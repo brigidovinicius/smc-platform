@@ -1,25 +1,48 @@
 import Layout from '@/components/Layout';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
-const ProfilePage = () => (
-  <Layout>
-    <section className="card">
-      <h1>Perfil do Criador</h1>
-      <p>Nome: Exemplo Founder</p>
-      <p>Nível atual: PRATA · Badge Explorador · 1.250 pontos</p>
-      <p>Seguidores: 248 · Favoritos: 12</p>
-      <div style={{ marginTop: '2rem' }}>
-        <h2>Ofertas públicas</h2>
-        <ul>
-          <li>Template SaaS Billing · Destaque OURO · R$ 80k</li>
-          <li>API Anti-churn · Destaque BRONZE · R$ 50k</li>
-        </ul>
-      </div>
-      <div style={{ marginTop: '2rem' }}>
-        <h2>Configurando venda anônima</h2>
-        <p>Status: Habilitado (taxa adicional aplicada no fechamento).</p>
-      </div>
-    </section>
-  </Layout>
-);
+const ProfilePage = () => {
+  const { data: session, status } = useSession();
+
+  if (status === 'loading') {
+    return (
+      <Layout>
+        <p>Carregando sessão...</p>
+      </Layout>
+    );
+  }
+
+  if (!session) {
+    return (
+      <Layout>
+        <p>Você precisa estar logado.</p>
+        <button className="button primary" onClick={() => signIn('google')}>
+          Entrar com Google
+        </button>
+      </Layout>
+    );
+  }
+
+  return (
+    <Layout>
+      <section className="card">
+        <h1>Perfil</h1>
+        <p>Nome: {session.user?.name}</p>
+        <p>Email: {session.user?.email}</p>
+        {session.user?.image && (
+          <img
+            src={session.user.image}
+            alt="Avatar"
+            style={{ width: 80, height: 80, borderRadius: '50%', marginTop: 16 }}
+          />
+        )}
+
+        <button className="button secondary" onClick={() => signOut()} style={{ marginTop: 20 }}>
+          Sair
+        </button>
+      </section>
+    </Layout>
+  );
+};
 
 export default ProfilePage;
