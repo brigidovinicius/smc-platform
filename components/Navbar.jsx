@@ -54,7 +54,7 @@ const Navbar = () => {
           </button>
         </div>
       ) : (
-        <button className="button primary" onClick={() => signIn('google')}>
+        <button className="button primary" onClick={() => signIn('google', { callbackUrl: '/dashboard' })}>
           Entrar
         </button>
       )}

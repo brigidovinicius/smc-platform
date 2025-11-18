@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
-import { wizardSteps, WizardStep } from '@/lib/wizardSteps';
+import { wizardSteps } from '@/lib/wizardSteps';
 
 const MIN_CHARACTERS = 40;
 
-const validateStep = (step: WizardStep, value: string) => {
+const validateStep = (step, value) => {
   const trimmed = value.trim();
 
   if (step.optional && trimmed.length === 0) {
@@ -23,9 +23,9 @@ const validateStep = (step: WizardStep, value: string) => {
 
 const RegisterWizard = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [progress, setProgress] = useState<Record<string, string>>({});
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [touchedSteps, setTouchedSteps] = useState<Record<string, boolean>>({});
+  const [progress, setProgress] = useState({});
+  const [errors, setErrors] = useState({});
+  const [touchedSteps, setTouchedSteps] = useState({});
 
   const currentStep = wizardSteps[currentIndex];
   const currentValue = progress[currentStep.id] ?? '';
@@ -41,7 +41,7 @@ const RegisterWizard = () => {
     return Math.round((filled / wizardSteps.length) * 100);
   }, [progress]);
 
-  const goToStep = (direction: 'next' | 'back') => {
+  const goToStep = (direction) => {
     setCurrentIndex((index) => {
       if (direction === 'next') {
         return Math.min(wizardSteps.length - 1, index + 1);
@@ -50,7 +50,7 @@ const RegisterWizard = () => {
     });
   };
 
-  const handleChange = (step: WizardStep, value: string) => {
+  const handleChange = (step, value) => {
     setProgress((prev) => ({ ...prev, [step.id]: value }));
     setTouchedSteps((prev) => ({ ...prev, [step.id]: true }));
     setErrors((prev) => ({ ...prev, [step.id]: validateStep(step, value) }));

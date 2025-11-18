@@ -1,17 +1,14 @@
-import { withAuth } from "next-auth/middleware";
+import { withAuth } from 'next-auth/middleware';
 
 export default withAuth({
-  pages: {
-    signIn: "/login",
+  callbacks: {
+    authorized: ({ token }) => !!token
   },
+  pages: {
+    signIn: '/login'
+  }
 });
 
 export const config = {
-  matcher: [
-    "/home",
-    "/wizard",
-    "/profile",
-    "/dashboard/:path*",
-    "/admin/:path*",
-  ],
+  matcher: ['/dashboard', '/dashboard/:path*']
 };
