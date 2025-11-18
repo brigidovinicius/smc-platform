@@ -30,6 +30,8 @@ const ProfilePage = () => {
         <h1>Perfil</h1>
         <p>Nome: {session.user?.name}</p>
         <p>Email: {session.user?.email}</p>
+        {session.user?.role && <p>Função: {session.user.role}</p>}
+        {session.user?.id && <p>ID do perfil: {session.user.id}</p>}
         {session.user?.image && (
           <img
             src={session.user.image}
