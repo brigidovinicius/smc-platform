@@ -1,39 +1,41 @@
 import { getSession, useSession } from 'next-auth/react';
 
-const DashboardPage = () => {
+export default function Dashboard() {
   const { data: session } = useSession();
 
   return (
-    <section className="card">
-      <h1>Painel do usuário</h1>
-      {session ? (
-        <div style={{ marginTop: '1rem' }}>
-          <p>Bem-vindo, {session.user?.name}!</p>
-          <p>Email: {session.user?.email}</p>
-          {session.user?.image && (
-            <img
-              src={session.user.image}
-              alt={session.user?.name ?? 'Foto de perfil'}
-              style={{ marginTop: '1rem', width: 80, height: 80, borderRadius: '50%', objectFit: 'cover' }}
-            />
-          )}
+    <div className="stack-lg">
+      <section className="card">
+        <h1 className="page-title">Dashboard</h1>
+        <p className="page-subtitle">Visão geral dos seus ativos e do funil de negociação.</p>
+        {session && (
+          <p className="muted">
+            Logado como <strong>{session.user?.name}</strong> ({session.user?.email})
+          </p>
+        )}
+      </section>
+
+      <section className="card">
+        <h2 className="page-title" style={{ fontSize: 18 }}>
+          Próximos passos
+        </h2>
+        <div className="stack">
+          <p className="muted">
+            • Criar o fluxo de cadastro de ativo (Wizard) <br />• Listar ativos já cadastrados com status e métricas <br />• Conectar o banco para salvar esses dados
+          </p>
         </div>
-      ) : (
-        <p>Carregando dados do usuário...</p>
-      )}
-    </section>
+      </section>
+    </div>
   );
-};
+}
 
-export default DashboardPage;
-
-export const getServerSideProps = async (context) => {
+export async function getServerSideProps(context) {
   const session = await getSession(context);
 
   if (!session) {
     return {
       redirect: {
-        destination: '/login',
+        destination: '/login?callbackUrl=/dashboard',
         permanent: false
       }
     };
@@ -42,4 +44,4 @@ export const getServerSideProps = async (context) => {
   return {
     props: { session }
   };
-};
+}

@@ -1,25 +1,28 @@
-import { getProviders, signIn } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
-const LoginPage = ({ providers }) => {
+const LoginPage = () => {
+  const router = useRouter();
+
+  const callbackUrl =
+    typeof router.query.callbackUrl === 'string' && router.query.callbackUrl.length > 0
+      ? router.query.callbackUrl
+      : '/dashboard';
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: 24 }}>
-      <h1>Entrar no SaaS Market Cap</h1>
-      {Object.values(providers ?? {}).map((provider) => (
-        <div key={provider.name}>
-          <button className="button primary" onClick={() => signIn(provider.id, { callbackUrl: '/dashboard' })}>
-            Entrar com {provider.name}
-          </button>
-        </div>
-      ))}
+    <div className="card">
+      <h1 className="page-title">Entrar</h1>
+      <p className="page-subtitle">Use sua conta Google para acessar o painel do SaaS Market Cap.</p>
+
+      <button className="button primary" onClick={() => signIn('google', { callbackUrl })}>
+        Entrar com Google
+      </button>
+
+      <p className="muted" style={{ marginTop: 16 }}>
+        Ao entrar, você será redirecionado para o dashboard, onde pode cadastrar e gerenciar ativos.
+      </p>
     </div>
   );
-};
-
-export const getServerSideProps = async () => {
-  const providers = await getProviders();
-  return {
-    props: { providers }
-  };
 };
 
 export default LoginPage;

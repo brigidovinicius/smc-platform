@@ -1,65 +1,46 @@
-import Link from 'next/link';
 import { useSession, signIn, signOut } from 'next-auth/react';
+import Link from 'next/link';
 
-const navItems = [
-  { href: '/', label: 'Home' },
-  { href: '/login', label: 'Login' },
-  { href: '/profile', label: 'Perfil' },
-  { href: '/wizard', label: 'Cadastro' }
-];
-
-const Navbar = () => {
+export default function Navbar() {
   const { data: session, status } = useSession();
 
   return (
-    <nav
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '16px 24px',
-        borderBottom: '1px solid #e2e8f0',
-        background: '#ffffff'
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-        <div style={{ fontWeight: 700 }}>SaaS Market Cap</div>
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          {navItems.map((item) => (
-            <Link key={item.href} href={item.href} className="nav-link">
-              {item.label}
-            </Link>
-          ))}
-        </div>
+    <header className="navbar">
+      <div className="navbar-left">
+        <Link href="/" className="navbar-logo">
+          SMC
+        </Link>
+        <nav className="navbar-links">
+          <Link href="/dashboard">Dashboard</Link>
+          <Link href="/wizard">Novo Ativo</Link>
+          <Link href="/profile">Perfil</Link>
+        </nav>
       </div>
 
-      {status === 'loading' ? (
-        <span>Carregando...</span>
-      ) : session ? (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          {session.user?.image && (
-            <img
-              src={session.user.image}
-              alt={session.user?.name ?? 'Foto de perfil'}
-              style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover' }}
-            />
-          )}
-          <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
-            <span style={{ fontWeight: 600 }}>{session.user?.name}</span>
-            <small style={{ color: '#475569' }}>{session.user?.email}</small>
-            {session.user?.role && <span className="role-badge">{session.user.role}</span>}
-          </div>
-          <button className="button secondary" onClick={() => signOut({ callbackUrl: '/' })}>
-            Sair
-          </button>
-        </div>
-      ) : (
-        <button className="button primary" onClick={() => signIn('google', { callbackUrl: '/dashboard' })}>
-          Entrar
-        </button>
-      )}
-    </nav>
-  );
-};
+      <div className="navbar-right">
+        {status === 'loading' && <span className="navbar-text">Carregando...</span>}
 
-export default Navbar;
+        {status === 'unauthenticated' && (
+          <button className="button primary" onClick={() => signIn('google', { callbackUrl: '/dashboard' })}>
+            Entrar
+          </button>
+        )}
+
+        {status === 'authenticated' && session?.user && (
+          <div className="navbar-user">
+            {session.user.image && (
+              <img src={session.user.image} alt={session.user.name || 'Avatar'} className="navbar-avatar" />
+            )}
+            <div className="navbar-user-info">
+              <span className="navbar-user-name">{session.user.name}</span>
+              <span className="navbar-user-email">{session.user.email}</span>
+            </div>
+            <button className="button ghost" onClick={() => signOut({ callbackUrl: '/' })}>
+              Sair
+            </button>
+          </div>
+        )}
+      </div>
+    </header>
+  );
+}

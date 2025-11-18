@@ -1,12 +1,12 @@
 import Navbar from './Navbar';
 
-const Layout = ({ children }) => {
+export default function Layout({ children }) {
   return (
-    <div className="app-shell">
+    <div className="app-root">
       <Navbar />
-      <main className="app-main">{children}</main>
+      <main className="app-main">
+        <div className="app-container">{children}</div>
+      </main>
     </div>
   );
-};
-
-export default Layout;
+}
