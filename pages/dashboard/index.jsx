@@ -3,6 +3,10 @@ import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import StatBlock from '@/components/ui/StatBlock';
 import ProgressList from '@/components/ui/ProgressList';
+import OfferCard from '@/components/OfferCard';
+import AssetCard from '@/components/AssetCard';
+import MarketGrid from '@/components/MarketGrid';
+import EmptyState from '@/components/EmptyState';
 
 const mockAssets = [
   {
@@ -20,6 +24,25 @@ const mockAssets = [
     readiness: 76,
     score: 640,
     health: 'Estável'
+  }
+];
+
+const mockOffers = [
+  {
+    id: 'offer-1',
+    title: 'SaaS de billing recorrente',
+    summary: 'Plataforma com 120 contas SMB e integrações prontas com Stripe.',
+    price: 450000,
+    classification: 'SAAS',
+    status: 'ACTIVE'
+  },
+  {
+    id: 'offer-2',
+    title: 'Marketplace de templates no-code',
+    summary: 'Receita média R$ 12k/mês, comunidade com 50k visitas.',
+    price: 220000,
+    classification: 'MARKETPLACE',
+    status: 'UNDER_NEGOTIATION'
   }
 ];
 
@@ -59,33 +82,42 @@ export default function Dashboard() {
       </Card>
 
       <Card title="Meus ativos" description="Selecione um ativo para ajustar métricas, readiness e badges.">
-        <div className="space-y-4">
-          {mockAssets.map((asset) => (
-            <div
-              key={asset.id}
-              className="bg-[#060c1a] border border-white/5 rounded-2xl p-4 flex flex-wrap gap-4 items-center justify-between"
-            >
-              <div>
-                <p className="text-lg text-white font-semibold">{asset.title}</p>
-                <p className="text-slate-400 text-sm">{asset.stage}</p>
-              </div>
-              <div className="flex gap-6 text-sm text-slate-200">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Readiness</p>
-                  <strong className="text-xl">{asset.readiness}%</strong>
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Health score</p>
-                  <strong className="text-xl">{asset.score}</strong>
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Status</p>
+        {mockAssets.length ? (
+          <MarketGrid
+            items={mockAssets}
+            renderItem={(asset) => (
+              <div key={asset.id} className="space-y-2">
+                <AssetCard
+                  asset={{
+                    name: asset.title,
+                    category: asset.stage,
+                    description: 'Resumo do ativo pronto para venda.',
+                    mrr: 'R$ 28k',
+                    churn: '1.8%'
+                  }}
+                />
+                <div className="flex gap-4 text-sm text-slate-300">
+                  <span>Readiness: {asset.readiness}%</span>
+                  <span>Score: {asset.score}</span>
                   <Badge variant="success">{asset.health}</Badge>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            )}
+          />
+        ) : (
+          <EmptyState />
+        )}
+      </Card>
+
+      <Card title="Ofertas ativas" description="Resumo das propostas em negociação.">
+        {mockOffers.length ? (
+          <MarketGrid
+            items={mockOffers}
+            renderItem={(offer) => <OfferCard key={offer.id} offer={offer} />}
+          />
+        ) : (
+          <EmptyState title="Sem ofertas" description="Publique seu ativo para receber propostas." />
+        )}
       </Card>
 
       <Card title="Gamificação & badges" description="Conquiste badges ao completar tarefas críticas.">

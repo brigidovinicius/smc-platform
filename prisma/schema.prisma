@@ -1,5 +1,3 @@
-// prisma/schema.prisma
-
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -9,132 +7,50 @@ generator client {
   provider = "prisma-client-js"
 }
 
-enum Role {
-  BUYER
-  SELLER
-  ADMIN
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+
+  accounts Account[]
+  sessions Session[]
 }
 
-enum UserLevel {
-  MAKER
-  FOUNDER
-  BUILDER
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
 }
 
-enum AssetClassification {
-  SAAS
-  MARKETPLACE
-  NEWSLETTER
-  APP
-  SITE
-  COMMUNITY
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-enum HighlightTier {
-  OURO
-  PRATA
-  BRONZE
-  NORMAL
-}
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
 
-enum NegotiationStatus {
-  DRAFT
-  ACTIVE
-  CLOSED
-  LOST
-}
-
-model Profile {
-  id                   String        @id @default(cuid())
-  name                 String?
-  email                String        @unique
-  image                String?
-  role                 Role          @default(SELLER)
-  level                UserLevel     @default(MAKER)
-  createdAt            DateTime      @default(now())
-  assets               Asset[]
-  favorites            Favorite[]
-  messages             Message[]     @relation("ProfileMessages")
-  negotiationsAsBuyer  Negotiation[] @relation("BuyerNegotiations")
-  negotiationsAsSeller Negotiation[] @relation("SellerNegotiations")
-}
-
-model Asset {
-  id                String              @id @default(cuid())
-  title             String
-  slug              String              @unique
-  summary           String
-  classification    AssetClassification
-  valuationMultiple String?
-  revenueRange      String?
-  highlightTier     HighlightTier       @default(NORMAL)
-  niche             String?
-  investmentMin     Int?
-  investmentMax     Int?
-  badges            Json?
-  score             Int                 @default(0)
-  owner             Profile             @relation(fields: [ownerId], references: [id])
-  ownerId           String
-  metrics           Metric?
-  valuations        Valuation[]
-  negotiations      Negotiation[]
-  favorites         Favorite[]
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-}
-
-model Metric {
-  id      String @id @default(cuid())
-  asset   Asset  @relation(fields: [assetId], references: [id])
-  assetId String @unique
-  mrr     Int?
-  churn   Float?
-  cac     Int?
-  ltv     Int?
-}
-
-model Valuation {
-  id          String   @id @default(cuid())
-  asset       Asset    @relation(fields: [assetId], references: [id])
-  assetId     String
-  method      String
-  score       Float
-  askingPrice Int?
-  rationale   String?
-  createdAt   DateTime @default(now())
-}
-
-model Negotiation {
-  id        String            @id @default(cuid())
-  asset     Asset             @relation(fields: [assetId], references: [id])
-  assetId   String
-  buyer     Profile           @relation("BuyerNegotiations", fields: [buyerId], references: [id])
-  buyerId   String
-  seller    Profile           @relation("SellerNegotiations", fields: [sellerId], references: [id])
-  sellerId  String
-  status    NegotiationStatus @default(DRAFT)
-  messages  Message[]
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
-}
-
-model Favorite {
-  id        String   @id @default(cuid())
-  profile   Profile  @relation(fields: [profileId], references: [id])
-  profileId String
-  asset     Asset    @relation(fields: [assetId], references: [id])
-  assetId   String
-  createdAt DateTime @default(now())
-
-  @@unique([profileId, assetId])
-}
-
-model Message {
-  id            String      @id @default(cuid())
-  negotiation   Negotiation @relation(fields: [negotiationId], references: [id])
-  negotiationId String
-  sender        Profile     @relation("ProfileMessages", fields: [senderId], references: [id])
-  senderId      String
-  content       String
-  createdAt     DateTime    @default(now())
+  @@unique([identifier, token])
 }
