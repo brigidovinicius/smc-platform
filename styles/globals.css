@@ -12,6 +12,7 @@
 
   /* Typography */
   --font-primary: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --font-heading: var(--font-space-grotesk, 'Space Grotesk'), var(--font-primary);
 
   /* Spacing scale (8px grid) */
   --space-1: 4px;
@@ -74,7 +75,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-primary);
+  font-family: var(--font-heading);
   color: var(--color-text);
   margin: 0 0 var(--space-2);
 }
@@ -149,6 +150,10 @@ select {
   font-weight: 500;
   background: rgba(108, 92, 231, 0.12);
   color: var(--color-primary);
+}
+
+.font-heading {
+  font-family: var(--font-heading);
 }
 
 .button {

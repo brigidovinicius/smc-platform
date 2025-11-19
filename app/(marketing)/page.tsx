@@ -1,258 +1,230 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { MarketingHomeContent } from './_components/marketing-home-content';
 
 export const metadata: Metadata = {
-  title: 'SMC – Avalie, compre e venda ativos digitais',
+  title: 'SMC – Avalie, compre e venda ativos digitais com dados reais',
   description:
-    'Marketplace especializado em valuation, compra e venda de SaaS, apps, sites e negócios digitais com due diligence assistida.'
+    'O SaaS Market Cap combina valuation automático, due diligence assistida por IA e compradores verificados para founders, investidores e flippers.'
 };
+
+const heroStats = [
+  {
+    label: 'Ativos avaliados',
+    value: 326,
+    suffix: '+',
+    description: 'MRR auditado nas últimas 12 semanas.'
+  },
+  {
+    label: 'Volume listado',
+    value: 180,
+    prefix: 'R$ ',
+    suffix: ' mi',
+    description: 'Inventário disponível no marketplace.'
+  },
+  {
+    label: 'Compradores verificados',
+    value: 2400,
+    suffix: '+',
+    description: 'Investidores, flippers e funds.'
+  },
+  {
+    label: 'Tempo médio de venda',
+    value: 34,
+    suffix: ' dias',
+    description: 'Do publish ao closing.'
+  }
+];
+
+const proofLogos = ['Atlas Capital', 'LatAm Operators', 'Orbit Ventures', 'Angels Club', 'Foxter Labs'];
 
 const howItWorks = [
   {
     title: 'Envie seu ativo',
-    description: 'Preencha o formulário com métricas de MRR, churn, CAC e posicionamento.'
+    description:
+      'Cadastro guiado com métricas de MRR, churn, CAC, canais de aquisição e stack tecnológico. Tudo padronizado.',
+    highlight: '1 • Intake'
   },
   {
     title: 'Receba valuation automático',
-    description: 'Nossa inteligência cruza dados de mercado e entrega múltiplos de referência.'
+    description:
+      'Nosso motor aplica múltiplos comparáveis, sanity check de métricas e gera dossiê pronto para compartilhar.',
+    highlight: '2 • Valuation'
   },
   {
     title: 'Negocie com compradores qualificados',
-    description: 'Receba propostas diretas de fundos, flippers e operadores avaliados.'
+    description:
+      'Acesso a funds, clubes de compra e operadores individuais com NDA, trilha de negociação e escrow seguro.',
+    highlight: '3 • Negociação'
   }
 ];
 
 const features = [
-  'Valuation Automático',
-  'Due Diligence Assistida por IA',
-  'Métricas Transparentes',
-  'Negociação Segura',
-  'Base Qualificada de Compradores',
-  'Exportação de Relatórios'
+  {
+    title: 'Valuation Automático',
+    description:
+      'Modelo proprietário cruza MRR, churn, CAC, LTV, crescimento e riscos setoriais para recomendar múltiplos.',
+    icon: '📈'
+  },
+  {
+    title: 'Due Diligence com IA',
+    description:
+      'Checklist inteligente sinaliza anomalias em receitas, cohort, dependências e expõe todo o histórico de métricas.',
+    icon: '🧠'
+  },
+  {
+    title: 'Deal-Room Seguro',
+    description:
+      'Uploads criptografados, blur automático e logs de acesso para compartilhar dados sensíveis só com quem avançar.',
+    icon: '🛡️'
+  },
+  {
+    title: 'Base de Compradores',
+    description:
+      'Funds, agregadores e flippers pré-verificados com acordo operacional e SLA para envio de propostas.',
+    icon: '🤝'
+  },
+  {
+    title: 'Relatórios Exportáveis',
+    description:
+      'Gere PDF, planilhas e modelos de data-room em um clique para mostrar tração e uso de caixa com clareza.',
+    icon: '🗂️'
+  },
+  {
+    title: 'Insights Operacionais',
+    description:
+      'Alertas sobre churn, retenção, payback e health score para orientar founders antes de abrir rodada ou venda.',
+    icon: '⚡️'
+  }
 ];
 
 const useCases = [
   {
-    title: 'Para Fundadores de SaaS',
-    description: 'Organize seus indicadores, receba valuation objetivo e acesse compradores prontos para investir.'
+    title: 'Fundadores de SaaS e apps',
+    description: 'Estruture os dados críticos, valide valuation e escolha quando abrir negociação com a base SMC.',
+    highlight: 'Founders'
   },
   {
-    title: 'Para Compradores Profissionais',
-    description: 'Encontre negócios com dados auditados, histórico de MRR e múltiplos alinhados ao mercado.'
+    title: 'Compradores institucionais',
+    description: 'Receba pipeline com métricas padronizadas e histórico auditável para comitês e LPs.',
+    highlight: 'Funds & studios'
   },
   {
-    title: 'Para Flippers de Sites',
-    description: 'Acelere a aquisição e revenda de projetos verificando métricas-chave em minutos.'
+    title: 'Flippers e operadores',
+    description: 'Identifique deals subprecificados, acompanhe health score e planeje turnaround com dados completos.',
+    highlight: 'Flippers'
   }
 ];
 
 const testimonials = [
   {
-    quote: 'Conseguimos vender nosso micro-SaaS em 34 dias com múltiplo acima do esperado.',
+    quote: 'Vimos o dossiê completo, negociamos em duas chamadas e fechamos com múltiplo 4.3x ARR.',
     author: 'Ana Costa',
-    role: 'Founder – BackOffice Pro'
+    role: 'Founder',
+    company: 'BackOffice Pro'
   },
   {
-    quote: 'O painel de métricas e a due diligence assistida reduziram riscos nas aquisições.',
+    quote: 'A automação de due diligence diminuiu 70% do tempo que gastávamos analisando micro-SaaS.',
     author: 'Marcos Lima',
-    role: 'Investor – Horizon Capital'
+    role: 'Investor',
+    company: 'Horizon Capital'
   },
   {
-    quote: 'O SMC virou o canal principal para testar e flipar sites rentáveis.',
+    quote: 'O marketplace virou o principal canal para flippar sites e newsletters rentáveis no Brasil.',
     author: 'Juliana Ribeiro',
-    role: 'Digital Asset Flipper'
+    role: 'Operator',
+    company: 'Digital Asset Lab'
   }
 ];
 
 const faq = [
-  'Como funciona o valuation automático?',
-  'Posso cadastrar ativos sem receita?',
-  'Quais métricas são obrigatórias?',
-  'Como funciona a verificação dos compradores?',
-  'Existe comissão sobre a venda?',
-  'Posso negociar em sigilo?',
-  'Quais mercados o SMC cobre?',
-  'Como é feito o pagamento após a venda?',
-  'Posso listar múltiplos ativos ao mesmo tempo?',
-  'O SMC oferece suporte jurídico ou contábil?'
+  {
+    question: 'Como o valuation automático é calculado?',
+    answer:
+      'Usamos múltiplos baseados em transações recentes, ajustados por MRR, churn, CAC, LTV, crescimento e risco setorial. Cada input gera um relatório com justificativa do múltiplo sugerido.'
+  },
+  {
+    question: 'Posso cadastrar ativos que ainda não geram receita recorrente?',
+    answer:
+      'Sim. Para ativos em estágio inicial consideramos GMV, usuários ativos, leads e provas de tração. Você recebe orientações claras sobre o que precisa evoluir antes de abrir negociação.'
+  },
+  {
+    question: 'Como os compradores são verificados?',
+    answer:
+      'Aplicamos KYC, pedimos prova de fundos e histórico de operações. Só liberamos acesso completo aos dados após acordo de confidencialidade e aceite dos termos da plataforma.'
+  },
+  {
+    question: 'Existe comissão sobre a venda?',
+    answer:
+      'Trabalhamos com success fee escalonado conforme o tamanho da transação. Não há custo para listar ativos; você só paga quando fecha negócio dentro do SMC.'
+  },
+  {
+    question: 'Consigo negociar em sigilo?',
+    answer:
+      'Sim. Você controla quem acessa o data-room, habilita blur automático e pode assinar NDA digital antes de revelar informações críticas.'
+  },
+  {
+    question: 'Quais mercados e modelos o SMC cobre?',
+    answer:
+      'SaaS B2B/B2C, apps mobile, marketplaces, newsletters pagas, APIs e plataformas de conteúdo digital. Expandimos os filtros constantemente.'
+  },
+  {
+    question: 'Como funciona o pagamento após o closing?',
+    answer:
+      'Trabalhamos com instrumentos de escrow e parceiros jurídicos para custodiar o valor até que as transferências de ativos sejam confirmadas.'
+  },
+  {
+    question: 'Posso listar vários ativos ao mesmo tempo?',
+    answer:
+      'Pode. Cada ativo recebe um dossiê independente e tem indicadores próprios. Operamos com limites apenas para garantir qualidade do inventário.'
+  },
+  {
+    question: 'O SMC fornece suporte jurídico ou contábil?',
+    answer:
+      'Temos parceiros especializados e templates prontos para contratos de compra e venda, reorganização societária e transferência de IP.'
+  },
+  {
+    question: 'Qual o prazo médio para fechar uma venda?',
+    answer:
+      'A média atual é de 34 dias, mas depende do ticket, da qualidade dos dados e da velocidade de resposta entre as partes.'
+  }
 ];
 
 const galleryPlaceholders = Array.from({ length: 8 }).map((_, index) => index);
 
+const story = {
+  title: 'Criamos o SMC porque founders não podem depender de guesses para precificar um ativo digital.',
+  body: 'Depois de ver dezenas de negociações travarem por falta de dados e padrões, construímos uma infraestrutura focada em métricas e governança. O resultado é clareza para quem vende e convicção para quem compra.',
+  highlights: [
+    'Metodologia própria inspirada em AngelList, Pitch.com e operadores brasileiros.',
+    'Processo de onboarding assistido com especialistas em M&A + automações com IA.',
+    'Relatórios que educam o fundador sobre o que precisa evoluir para capturar múltiplos maiores.'
+  ]
+};
+
+const security = {
+  title: 'Camadas de confiança para negociar ativos de alto valor.',
+  description:
+    'Utilizamos criptografia, logs auditáveis e políticas rígidas de acesso para proteger dados financeiros e estratégicos.',
+  bullets: [
+    'Due diligence com histórico de alterações em métricas.',
+    'KYC e verificação manual de operadores antes de liberar data-room.',
+    'Integração com parceiros jurídicos e escrow para custodiar pagamentos.'
+  ]
+};
+
 export default function MarketingHome() {
   return (
-    <main className="space-y-28 px-4 py-20 md:px-12 lg:px-24 bg-gradient-to-b from-[#02040a] via-[#050a1a] to-[#02040a]">
-      <section className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] items-center">
-        <div className="space-y-6">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs uppercase tracking-[0.3em] text-blue-200">
-            <span className="h-2 w-2 rounded-full bg-blue-400" /> SaaS Market Cap
-          </span>
-          <h1 className="text-4xl md:text-6xl font-semibold leading-tight text-white">
-            Avalie, compre e venda ativos digitais com transparência total
-          </h1>
-          <p className="text-lg text-slate-300 max-w-2xl">
-            Estrutura completa para founders, investidores e profissionais de aquisição acessarem valuation automático,
-            métricas auditadas e compradores qualificados.
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <Link className="button primary text-base" href="/feed">
-              Explorar ativos
-            </Link>
-            <Link className="button secondary text-base" href="/wizard">
-              Enviar meu ativo
-            </Link>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3 text-left">
-            {[
-              { label: 'Ativos avaliados', value: '320+' },
-              { label: 'Volume listado', value: 'R$ 180 mi' },
-              { label: 'Compradores verificados', value: '2.400+' }
-            ].map((stat) => (
-              <div key={stat.label} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                <p className="text-sm uppercase tracking-[0.3em] text-slate-400">{stat.label}</p>
-                <p className="text-2xl font-semibold text-white">{stat.value}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="relative">
-          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-500/30 to-purple-700/20 blur-3xl" />
-          <div className="relative rounded-3xl border border-white/10 bg-[#030713]/80 p-8 shadow-2xl shadow-blue-900/50">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-white">Visão de valuation</h3>
-              <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs text-emerald-300">Live</span>
-            </div>
-            <div className="mt-6 h-56 rounded-2xl border border-white/5 bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center">
-              <div className="text-center text-slate-400">Placeholder para mockup de gráfico</div>
-            </div>
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              {[
-                { label: 'MRR auditado', value: 'R$ 28.400', trend: '+9% · 30d' },
-                { label: 'Múltiplo sugerido', value: '4.2x ARR', trend: 'ref. mercado B2B' }
-              ].map((item) => (
-                <div key={item.label} className="rounded-2xl border border-white/5 bg-white/5 p-4">
-                  <p className="text-xs uppercase tracking-[0.3em] text-slate-400">{item.label}</p>
-                  <p className="text-xl font-semibold text-white">{item.value}</p>
-                  <p className="text-xs text-slate-400">{item.trend}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="space-y-6">
-        <div>
-          <p className="text-xs uppercase tracking-[0.4em] text-blue-300">Como funciona</p>
-          <h2 className="text-3xl font-semibold">Três passos para navegar no mercado secundário</h2>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {howItWorks.map((item) => (
-            <article key={item.title} className="bg-[#050b1a] border border-white/5 rounded-2xl p-6">
-              <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-              <p className="text-slate-300 text-sm">{item.description}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="space-y-6">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-[0.4em] text-blue-300">Recursos</p>
-            <h2 className="text-3xl font-semibold">Tudo o que você precisa em um só lugar</h2>
-          </div>
-          <p className="text-sm text-slate-400 max-w-lg">
-            Automação de valuation, due diligence com IA e infraestrutura de negociação centralizados em um dashboard.
-          </p>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {features.map((feature) => (
-            <div key={feature} className="rounded-2xl border border-white/5 bg-gradient-to-br from-white/10 to-transparent p-5 text-slate-100 shadow-2xl shadow-black/40">
-              <div className="mb-3 h-10 w-10 rounded-full bg-white/10 text-center text-lg leading-10 text-blue-300">✦</div>
-              <p className="text-base font-semibold">{feature}</p>
-              <p className="text-sm text-slate-400">Operações suportadas com materiais prontos para due diligence.</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="space-y-6">
-        <div>
-          <p className="text-xs uppercase tracking-[0.4em] text-blue-300">Use cases</p>
-          <h2 className="text-3xl font-semibold">SMC para múltiplos perfis do ecossistema</h2>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {useCases.map((useCase) => (
-            <article key={useCase.title} className="rounded-3xl border border-white/10 bg-white/5 p-6 space-y-4">
-              <div className="h-32 rounded-2xl border border-dashed border-blue-500/30 bg-blue-500/5 text-blue-200 flex items-center justify-center">
-                Ilustração
-              </div>
-              <h3 className="text-xl font-semibold">{useCase.title}</h3>
-              <p className="text-slate-300 text-sm">{useCase.description}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="space-y-6">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-[0.4em] text-blue-300">Galeria</p>
-            <h2 className="text-3xl font-semibold">Alguns ativos já avaliados</h2>
-          </div>
-          <p className="text-sm text-slate-400 max-w-md">Visualize como entregamos métricas de MRR, churn e CAC em cards prontos para investidores.</p>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {galleryPlaceholders.map((item) => (
-            <div key={item} className="aspect-video rounded-2xl border border-white/5 bg-gradient-to-br from-blue-900/40 to-purple-900/30" />
-          ))}
-        </div>
-      </section>
-
-      <section className="space-y-6">
-        <div>
-          <p className="text-xs uppercase tracking-[0.4em] text-blue-300">Depoimentos</p>
-          <h2 className="text-3xl font-semibold">Confiança validada por quem usa</h2>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {testimonials.map((testimonial) => (
-            <article key={testimonial.author} className="bg-[#050b1a] border border-white/5 rounded-3xl p-6 space-y-4">
-              <p className="text-slate-200">“{testimonial.quote}”</p>
-              <div>
-                <p className="font-semibold">{testimonial.author}</p>
-                <p className="text-sm text-slate-400">{testimonial.role}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="space-y-6">
-        <div>
-          <p className="text-xs uppercase tracking-[0.4em] text-blue-300">FAQ</p>
-          <h2 className="text-3xl font-semibold">Perguntas frequentes</h2>
-        </div>
-        <div className="space-y-4">
-          {faq.map((question) => (
-            <details key={question} className="bg-[#050b1a] border border-white/5 rounded-2xl p-4">
-              <summary className="cursor-pointer text-lg font-semibold text-white">{question}</summary>
-              <p className="mt-3 text-sm text-slate-300">
-                Nossa equipe responde em até 24h e direciona você para o melhor fluxo de compra ou venda.
-              </p>
-            </details>
-          ))}
-        </div>
-      </section>
-
-      <footer className="border-t border-white/10 pt-8 text-sm text-slate-400 flex flex-wrap gap-6 justify-between">
-        <p>© {new Date().getFullYear()} SaaS Market Cap</p>
-        <div className="flex gap-4">
-          <Link href="/" className="text-slate-300/80 hover:text-white">Termos</Link>
-          <Link href="/" className="text-slate-300/80 hover:text-white">Privacidade</Link>
-          <a href="mailto:contato@saasmarketcap.com">Contato</a>
-        </div>
-      </footer>
-    </main>
+    <MarketingHomeContent
+      heroStats={heroStats}
+      proofLogos={proofLogos}
+      howItWorks={howItWorks}
+      features={features}
+      useCases={useCases}
+      testimonials={testimonials}
+      faq={faq}
+      gallery={galleryPlaceholders}
+      story={story}
+      security={security}
+    />
   );
 }
