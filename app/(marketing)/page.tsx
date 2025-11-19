@@ -201,6 +201,30 @@ const story = {
   ]
 };
 
+const productShots = [
+  {
+    highlight: 'Insights de métricas',
+    title: 'Canvas de cohort',
+    description: 'Veja retenção, expansão e churn com filtros por plano e faixa de ticket.',
+    metric: 'Net Revenue Retention · 118%',
+    gradient: 'linear-gradient(135deg, #120C2C 0%, #302A73 50%, #5A45B7 100%)'
+  },
+  {
+    highlight: 'Deal room',
+    title: 'Documentos com blur',
+    description: 'Compartilhe P&L e contratos com níveis de acesso configuráveis.',
+    metric: '16 documentos liberados',
+    gradient: 'linear-gradient(135deg, #0F1F3C 0%, #123F6F 50%, #29A4D9 100%)'
+  },
+  {
+    highlight: 'Comparativo de múltiplos',
+    title: 'Múltiplos sugeridos',
+    description: 'Compare deals similares no mercado secundário e gere argumentos de valuation.',
+    metric: 'Faixa sugerida · 4.1x a 4.5x ARR',
+    gradient: 'linear-gradient(135deg, #2D0F3B 0%, #6E0F88 60%, #A855F7 100%)'
+  }
+];
+
 const security = {
   title: 'Camadas de confiança para negociar ativos de alto valor.',
   description:
@@ -209,6 +233,23 @@ const security = {
     'Due diligence com histórico de alterações em métricas.',
     'KYC e verificação manual de operadores antes de liberar data-room.',
     'Integração com parceiros jurídicos e escrow para custodiar pagamentos.'
+  ],
+  callouts: [
+    {
+      highlight: 'Compliance',
+      title: 'Logs auditáveis',
+      description: 'Monitoramos cada acesso e alteração nos dados do ativo.'
+    },
+    {
+      highlight: 'Sigilo',
+      title: 'Blur e NDA digital',
+      description: 'Escolha o nível de exposição de cada documento antes de liberar.'
+    },
+    {
+      highlight: 'Liquidação',
+      title: 'Escrow protegido',
+      description: 'Parceiros jurídicos e financeiros dão segurança ao closing.'
+    }
   ]
 };
 
@@ -220,6 +261,7 @@ export default function MarketingHome() {
       howItWorks={howItWorks}
       features={features}
       useCases={useCases}
+      productShots={productShots}
       testimonials={testimonials}
       faq={faq}
       gallery={galleryPlaceholders}
