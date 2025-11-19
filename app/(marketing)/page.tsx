@@ -248,8 +248,8 @@ export default function MarketingHome() {
       <footer className="border-t border-white/10 pt-8 text-sm text-slate-400 flex flex-wrap gap-6 justify-between">
         <p>© {new Date().getFullYear()} SaaS Market Cap</p>
         <div className="flex gap-4">
-          <Link href="/terms">Termos</Link>
-          <Link href="/privacy">Privacidade</Link>
+          <Link href="/" className="text-slate-300/80 hover:text-white">Termos</Link>
+          <Link href="/" className="text-slate-300/80 hover:text-white">Privacidade</Link>
           <a href="mailto:contato@saasmarketcap.com">Contato</a>
         </div>
       </footer>
