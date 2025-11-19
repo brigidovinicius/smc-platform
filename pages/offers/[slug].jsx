@@ -1,6 +1,15 @@
+import Head from 'next/head';
 import Link from 'next/link';
-import { getSession } from 'next-auth/react';
-import { getOfferBySlug } from '@/lib/offers';
+import { getAllOffers, getOfferBySlug } from '@/lib/offers';
+
+const SITE_URL = 'https://smc-platform.vercel.app';
+
+const metricsList = [
+  { key: 'mrr', label: 'MRR' },
+  { key: 'churn', label: 'Churn' },
+  { key: 'cac', label: 'CAC' },
+  { key: 'ltv', label: 'LTV' }
+];
 
 const OfferDetailsPage = ({ offer }) => {
   if (!offer) {
@@ -11,13 +20,53 @@ const OfferDetailsPage = ({ offer }) => {
     );
   }
 
+  const canonical = `${SITE_URL}/offers/${offer.slug}`;
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Offer',
+    url: canonical,
+    priceCurrency: 'BRL',
+    itemOffered: {
+      '@type': 'Product',
+      name: offer.title,
+      category: offer.classification,
+      description: offer.summary
+    },
+    priceSpecification: {
+      '@type': 'PriceSpecification',
+      priceCurrency: 'BRL',
+      minPrice: offer.investmentRange?.min ?? undefined,
+      maxPrice: offer.investmentRange?.max ?? undefined
+    },
+    additionalProperty: [
+      { '@type': 'PropertyValue', name: 'MRR', value: offer.metrics?.mrr },
+      { '@type': 'PropertyValue', name: 'Churn', value: offer.metrics?.churn },
+      { '@type': 'PropertyValue', name: 'CAC', value: offer.metrics?.cac },
+      { '@type': 'PropertyValue', name: 'LTV', value: offer.metrics?.ltv }
+    ]
+  };
+
   return (
     <main className="min-h-screen bg-[#050711] py-16 px-4 text-white">
+      <Head>
+        <title>{`${offer.title} | Oportunidade SaaS - SMC Platform`}</title>
+        <meta name="description" content={offer.summary} />
+        <meta
+          name="keywords"
+          content={`comprar SaaS, ativos digitais, ${offer.niche}, ${offer.classification}, múltiplos SaaS`}
+        />
+        <meta property="og:title" content={`${offer.title} | SMC Platform`} />
+        <meta property="og:description" content={offer.summary} />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href={canonical} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      </Head>
       <div className="max-w-4xl mx-auto space-y-8">
-        <nav className="text-sm text-blue-300 flex items-center gap-2">
+        <nav className="text-sm text-blue-300 flex items-center gap-2" aria-label="breadcrumb">
           <Link href="/">Home</Link>
           <span>›</span>
-          <Link href="/feed">Feed</Link>
+          <Link href="/feed">Oportunidades</Link>
           <span>›</span>
           <span className="text-slate-300">{offer.title}</span>
         </nav>
@@ -48,18 +97,12 @@ const OfferDetailsPage = ({ offer }) => {
             <p className="text-slate-400 text-xs uppercase mb-1">MRR atual</p>
             <h2 className="text-2xl font-semibold text-white">{offer.metrics?.mrr}</h2>
           </div>
-          <div>
-            <p className="text-slate-400 text-xs uppercase mb-1">Churn</p>
-            <p>{offer.metrics?.churn}</p>
-          </div>
-          <div>
-            <p className="text-slate-400 text-xs uppercase mb-1">CAC</p>
-            <p>{offer.metrics?.cac}</p>
-          </div>
-          <div>
-            <p className="text-slate-400 text-xs uppercase mb-1">LTV</p>
-            <p>{offer.metrics?.ltv}</p>
-          </div>
+          {metricsList.map(({ key, label }) => (
+            <div key={key}>
+              <p className="text-slate-400 text-xs uppercase mb-1">{label}</p>
+              <p>{offer.metrics?.[key]}</p>
+            </div>
+          ))}
         </section>
 
         <section className="space-y-4 bg-[#0b1230] border border-white/5 rounded-3xl p-6">
@@ -76,15 +119,15 @@ const OfferDetailsPage = ({ offer }) => {
         <section className="bg-[#0b1230] border border-white/5 rounded-3xl p-6 space-y-4">
           <h2 className="text-xl font-semibold">Próximos passos</h2>
           <p className="text-slate-300">
-            Esta área é exclusiva para membros logados. Ao prosseguir você receberá o memorando completo, dados financeiros e
+            Esta área é exclusiva para membros logados. Ao prosseguir você recebe o memorando completo, dados financeiros e
             checkpoints técnicos para due diligence.
           </p>
           <div className="flex gap-4 flex-wrap">
-            <Link href="/wizard" className="button primary">
-              Cadastrar meu ativo
-            </Link>
-            <Link href="/profile" className="button secondary">
+            <Link href="/profile" className="button primary">
               Falar com um advisor
+            </Link>
+            <Link href="/wizard" className="button secondary">
+              Quero listar meu ativo
             </Link>
           </div>
         </section>
@@ -93,21 +136,26 @@ const OfferDetailsPage = ({ offer }) => {
   );
 };
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
-  if (!session) {
+export async function getStaticPaths() {
+  const offers = getAllOffers();
+  return {
+    paths: offers.map((offer) => ({ params: { slug: offer.slug } })),
+    fallback: 'blocking'
+  };
+}
+
+export async function getStaticProps({ params }) {
+  const offer = getOfferBySlug(params.slug) || null;
+
+  if (!offer) {
     return {
-      redirect: {
-        destination: `/login?callbackUrl=/offers/${context.params.slug}`,
-        permanent: false
-      }
+      notFound: true
     };
   }
 
-  const offer = getOfferBySlug(context.params.slug) || null;
-
   return {
-    props: { offer }
+    props: { offer },
+    revalidate: 60 * 30
   };
 }
 

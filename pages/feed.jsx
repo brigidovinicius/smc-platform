@@ -264,7 +264,8 @@ const FeedPage = ({ offers }) => {
 export async function getStaticProps() {
   const offers = getAllOffers();
   return {
-    props: { offers }
+    props: { offers },
+    revalidate: 60 * 30 // atualiza a cada 30 minutos
   };
 }
 

@@ -11,12 +11,14 @@
     "schedule:posts": "node scripts/scheduleGeneratePost.js"
   },
   "dependencies": {
+    "@prisma/client": "^6.19.0",
     "@vercel/postgres": "^0.10.0",
     "gray-matter": "^4.0.3",
     "next": "14.2.0",
     "next-auth": "^4.24.13",
     "node-cron": "^4.2.1",
     "openai": "^6.9.1",
+    "prisma": "^6.19.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-markdown": "^10.1.0"
