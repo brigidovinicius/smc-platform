@@ -11,6 +11,7 @@ export default function Navbar() {
           SMC
         </Link>
         <nav className="navbar-links">
+          <Link href="/feed">Ofertas</Link>
           <Link href="/dashboard">Dashboard</Link>
           <Link href="/wizard">Novo Ativo</Link>
           <Link href="/profile">Perfil</Link>

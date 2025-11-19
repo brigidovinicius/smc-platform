@@ -6,16 +6,23 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate:post": "node scripts/generateDailyPost.js",
+    "schedule:posts": "node scripts/scheduleGeneratePost.js"
   },
   "dependencies": {
     "@vercel/postgres": "^0.10.0",
+    "gray-matter": "^4.0.3",
     "next": "14.2.0",
     "next-auth": "^4.24.13",
+    "node-cron": "^4.2.1",
+    "openai": "^6.9.1",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "react-markdown": "^10.1.0"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.17",
     "@types/node": "20.11.17",
     "@types/react": "18.2.43",
     "@types/react-dom": "18.2.17",
@@ -24,6 +31,7 @@
     "eslint-config-next": "14.2.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.17",
-    "typescript": "5.4.2"
+    "typescript": "5.4.2",
+    "vercel": "^48.10.3"
   }
 }

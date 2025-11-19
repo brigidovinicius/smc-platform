@@ -1,30 +1,52 @@
-# Repository Guidelines
+# SMC Frontend – Agent Guidelines
 
-## Project Structure & Module Organization
-Keep ingestion, transformation, and presentation layers isolated so SaaS market-cap calculations stay reproducible. Runtime code lives in `src/` with subpackages such as `ingestion/` (API + HTML clients), `pipelines/` (batch jobs), `services/` (valuation math), and `api/` (FastAPI/Streamlit entry points). Store immutable data in `data/raw/`, derived tables in `data/processed/`, notebooks in `notebooks/`, dashboard assets in `dashboards/`, and config templates in `config/`. Tests mirror the runtime tree inside `tests/unit/` and `tests/integration/`. Expected skeleton:
+## Project Overview
+SaaS Market Cap (SMC) is a Next.js 14 (pages router) app focused on autenticação via NextAuth (Google), um dashboard privado e um blog público. A base atual usa JavaScript, Tailwind CSS (via `@tailwindcss/postcss`), e alias `@/` apontando para a raiz. As pastas mais relevantes:
+
 ```
-src/{ingestion,pipelines,services,api}
-tests/{unit,integration}
-data/{raw,processed}
-dashboards/
-docs/
+components/      # Layout, Navbar e demais shells reutilizáveis
+lib/             # utilitários client-side (ex.: blogPosts)
+pages/           # rotas do Next (auth, dashboard, blog, wizard, etc.)
+styles/          # Tailwind + tokens globais
+docs/            # documentação adicional
 ```
 
-## Build, Test, and Development Commands
-- `python -m pip install -r requirements.txt` – install dependencies; rerun whenever the lockfile changes.
-- `python -m src.pipelines.sync --days 30` – refresh processed parquet files from the latest SaaS tickers.
-- `python -m src.api.main --reload` – run the service at http://localhost:8000 for manual QA.
-- `streamlit run dashboards/overview.py` – inspect the investor dashboard using cached metrics.
-- `python -m pytest --cov=src --cov-report=term-missing` – execute the suite and surface coverage regressions.
+Privacidade das rotas é controlada por `middleware.js` (protege apenas `/dashboard/**`). O blog (`/blog` e `/blog/[slug]`) precisa permanecer público.
 
-## Coding Style & Naming Conventions
-Target Python 3.11+, four-space indents, full type hints, and prefer dataclasses over loose dicts. Run `ruff check src tests` and `black src tests` before committing. Modules/files follow `snake_case`, classes `PascalCase`, CLI entry points `src/cli_<verb>.py`, and async helpers end in `_async`. Keep reusable SQL in `src/queries/` and describe each job with a short module docstring.
+## Build & Development Commands
+- `npm install` – instala dependências (Next.js, NextAuth, Tailwind).
+- `npm run dev` – sobe o Next com HMR em http://localhost:3000.
+- `npm run build` / `npm start` – build e execução em modo produção.
+- `npm run lint` – usa o ESLint padrão do Next.
 
-## Testing Guidelines
-Pytest drives unit and integration coverage. Name files `test_<module>.py`, centralize fixtures in `tests/fixtures/`, and use parametrized cases for rounding/currency rules. Each pipeline must include an integration test that reads from the mocked SaaS payload in `tests/data/market_sample.json`. Maintain ≥85% coverage via `pytest --cov`, and fail fast on schema drift by validating against the column map stored in `tests/schemas.py`.
+Sempre derrube instâncias antigas (`lsof -nP -iTCP:3000 ...`) antes de subir outra, evitando múltiplos processos ocupando a porta.
 
-## Commit & Pull Request Guidelines
-Follow Conventional Commits (`feat:`, `fix:`, `chore:`) and mention the market/ticker touched in the subject. PR descriptions must include purpose, a short change list, test output snippets, and screenshots/CSV diffs when dashboards or metrics shift. Link to the issue, call out config or migration steps, and describe rollback expectations if pipelines mutate storage.
+## Coding Style & Naming
+- Use componentes funcionais com hooks; mantenha estado local minimalista.
+- Prefira arquivos `.jsx`/`.js` no diretório `components/` para blocos reutilizáveis.
+- Páginas residem em `pages/`. Use `getStaticProps`, `getStaticPaths` ou `getServerSideProps` conforme o fluxo (SSR para áreas privadas, SSG para blog).
+- Estilos: combine utilitários Tailwind com classes globais (`styles/globals.css`). Evite CSS-in-JS adicional.
+- SEO é obrigatório para páginas públicas: `<Head>`, Open Graph/Twitter e JSON-LD usando `dangerouslySetInnerHTML`.
 
-## Security & Configuration Tips
-Secrets live in `.env.local` and are loaded through `config/settings.py`; update `config/.env.example` whenever variables change. Never commit raw API payloads or BI exports—keep `data/raw/`, `*.parquet`, and `.env*` ignored. Rotate vendor keys quarterly, document permissions in `docs/security.md`, and sanitise log samples before attaching them to issues.
+## Testing & QA
+Ainda não há suíte automatizada. Ao implementar recursos sensíveis (ex.: autenticação, blog público), valide manualmente:
+- `npm run dev` + navegação das rotas críticas (`/`, `/login`, `/dashboard`, `/blog`).
+- Verifique redirecionamentos protegidos (usuário não logado deve ser mandado a `/login`).
+- Teste responsividade básica (mobile/desktop) dos layouts dark.
+
+## Commit & PR Guidelines
+- Use Conventional Commits (`feat:`, `fix:`, `chore:`). Inclua o contexto (ex.: `feat(blog): melhorar página pública`).
+- PRs precisam de: objetivos, lista de mudanças, prints/gifs quando UI muda, e resultado dos comandos relevantes (`npm run lint`, etc.).
+- Aponte se há impacto em variáveis de ambiente ou credenciais.
+
+## Security & Configuration
+- Segredos ficam em `.env.local` (Google OAuth, NEXTAUTH_SECRET). Não comite esse arquivo.
+- Sempre atualize `postcss.config.js` para usar `@tailwindcss/postcss`; evitar plugins deprecados.
+- Middleware deve proteger apenas rotas privadas. Não envolva `/blog` e `/blog/**`.
+- Ao lidar com dados fictícios (ex.: `lib/blogPosts.js`), mantenha o conteúdo editorial neutro e sem dados sensíveis.
+
+## UX/Design Guardrails
+- Tema dark predominante (#050711 / azul elétrico). Use as utilidades Tailwind para espaçamento e tipografia confortável.
+- Navbar fixa com CTA de login/logout e breadcrumbs coerentes nas páginas de conteúdo.
+- Os cards e páginas do blog precisam comunicar claramente: capa > meta info > título > resumo > tags > CTA.
+- Para artigos, priorize leitura fluída (`prose prose-invert` ou equivalente) e blocos relacionados no rodapé.
