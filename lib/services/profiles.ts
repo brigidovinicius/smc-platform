@@ -1,4 +1,4 @@
-import type { Prisma, Profile } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
 
 export function getProfileByUserId(userId: string) {
@@ -8,11 +8,11 @@ export function getProfileByUserId(userId: string) {
   });
 }
 
-export function createProfile(data: Prisma.ProfileCreateInput): Promise<Profile> {
+export function createProfile(data: Prisma.ProfileCreateInput) {
   return prisma.profile.create({ data });
 }
 
-export function updateProfile(userId: string, data: Prisma.ProfileUpdateInput): Promise<Profile> {
+export function updateProfile(userId: string, data: Prisma.ProfileUpdateInput) {
   return prisma.profile.update({
     where: { userId },
     data

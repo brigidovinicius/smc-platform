@@ -1,4 +1,4 @@
-import type { Offer, Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
 
 const DEFAULT_PAGE_SIZE = 12;
@@ -51,10 +51,10 @@ export function getOfferBySlug(slug: string) {
   });
 }
 
-export function createOffer(data: Prisma.OfferCreateInput): Promise<Offer> {
+export function createOffer(data: Prisma.OfferCreateInput) {
   return prisma.offer.create({ data });
 }
 
-export function updateOffer(id: string, data: Prisma.OfferUpdateInput): Promise<Offer> {
+export function updateOffer(id: string, data: Prisma.OfferUpdateInput) {
   return prisma.offer.update({ where: { id }, data });
 }

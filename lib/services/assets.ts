@@ -1,4 +1,4 @@
-import type { Prisma, SaaSAsset } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
 
 const DEFAULT_PAGE_SIZE = 12;
@@ -51,10 +51,10 @@ export function getAssetBySlug(slug: string) {
   });
 }
 
-export function createAsset(data: Prisma.SaaSAssetCreateInput): Promise<SaaSAsset> {
+export function createAsset(data: Prisma.SaaSAssetCreateInput) {
   return prisma.saaSAsset.create({ data });
 }
 
-export function updateAsset(id: string, data: Prisma.SaaSAssetUpdateInput): Promise<SaaSAsset> {
+export function updateAsset(id: string, data: Prisma.SaaSAssetUpdateInput) {
   return prisma.saaSAsset.update({ where: { id }, data });
 }
