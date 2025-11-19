@@ -1,5 +1,7 @@
-import { formatCurrency } from '@/lib/utils/formatting';
 import Badge from './ui/Badge';
+
+const formatCurrency = (value, currency = 'BRL') =>
+  new Intl.NumberFormat('pt-BR', { style: 'currency', currency }).format(value);
 
 const OfferCard = ({ offer }) => (
   <article className="bg-[#060c1a] border border-white/5 rounded-2xl p-4 flex flex-col gap-3">
