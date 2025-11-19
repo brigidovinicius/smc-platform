@@ -17,6 +17,12 @@ model User {
 
   accounts Account[]
   sessions Session[]
+  profile  Profile?
+  assets   SaaSAsset[]
+  offers   Offer[]      @relation("UserOffers")
+  purchases Offer[]     @relation("UserBuys")
+  transactionsSold Transaction[] @relation("TransactionSeller")
+  transactionsBought Transaction[] @relation("TransactionBuyer")
 }
 
 model Account {
@@ -53,4 +59,77 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  role      Role     @default(USER)
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SaaSAsset {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String
+  category    String
+  mrr         Float?
+  arr         Float?
+  churnRate   Float?
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  offers      Offer[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([ownerId])
+}
+
+model Offer {
+  id        String      @id @default(cuid())
+  assetId   String
+  asset     SaaSAsset   @relation(fields: [assetId], references: [id])
+  sellerId  String
+  seller    User        @relation("UserOffers", fields: [sellerId], references: [id])
+  buyerId   String?
+  buyer     User?       @relation("UserBuys", fields: [buyerId], references: [id])
+  price     Float
+  status    OfferStatus @default(ACTIVE)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  transactions Transaction[]
+
+  @@index([assetId])
+  @@index([sellerId])
+  @@index([status])
+}
+
+model Transaction {
+  id        String   @id @default(cuid())
+  offerId   String
+  offer     Offer    @relation(fields: [offerId], references: [id])
+  sellerId  String
+  seller    User     @relation("TransactionSeller", fields: [sellerId], references: [id])
+  buyerId   String
+  buyer     User     @relation("TransactionBuyer", fields: [buyerId], references: [id])
+  value     Float
+  closedAt  DateTime @default(now())
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OfferStatus {
+  ACTIVE
+  UNDER_NEGOTIATION
+  SOLD
+  ARCHIVED
 }

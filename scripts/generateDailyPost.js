@@ -13,7 +13,7 @@ const openai = new OpenAI({
 });
 
 // Config geral
-const BASE_URL = "https://seu-dominio.com"; // TROCAR depois
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 const SECTION = "blog";
 
 const TARGET_AUDIENCE =

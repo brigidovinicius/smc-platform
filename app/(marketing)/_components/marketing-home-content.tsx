@@ -692,7 +692,7 @@ function StickyNavbar() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <Link className={`hidden text-sm transition md:inline-flex ${textColor}`} href="/login">
+          <Link className={`hidden text-sm transition md:inline-flex ${textColor}`} href="/auth/login">
             Login
           </Link>
           <Link

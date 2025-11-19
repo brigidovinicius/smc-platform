@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { getSession, signIn, signOut, useSession } from 'next-auth/react';
 
 const ProfilePage = () => {
@@ -26,10 +27,13 @@ const ProfilePage = () => {
       {session.user?.role && <p>Função: {session.user.role}</p>}
       {session.user?.id && <p>ID do perfil: {session.user.id}</p>}
       {session.user?.image && (
-        <img
+        <Image
           src={session.user.image}
-          alt="Avatar"
-          style={{ width: 80, height: 80, borderRadius: '50%', marginTop: 16 }}
+          alt={session.user.name ?? 'Avatar'}
+          width={80}
+          height={80}
+          style={{ borderRadius: '50%', marginTop: 16, height: 'auto' }}
+          priority
         />
       )}
 

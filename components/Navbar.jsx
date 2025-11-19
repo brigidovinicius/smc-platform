@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
 
@@ -30,7 +31,15 @@ export default function Navbar() {
         {status === 'authenticated' && session?.user && (
           <div className="navbar-user">
             {session.user.image && (
-              <img src={session.user.image} alt={session.user.name || 'Avatar'} className="navbar-avatar" />
+              <Image
+                src={session.user.image}
+                alt={session.user.name || 'Avatar'}
+                className="navbar-avatar"
+                width={40}
+                height={40}
+                style={{ borderRadius: '9999px', objectFit: 'cover' }}
+                priority
+              />
             )}
             <div className="navbar-user-info">
               <span className="navbar-user-name">{session.user.name}</span>

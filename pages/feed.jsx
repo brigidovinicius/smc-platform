@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { getAllOffers } from '@/lib/offers';
+import { listOffers } from '@/lib/services/offers';
 
 const SITE_URL = 'https://smc-platform.vercel.app';
 
@@ -261,12 +261,48 @@ const FeedPage = ({ offers }) => {
   );
 };
 
-export async function getStaticProps() {
-  const offers = getAllOffers();
+const normalizeOffer = (offer) => {
+  const asset = offer.asset ?? null;
+  const mrrValue = asset?.mrr ?? null;
+  const arrValue = asset?.arr ?? null;
+  const formattedMRR = typeof mrrValue === 'number' ? `R$ ${mrrValue.toLocaleString('pt-BR')}` : undefined;
+
   return {
-    props: { offers },
-    revalidate: 60 * 30 // atualiza a cada 30 minutos
+    id: offer.id,
+    slug: asset?.slug ?? offer.id,
+    title: asset?.name ?? offer.asset?.slug ?? 'Ativo digital',
+    summary: asset?.description ?? 'Ativo cadastrado no marketplace.',
+    classification: asset?.category ?? 'Ativo',
+    niche: asset?.category ?? 'Ativos digitais',
+    investmentRange: {
+      min: offer.price,
+      max: offer.price
+    },
+    revenueRange: formattedMRR ? `MRR ${formattedMRR}` : 'Sob consulta',
+    valuationMultiple:
+      typeof arrValue === 'number' && arrValue > 0
+        ? `${(offer.price / arrValue).toFixed(1)}x ARR`
+        : 'Sob consulta',
+    badges: [],
+    metrics: {
+      mrr: formattedMRR
+    }
   };
+};
+
+export async function getServerSideProps() {
+  try {
+    const offerResult = await listOffers({ pageSize: 50 });
+    const normalized = offerResult.items.map(normalizeOffer);
+    return {
+      props: { offers: normalized }
+    };
+  } catch (error) {
+    console.error('[feed] Falha ao carregar ofertas', error);
+    return {
+      props: { offers: [] }
+    };
+  }
 }
 
 export default FeedPage;
