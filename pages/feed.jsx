@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { listOffers } from '@/lib/services/offers';
@@ -38,51 +39,85 @@ const matchesInvestment = (offer, filter) => {
   }
 };
 
-const OfferCard = ({ offer }) => (
-  <article className="bg-[#0b1230] border border-white/5 rounded-3xl p-6 flex flex-col gap-3 shadow-2xl shadow-black/50">
-    <div className="text-xs uppercase tracking-[0.3em] text-blue-300">{offer.classification}</div>
-    <h2 className="text-2xl font-semibold text-white">{offer.title}</h2>
-    <p className="text-slate-300">{offer.summary}</p>
-    <div className="grid grid-cols-2 gap-4 text-sm text-slate-200">
-      <div>
-        <p className="text-slate-400 text-xs">Faturamento</p>
-        <strong>{offer.revenueRange}</strong>
+const OfferCard = ({ offer, isHighlighted, isAuthenticated }) => {
+  const ctaHref = isAuthenticated ? `/offers/${offer.slug}` : `/auth/login?callbackUrl=/offers/${offer.slug}`;
+  const ctaLabel = isAuthenticated ? 'Ver detalhes →' : 'Entrar para ver detalhes';
+
+  return (
+    <article
+      className={`bg-[#0b1230] border rounded-3xl p-6 flex flex-col gap-3 shadow-2xl transition hover:-translate-y-1 ${
+        isHighlighted ? 'border-blue-400 shadow-blue-500/40' : 'border-white/5 shadow-black/40'
+      }`}
+    >
+      <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-blue-300">
+        {isHighlighted && (
+          <span className="rounded-full bg-blue-500/20 px-2 py-0.5 text-[10px] tracking-[0.2em] text-blue-100">Novo</span>
+        )}
+        <span>{offer.classification}</span>
       </div>
-      <div>
-        <p className="text-slate-400 text-xs">Investimento</p>
-        <strong>
-          {offer.investmentRange
-            ? `R$ ${(offer.investmentRange.min / 1000).toFixed(0)}k – R$ ${(offer.investmentRange.max / 1000).toFixed(0)}k`
-            : 'Sob consulta'}
-        </strong>
+      <h2 className="text-2xl font-semibold text-white">{offer.title}</h2>
+      <p className="text-slate-300">{offer.summary}</p>
+      <div className="grid grid-cols-2 gap-4 text-sm text-slate-200">
+        <div>
+          <p className="text-slate-400 text-xs flex items-center gap-1">
+            Faturamento
+            <span className="text-blue-300 cursor-help" title="MRR aproximado reportado pelo operador.">
+              ⓘ
+            </span>
+          </p>
+          <strong>{offer.revenueRange}</strong>
+        </div>
+        <div>
+          <p className="text-slate-400 text-xs flex items-center gap-1">
+            Investimento
+            <span className="text-blue-300 cursor-help" title="Faixa esperada para aquisição equity/cash-out.">
+              ⓘ
+            </span>
+          </p>
+          <strong>
+            {offer.investmentRange
+              ? `R$ ${(offer.investmentRange.min / 1000).toFixed(0)}k – R$ ${(offer.investmentRange.max / 1000).toFixed(0)}k`
+              : 'Sob consulta'}
+          </strong>
+        </div>
+        <div>
+          <p className="text-slate-400 text-xs">Nicho</p>
+          <strong>{offer.niche}</strong>
+        </div>
+        <div>
+          <p className="text-slate-400 text-xs flex items-center gap-1">
+            Múltiplo
+            <span className="text-blue-300 cursor-help" title="Valor pedido / ARR.">
+              ⓘ
+            </span>
+          </p>
+          <strong>{offer.valuationMultiple}</strong>
+        </div>
       </div>
-      <div>
-        <p className="text-slate-400 text-xs">Nicho</p>
-        <strong>{offer.niche}</strong>
+      <div className="flex flex-wrap gap-2">
+        {offer.badges?.map((badge) => (
+          <span key={badge} className="px-3 py-1 rounded-full text-xs bg-white/5 text-slate-200">
+            {badge}
+          </span>
+        ))}
       </div>
-      <div>
-        <p className="text-slate-400 text-xs">Múltiplo</p>
-        <strong>{offer.valuationMultiple}</strong>
-      </div>
-    </div>
-    <div className="flex flex-wrap gap-2">
-      {offer.badges?.map((badge) => (
-        <span key={badge} className="px-3 py-1 rounded-full text-xs bg-white/5 text-slate-200">
-          {badge}
-        </span>
-      ))}
-    </div>
-    <Link href={`/offers/${offer.slug}`} className="mt-2 inline-flex items-center text-blue-400 hover:text-blue-200 text-sm">
-      Ver detalhes →
-    </Link>
-  </article>
-);
+      <Link
+        href={ctaHref}
+        className="mt-4 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#6b5bff] to-[#8f74ff] px-5 py-2 text-sm font-semibold text-white transition hover:opacity-90"
+      >
+        {ctaLabel}
+      </Link>
+    </article>
+  );
+};
 
 const FeedPage = ({ offers }) => {
+  const { data: session } = useSession();
   const [classification, setClassification] = useState('Todos');
   const [investmentFilter, setInvestmentFilter] = useState('all');
   const [revenueFilter, setRevenueFilter] = useState('Todos');
   const [nicheFilter, setNicheFilter] = useState('Todos');
+  const [visibleCount, setVisibleCount] = useState(9);
 
   const classifications = useMemo(
     () => ['Todos', ...new Set(offers.map((offer) => offer.classification))],
@@ -99,6 +134,33 @@ const FeedPage = ({ offers }) => {
     const nicheMatch = nicheFilter === 'Todos' || offer.niche === nicheFilter;
     return classificationMatch && investmentMatch && revenueMatch && nicheMatch;
   });
+
+  const paginatedOffers = filteredOffers.slice(0, visibleCount);
+
+  const activeFilters = useMemo(() => {
+    const chips = [];
+    if (classification !== 'Todos') {
+      chips.push({ label: classification, onRemove: () => setClassification('Todos') });
+    }
+    if (investmentFilter !== 'all') {
+      const label = investmentFilters.find((f) => f.value === investmentFilter)?.label ?? 'Ticket';
+      chips.push({ label, onRemove: () => setInvestmentFilter('all') });
+    }
+    if (revenueFilter !== 'Todos') {
+      chips.push({ label: revenueFilter, onRemove: () => setRevenueFilter('Todos') });
+    }
+    if (nicheFilter !== 'Todos') {
+      chips.push({ label: nicheFilter, onRemove: () => setNicheFilter('Todos') });
+    }
+    return chips;
+  }, [classification, investmentFilter, revenueFilter, nicheFilter]);
+
+  const clearAllFilters = () => {
+    setClassification('Todos');
+    setInvestmentFilter('all');
+    setRevenueFilter('Todos');
+    setNicheFilter('Todos');
+  };
 
   const schemaData = useMemo(
     () => ({
@@ -159,16 +221,14 @@ const FeedPage = ({ offers }) => {
 
         <header className="space-y-4 text-center">
           <p className="tracking-[0.4em] uppercase text-xs text-blue-200">SMC FEED</p>
-          <h1 className="text-4xl font-bold">
-            Oportunidades de SaaS e ativos digitais para investidores e founders
-          </h1>
+          <h1 className="text-4xl font-bold">Oportunidades de SaaS e ativos digitais para investidores e founders</h1>
           <p className="text-slate-300">
             Visualize oportunidades reais de aquisição de SaaS, marketplaces e newsletters. Esta prévia é aberta ao público –
             detalhes completos exigem login. Atualizamos diariamente com ativos que possuem métricas claras de MRR, churn e
             faixa de investimento.
           </p>
           <div className="flex justify-center gap-4 flex-wrap">
-            <Link href="/login?callbackUrl=/feed" className="button primary">
+            <Link href="/auth/login?callbackUrl=/feed" className="button primary">
               Receber memorando completo
             </Link>
             <Link href="/wizard" className="button secondary">
@@ -187,7 +247,7 @@ const FeedPage = ({ offers }) => {
         </section>
 
         <section className="bg-[#081024] border border-white/5 rounded-3xl p-6 space-y-4" aria-label="Filtros do feed">
-          <div className="grid md:grid-cols-4 gap-4">
+          <div className="grid gap-4 lg:grid-cols-4">
             <label className="flex flex-col gap-1 text-sm">
               <span className="text-slate-400">Classificação</span>
               <select
@@ -202,9 +262,8 @@ const FeedPage = ({ offers }) => {
                 ))}
               </select>
             </label>
-
             <label className="flex flex-col gap-1 text-sm">
-              <span className="text-slate-400">Investimento</span>
+              <span className="text-slate-400">Ticket de investimento</span>
               <select
                 className="bg-[#050b1a] border border-white/10 rounded-2xl px-4 py-2"
                 value={investmentFilter}
@@ -217,9 +276,8 @@ const FeedPage = ({ offers }) => {
                 ))}
               </select>
             </label>
-
             <label className="flex flex-col gap-1 text-sm">
-              <span className="text-slate-400">Faturamento (MRR)</span>
+              <span className="text-slate-400">MRR</span>
               <select
                 className="bg-[#050b1a] border border-white/10 rounded-2xl px-4 py-2"
                 value={revenueFilter}
@@ -232,7 +290,6 @@ const FeedPage = ({ offers }) => {
                 ))}
               </select>
             </label>
-
             <label className="flex flex-col gap-1 text-sm">
               <span className="text-slate-400">Nicho</span>
               <select
@@ -248,14 +305,75 @@ const FeedPage = ({ offers }) => {
               </select>
             </label>
           </div>
+          {activeFilters.length > 0 && (
+            <div className="flex flex-wrap items-center gap-3 text-sm">
+              <span className="text-slate-400">Filtros ativos:</span>
+              {activeFilters.map((filter) => (
+                <button
+                  key={filter.label}
+                  type="button"
+                  className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs text-white"
+                  onClick={filter.onRemove}
+                >
+                  {filter.label}
+                  <span aria-hidden>✕</span>
+                </button>
+              ))}
+              <button type="button" className="text-xs text-blue-300 underline" onClick={clearAllFilters}>
+                Limpar todos
+              </button>
+            </div>
+          )}
         </section>
 
-        <section className="grid gap-6 md:grid-cols-2" aria-label="Ofertas">
-          {filteredOffers.length === 0 && <p className="text-slate-400">Nenhuma oferta corresponde aos filtros selecionados.</p>}
-          {filteredOffers.map((offer) => (
-            <OfferCard key={offer.slug} offer={offer} />
-          ))}
+        <section className="space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-slate-400">
+            <span>
+              Mostrando <strong>{Math.min(visibleCount, filteredOffers.length)}</strong> de{' '}
+              <strong>{filteredOffers.length}</strong> ativos
+            </span>
+            <span>Atualizado continuamente com dados auditados.</span>
+          </div>
+
+          {filteredOffers.length === 0 ? (
+            <div className="rounded-3xl border border-white/10 bg-[#081024] p-10 text-center">
+              <p className="text-lg font-semibold">Nenhum ativo encontrado com esses filtros.</p>
+              <p className="text-slate-400 mt-2">Ajuste os filtros ou limpe-os para ver o inventário completo.</p>
+              <button
+                type="button"
+                className="mt-4 inline-flex items-center justify-center rounded-full border border-white/30 px-5 py-2 text-sm text-white transition hover:bg-white/10"
+                onClick={clearAllFilters}
+              >
+                Limpar filtros
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {paginatedOffers.map((offer, index) => (
+                  <OfferCard
+                    key={offer.id}
+                    offer={offer}
+                    isHighlighted={index === 0}
+                    isAuthenticated={Boolean(session)}
+                  />
+                ))}
+              </div>
+              {visibleCount < filteredOffers.length && (
+                <div className="flex justify-center">
+                  <button
+                    type="button"
+                    className="rounded-full border border-white/20 px-6 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+                    onClick={() => setVisibleCount((prev) => prev + 6)}
+                  >
+                    Mostrar mais ativos
+                  </button>
+                </div>
+              )}
+            </>
+          )}
         </section>
+
       </div>
     </main>
   );
