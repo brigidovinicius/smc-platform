@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import prisma from '@/lib/prisma';
+import { sendVerificationEmail } from '@/lib/email';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -12,6 +13,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (!email || !password) {
     return res.status(400).json({ error: 'E-mail e senha são obrigatórios' });
+  }
+
+  if (password.length < 8) {
+    return res.status(400).json({ error: 'A senha deve ter pelo menos 8 caracteres.' });
   }
 
   const existing = await prisma.user.findUnique({ where: { email } });
@@ -39,7 +44,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   });
 
-  console.log(`Verifique seu e-mail acessando: http://localhost:3000/auth/verify?token=${token}`);
+  const emailSent = await sendVerificationEmail(email, token);
+  if (!emailSent) {
+    return res
+      .status(500)
+      .json({ error: 'Não foi possível enviar o e-mail de verificação. Verifique configurações SMTP.' });
+  }
 
   return res.status(201).json({ ok: true });
 }
