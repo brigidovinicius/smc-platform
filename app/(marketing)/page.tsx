@@ -42,19 +42,22 @@ const howItWorks = [
     title: 'Envie seu ativo',
     description:
       'Cadastro guiado com métricas de MRR, churn, CAC, canais de aquisição e stack tecnológico. Tudo padronizado.',
-    highlight: '1 • Intake'
+    highlight: '1 • Intake',
+    icon: 'Upload'
   },
   {
     title: 'Receba valuation automático',
     description:
       'Nosso motor aplica múltiplos comparáveis, sanity check de métricas e gera dossiê pronto para compartilhar.',
-    highlight: '2 • Valuation'
+    highlight: '2 • Valuation',
+    icon: 'Calculator'
   },
   {
     title: 'Negocie com compradores qualificados',
     description:
       'Acesso a funds, clubes de compra e operadores individuais com NDA, trilha de negociação e escrow seguro.',
-    highlight: '3 • Negociação'
+    highlight: '3 • Negociação',
+    icon: 'Handshake'
   }
 ];
 
@@ -63,37 +66,37 @@ const features = [
     title: 'Valuation Automático',
     description:
       'Modelo proprietário cruza MRR, churn, CAC, LTV, crescimento e riscos setoriais para recomendar múltiplos.',
-    icon: '📈'
+    icon: 'ChartLine'
   },
   {
     title: 'Due Diligence com IA',
     description:
       'Checklist inteligente sinaliza anomalias em receitas, cohort, dependências e expõe todo o histórico de métricas.',
-    icon: '🧠'
+    icon: 'Brain'
   },
   {
     title: 'Deal-Room Seguro',
     description:
       'Uploads criptografados, blur automático e logs de acesso para compartilhar dados sensíveis só com quem avançar.',
-    icon: '🛡️'
+    icon: 'Shield'
   },
   {
     title: 'Base de Compradores',
     description:
       'Funds, agregadores e flippers pré-verificados com acordo operacional e SLA para envio de propostas.',
-    icon: '🤝'
+    icon: 'Users'
   },
   {
     title: 'Relatórios Exportáveis',
     description:
       'Gere PDF, planilhas e modelos de data-room em um clique para mostrar tração e uso de caixa com clareza.',
-    icon: '🗂️'
+    icon: 'FileText'
   },
   {
     title: 'Insights Operacionais',
     description:
       'Alertas sobre churn, retenção, payback e health score para orientar founders antes de abrir rodada ou venda.',
-    icon: '⚡️'
+    icon: 'Zap'
   }
 ];
 

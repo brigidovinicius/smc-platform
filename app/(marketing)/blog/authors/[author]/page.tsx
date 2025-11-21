@@ -1,13 +1,20 @@
-import { notFound } from 'next/navigation';
-import BlogCard from '@/components/blog/BlogCard';
 import BlogAuthorCard from '@/components/blog/BlogAuthorCard';
-import { getAuthorBySlug, getPostsByAuthor } from '@/lib/blog';
+import BlogCard from '@/components/blog/BlogCard';
+import { getAllAuthors, getAuthorBySlug, getPostsByAuthor } from '@/lib/blog';
+import { notFound } from 'next/navigation';
 
 interface Params {
   params: { author: string };
 }
 
 export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  const authors = getAllAuthors();
+  return authors.map((author) => ({
+    author: author.slug,
+  }));
+}
 
 export default function AuthorPage({ params }: Params) {
   const author = getAuthorBySlug(params.author);

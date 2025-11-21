@@ -1,8 +1,36 @@
 'use client';
 
-import { motion, useInView, useMotionValue, useSpring } from 'framer-motion';
+import { motion, useScroll } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Footer } from './footer';
+import {
+  ChartLine,
+  Brain,
+  Shield,
+  Users,
+  FileText,
+  Zap,
+  Upload,
+  Calculator,
+  Handshake,
+  ArrowRight,
+  CheckCircle,
+  LucideIcon
+} from 'lucide-react';
+
+const iconMap: Record<string, LucideIcon> = {
+  ChartLine,
+  Brain,
+  Shield,
+  Users,
+  FileText,
+  Zap,
+  Upload,
+  Calculator,
+  Handshake
+};
 
 export type HeroStat = {
   label: string;
@@ -68,590 +96,383 @@ type MarketingHomeContentProps = {
 
 export function MarketingHomeContent(props: MarketingHomeContentProps) {
   const {
-    heroStats,
     proofLogos,
     howItWorks,
     features,
-    useCases,
-    productShots,
-    testimonials,
-    faq,
-    gallery,
-    story,
-    security
+    testimonials
   } = props;
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden bg-[#FAFAFA]">
       <StickyNavbar />
       <FloatingCTA />
 
+      {/* HERO SECTION */}
       <section
         id="hero"
-        className="relative bg-gradient-to-b from-[#050611] via-[#0b0d18] to-[var(--color-bg)] text-white"
+        className="relative min-h-[90vh] overflow-hidden bg-[#050611] text-white"
       >
-        <div className="absolute inset-x-0 top-0 h-[520px] bg-[radial-gradient(circle_at_top,_rgba(108,92,231,0.25),_transparent_65%)]" />
-        <div className="container relative grid gap-16 py-28 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+        {/* Background Effects */}
+        <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-20" />
+        <div className="absolute -top-[20%] -left-[10%] h-[800px] w-[800px] rounded-full bg-purple-600/20 blur-[120px]" />
+        <div className="absolute top-[10%] -right-[10%] h-[600px] w-[600px] rounded-full bg-blue-600/20 blur-[100px]" />
+
+        <div className="container relative z-10 grid gap-16 py-32 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div className="space-y-8">
-            <div className="flex flex-wrap items-center gap-3 text-sm">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-1 uppercase tracking-[0.3em] text-[10px] text-white">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" /> Beta público
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 backdrop-blur-md"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
               </span>
-              <span className="text-white/80">Auditoria e dados vivos</span>
-            </div>
-            <div className="space-y-5">
+              <span className="text-xs font-medium tracking-wide text-white/90 uppercase">Beta Público · Dados auditados</span>
+            </motion.div>
+
+            <div className="space-y-6">
               <motion.h1
-                className="font-heading text-4xl leading-tight md:text-5xl lg:text-6xl"
-                initial={{ opacity: 0, y: 24 }}
+                className="font-heading text-5xl font-bold leading-[1.1] tracking-tight md:text-6xl lg:text-7xl"
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
               >
-                Avalie, compre e venda ativos digitais com ritmo e transparência
+                O marketplace de <br />
+                <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  ativos digitais
+                </span>
               </motion.h1>
               <motion.p
-                className="text-lg text-white/80 md:text-xl"
-                initial={{ opacity: 0, y: 24 }}
+                className="max-w-xl text-lg text-slate-400 md:text-xl leading-relaxed"
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
               >
-                MRR, churn, CAC, cohorts e riscos consolidados em um único painel. Fundadores têm clareza sobre valuation
-                e compradores ganham velocidade para tomar decisão.
+                Compre e venda SaaS, newsletters e comunidades com dados verificados.
+                Valuation automático, due diligence integrada e deal-room seguro.
               </motion.p>
             </div>
+
             <motion.div
               className="flex flex-wrap gap-4"
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                <Link
-                  className="button primary bg-gradient-to-r from-[#6b5bff] via-[#8f74ff] to-[#6c5ce7] text-base shadow-lg shadow-purple-500/30"
-                  href="/feed"
-                >
-                  Explorar ativos
-                </Link>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                <Link className="button secondary border-white/60 text-white" href="/wizard">
-                  Enviar meu ativo
-                </Link>
-              </motion.div>
+              <Link
+                className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full bg-white px-8 font-medium text-black transition-all hover:bg-slate-200 hover:scale-105"
+                href="/feed"
+              >
+                <span className="mr-2">Explorar ativos</span>
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <Link
+                className="inline-flex h-12 items-center justify-center rounded-full border border-white/20 bg-white/5 px-8 font-medium text-white backdrop-blur-sm transition-all hover:bg-white/10"
+                href="/wizard"
+              >
+                Vender meu ativo
+              </Link>
             </motion.div>
-            <motion.div
-              className="rounded-2xl border border-white/10 bg-white/5 p-5 text-sm text-white/80 shadow-[0_12px_48px_rgba(3,7,18,0.45)]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-            >
-              “Criamos o SMC porque founders não podem depender de guesswork para precificar. A plataforma reúne dados,
-              due diligence e compradores que sabem executar.”
-            </motion.div>
-            <ProofBar proofLogos={proofLogos} />
-            <div className="grid gap-4 pt-4 sm:grid-cols-2">
-              {heroStats.map((stat) => (
-                <div key={stat.label} className="rounded-3xl border border-white/10 bg-white/5 p-4 text-white">
-                  <p className="text-xs uppercase tracking-[0.3em] text-white/70">{stat.label}</p>
-                  <AnimatedStat value={stat.value} prefix={stat.prefix} suffix={stat.suffix} description={stat.description} />
-                </div>
-              ))}
+
+            <div className="pt-8">
+              <p className="mb-4 text-xs font-medium uppercase tracking-widest text-slate-500">Confiança de players como</p>
+              <MarqueeLogos logos={proofLogos} />
             </div>
           </div>
 
           <motion.div
-            className="relative rounded-[32px] border border-white/10 bg-white/5 p-6 lg:p-8 shadow-[0_25px_80px_rgba(12,15,35,0.65)]"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.15 }}
+            className="relative"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <div className="mb-8 flex items-center justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-white/60">Painel ao vivo</p>
-                <p className="text-2xl font-semibold text-white">Health Score do ativo</p>
+            <div className="relative z-10 rounded-3xl border border-white/10 bg-[#0B0D18]/80 p-2 shadow-2xl backdrop-blur-xl ring-1 ring-white/10">
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-slate-900">
+                <Image
+                  src="/images/hero-dashboard.png"
+                  alt="SaaS Market Cap Dashboard"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0B0D18] via-transparent to-transparent opacity-60" />
               </div>
-              <span className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs text-emerald-200">Atualizado agora</span>
             </div>
-            <HeroVisualization />
-            <HeroProductMock />
+            {/* Floating Elements */}
+            <motion.div
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -right-8 top-20 z-20 rounded-2xl border border-white/10 bg-[#1A1D2D]/90 p-4 shadow-xl backdrop-blur-md"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500/20 text-green-400">
+                  💰
+                </div>
+                <div>
+                  <p className="text-xs text-slate-400">Oferta Recebida</p>
+                  <p className="font-semibold text-white">R$ 450.000</p>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      <section id="como-funciona" className="container py-20">
-        <div className="mb-12 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="space-y-3">
-            <p className="text-xs uppercase tracking-[0.4em] text-[var(--color-primary)]">Como funciona</p>
-            <h2 className="text-3xl font-semibold text-[var(--color-text)]">Fluxo completo em três movimentos</h2>
-            <p className="text-base text-[var(--color-text-secondary)]">
-              Dados entram uma única vez, passam pelo valuation automático e são convertidos em dossiês com múltiplos de
-              mercado e métricas auditadas. Tudo pronto para negociar.
+      {/* HOW IT WORKS - TIMELINE */}
+      <section id="como-funciona" className="py-24 bg-white">
+        <div className="container">
+          <div className="mb-16 text-center">
+            <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-4xl">Como funciona</h2>
+            <p className="mx-auto max-w-2xl text-slate-600">
+              Do cadastro ao exit, simplificamos cada etapa da jornada de M&A para ativos digitais.
             </p>
           </div>
-          <div className="rounded-3xl border border-[var(--color-border)] bg-white p-6 shadow-[0_15px_60px_rgba(15,16,20,0.08)]">
-            <p className="text-sm font-semibold text-[var(--color-text)]">
-              “Integramos o SMC ao stack do nosso fundo.
-            </p>
-            <p className="text-sm text-[var(--color-text-secondary)]">
-              As oportunidades chegam com saúde financeira, riscos mapeados e documentos organizados. É literalmente outra
-              cadência de investimento.”
-            </p>
-            <p className="mt-4 text-xs uppercase tracking-[0.3em] text-[var(--color-text-secondary)]">
-              Isabel – Partner @ Orbit Ventures
-            </p>
-          </div>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {howItWorks.map((item) => (
-            <motion.article
-              key={item.title}
-              className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-sm"
-              whileHover={{ y: -6, borderColor: 'rgba(108,92,231,0.4)' }}
-            >
-              <p className="text-sm font-semibold text-[var(--color-primary)]">{item.highlight}</p>
-              <h3 className="mb-2 text-xl font-semibold text-[var(--color-text)]">{item.title}</h3>
-              <p className="text-sm text-[var(--color-text-secondary)]">{item.description}</p>
-            </motion.article>
-          ))}
-        </div>
-      </section>
 
-      <section id="prova" className="section section-muted">
-        <div className="container space-y-8">
-          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-[0.4em] text-[var(--color-primary)]">Prova social</p>
-              <h2 className="text-3xl font-semibold text-[var(--color-text)]">Operadores que confiam em nós</h2>
-            </div>
-            <p className="text-sm text-[var(--color-text-secondary)]">
-              Investors, operators e flippers que já fecharam deals no SMC.
-            </p>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {testimonials.map((testimonial) => (
-              <motion.article
-                key={testimonial.author}
-                className="rounded-[28px] border border-[var(--color-border)] bg-white p-6 shadow-sm"
-                whileHover={{ y: -4, boxShadow: '0 15px 34px rgba(32,33,36,0.12)' }}
-              >
-                <p className="text-sm text-[var(--color-text-secondary)]">“{testimonial.quote}”</p>
-                <div className="mt-4">
-                  <p className="font-semibold text-[var(--color-text)]">{testimonial.author}</p>
-                  <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-text-secondary)]">
-                    {testimonial.role} · {testimonial.company}
-                  </p>
-                </div>
-              </motion.article>
-            ))}
-          </div>
-        </div>
-      </section>
+          <div className="relative">
+            {/* Line */}
+            <div className="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 bg-slate-100 hidden md:block" />
 
-      <section id="produto" className="section section-muted">
-        <div className="container space-y-12">
-          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-[0.4em] text-[var(--color-primary)]">Produto</p>
-              <h2 className="text-3xl font-semibold text-[var(--color-text)]">SMC é um produto vivo</h2>
-              <p className="max-w-2xl text-base text-[var(--color-text-secondary)]">
-                Cards com métricas, deal-room com blur estratégico e insights de churn/CAC que você só encontra aqui.
-              </p>
-            </div>
-            <Link className="button ghost" href="/dashboard">
-              Ver dashboard em detalhes →
-            </Link>
-          </div>
-          <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-            <div className="relative overflow-hidden rounded-[32px] border border-[var(--color-border)] bg-white/70 p-6 backdrop-blur-xl shadow-[0_25px_80px_rgba(10,10,10,0.08)]">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(108,92,231,0.25),_transparent_65%)]" />
-              <div className="relative space-y-4 text-[var(--color-text)]">
-                <div className="flex items-center justify-between text-sm text-[var(--color-text-secondary)]">
-                  <span>Visão do operador</span>
-                  <span>Blur automático</span>
-                </div>
-                <div className="rounded-2xl border border-white/70 bg-white/80 p-6 shadow-inner">
-                  <p className="font-heading text-2xl">Pipeline de negociações</p>
-                  <div className="mt-5 grid gap-4 md:grid-cols-2">
-                    {['MRR • Últimos 12m', 'CAC Recuperado', 'Payback', 'Health Score'].map((item) => (
-                      <div key={item} className="rounded-2xl border border-[var(--color-border)] bg-white/90 p-4">
-                        <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-text-secondary)]">{item}</p>
-                        <p className="text-xl font-semibold text-[var(--color-text)]">••••••••</p>
+            <div className="space-y-12 md:space-y-24">
+              {howItWorks.map((item, index) => {
+                const Icon = item.icon ? iconMap[item.icon] : CheckCircle;
+                return (
+                  <motion.div
+                    key={item.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    className={`flex flex-col gap-8 md:flex-row ${index % 2 === 1 ? 'md:flex-row-reverse' : ''} items-center`}
+                  >
+                    <div className="flex-1 text-center md:text-left">
+                      <div className={`inline-flex h-12 w-12 items-center justify-center rounded-full bg-indigo-50 text-xl font-bold text-indigo-600 mb-4 md:hidden`}>
+                        {index + 1}
                       </div>
-                    ))}
+                      <h3 className="mb-3 text-2xl font-bold text-slate-900">{item.title}</h3>
+                      <p className="text-slate-600 leading-relaxed">{item.description}</p>
+                    </div>
+
+                    <div className="relative flex items-center justify-center md:w-24">
+                      <div className="hidden h-12 w-12 items-center justify-center rounded-full bg-indigo-600 text-xl font-bold text-white shadow-lg shadow-indigo-200 md:flex z-10">
+                        {index + 1}
+                      </div>
+                    </div>
+
+                    <div className="flex-1">
+                      <div className="aspect-video rounded-2xl bg-slate-50 border border-slate-100 p-8 flex items-center justify-center group hover:border-indigo-100 transition-colors">
+                        <div className="h-20 w-20 rounded-2xl bg-white shadow-sm flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform duration-300">
+                          <Icon size={40} strokeWidth={1.5} />
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FEATURES - BENTO GRID */}
+      <section id="recursos" className="py-24 bg-slate-50">
+        <div className="container">
+          <div className="mb-16 max-w-2xl">
+            <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-4xl">Tudo o que você precisa para negociar</h2>
+            <p className="text-slate-600">
+              Ferramentas profissionais de M&A democratizadas para o mercado de micro-SaaS e ativos digitais.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3 md:grid-rows-2 h-auto md:h-[600px]">
+            {/* Large Item 1 */}
+            <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 md:col-span-2">
+              <div className="relative z-10 grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                    {features[0].icon && iconMap[features[0].icon] && <ChartLine size={24} />}
                   </div>
+                  <h3 className="mb-2 text-xl font-bold text-slate-900">{features[0].title}</h3>
+                  <p className="text-slate-600">{features[0].description}</p>
                 </div>
-                <p className="text-sm text-[var(--color-text-secondary)]">
-                  Para mostrar autoridade sem expor dados sensíveis, aplicamos blur controlado e placeholders configuráveis.
-                </p>
+                <div className="relative h-48 w-full overflow-hidden rounded-xl bg-blue-50/50">
+                  <Image
+                    src="/images/feature-valuation.png"
+                    alt="Valuation Chart"
+                    fill
+                    className="object-contain p-4 transition-transform duration-500 group-hover:scale-110"
+                  />
+                </div>
               </div>
             </div>
-            <div className="grid gap-6">
-              {features.map((feature) => (
-                <motion.article
-                  key={feature.title}
-                  className="flex items-start gap-4 rounded-2xl border border-[var(--color-border)] bg-white p-5 shadow-sm"
-                  whileHover={{ y: -4, boxShadow: '0 15px 34px rgba(32,33,36,0.1)' }}
-                >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-primary)]/10 text-2xl">
-                    {feature.icon}
+
+            {/* Tall Item */}
+            <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 md:row-span-2">
+              <div className="relative z-10 h-full flex flex-col">
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 text-purple-600">
+                  {features[2].icon && iconMap[features[2].icon] && <Shield size={24} />}
+                </div>
+                <h3 className="mb-2 text-xl font-bold text-slate-900">{features[2].title}</h3>
+                <p className="text-slate-600 mb-8">{features[2].description}</p>
+
+                <div className="relative flex-1 min-h-[200px] w-full overflow-hidden rounded-xl bg-purple-50/30 mb-4">
+                  <Image
+                    src="/images/feature-dealroom.png"
+                    alt="Deal Room Security"
+                    fill
+                    className="object-contain p-4 transition-transform duration-500 group-hover:scale-110"
+                  />
+                </div>
+
+                <div className="mt-auto rounded-xl bg-slate-50 border border-slate-100 p-4 group-hover:border-purple-100 transition-colors">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-xs font-medium text-slate-500">Deal Room Ativo</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="h-2 w-full rounded-full bg-slate-200" />
+                    <div className="h-2 w-3/4 rounded-full bg-slate-200" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Small Item 1 */}
+            <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1">
+              <div className="flex flex-col h-full">
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+                  {features[1].icon && iconMap[features[1].icon] && <Brain size={24} />}
+                </div>
+                <h3 className="mb-2 text-lg font-bold text-slate-900">{features[1].title}</h3>
+                <p className="text-sm text-slate-600 mb-4">{features[1].description}</p>
+                <div className="relative h-32 w-full mt-auto overflow-hidden rounded-xl bg-indigo-50/30">
+                  <Image
+                    src="/images/feature-duediligence.png"
+                    alt="AI Due Diligence"
+                    fill
+                    className="object-contain p-2 transition-transform duration-500 group-hover:scale-110"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Small Item 2 */}
+            <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1">
+              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-pink-50 text-pink-600">
+                {features[5].icon && iconMap[features[5].icon] && <Zap size={24} />}
+              </div>
+              <h3 className="mb-2 text-lg font-bold text-slate-900">{features[5].title}</h3>
+              <p className="text-sm text-slate-600">{features[5].description}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section id="depoimentos" className="py-24 bg-white overflow-hidden">
+        <div className="container mb-12 text-center">
+          <h2 className="text-3xl font-bold text-slate-900">Quem já negociou</h2>
+        </div>
+        <div className="relative">
+          <div className="absolute left-0 top-0 z-10 h-full w-32 bg-gradient-to-r from-white to-transparent" />
+          <div className="absolute right-0 top-0 z-10 h-full w-32 bg-gradient-to-l from-white to-transparent" />
+
+          <motion.div
+            className="flex gap-6 w-max"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          >
+            {[...testimonials, ...testimonials, ...testimonials].map((t, i) => (
+              <div key={i} className="w-[400px] flex-shrink-0 rounded-2xl border border-slate-100 bg-slate-50 p-8">
+                <p className="mb-6 text-lg text-slate-700 italic">&quot;{t.quote}&quot;</p>
+                <div className="flex items-center gap-4">
+                  <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center font-bold text-indigo-600">
+                    {t.author[0]}
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-[var(--color-text)]">{feature.title}</h3>
-                    <p className="text-sm text-[var(--color-text-secondary)]">{feature.description}</p>
+                    <p className="font-bold text-slate-900">{t.author}</p>
+                    <p className="text-sm text-slate-500">{t.role} @ {t.company}</p>
                   </div>
-                </motion.article>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="container section space-y-10">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-[0.4em] text-[var(--color-primary)]">Product shots</p>
-            <h2 className="text-3xl font-semibold text-[var(--color-text)]">Dashboard pronto para captar atenção</h2>
-          </div>
-          <p className="max-w-2xl text-sm text-[var(--color-text-secondary)]">
-            Use screenshots com blur inteligente e insights configuráveis para compartilhar apenas o necessário em cada etapa.
-          </p>
-        </div>
-        <div className="grid gap-6 lg:grid-cols-3">
-          {productShots.map((shot) => (
-            <motion.article
-              key={shot.title}
-              className="rounded-[28px] border border-white/60 p-6 text-white shadow-[0_25px_60px_rgba(11,8,40,0.25)]"
-              style={{ background: shot.gradient }}
-              whileHover={{ y: -6, scale: 1.01 }}
-            >
-              <p className="text-xs uppercase tracking-[0.3em] text-white/80">{shot.highlight}</p>
-              <h3 className="mt-2 text-2xl font-semibold">{shot.title}</h3>
-              <p className="mt-3 text-sm text-white/80">{shot.description}</p>
-              <div className="mt-6 rounded-2xl border border-white/30 bg-white/10 p-4 text-sm">
-                <p className="text-white/70">Indicador em destaque</p>
-                <p className="text-2xl font-semibold text-white">{shot.metric}</p>
-              </div>
-            </motion.article>
-          ))}
-        </div>
-      </section>
-
-      <section id="perfis" className="container section space-y-8">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-[0.4em] text-[var(--color-primary)]">Perfis atendidos</p>
-            <h2 className="text-3xl font-semibold text-[var(--color-text)]">Uma plataforma para cada player</h2>
-          </div>
-          <p className="max-w-2xl text-sm text-[var(--color-text-secondary)]">
-            SaaS, newsletters, apps mobile e marketplaces aparecem com indicadores padronizados, permitindo comparar oportunidades
-            rapidamente.
-          </p>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {useCases.map((useCase) => (
-            <article
-              key={useCase.title}
-              className="rounded-[28px] border border-[var(--color-border)] bg-gradient-to-b from-white to-[var(--color-surface)] p-6 shadow-sm"
-            >
-              <div className="mb-4 flex h-36 items-center justify-center rounded-2xl border border-dashed border-[var(--color-border)] bg-[var(--color-surface)] text-center text-sm text-[var(--color-text-secondary)]">
-                Renderização ilustrativa
-              </div>
-              <span className="text-xs uppercase tracking-[0.3em] text-[var(--color-primary)]">{useCase.highlight}</span>
-              <h3 className="mt-2 text-xl font-semibold text-[var(--color-text)]">{useCase.title}</h3>
-              <p className="text-sm text-[var(--color-text-secondary)]">{useCase.description}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="section section-muted">
-        <div className="container space-y-8">
-          <div className="grid gap-8 lg:grid-cols-2">
-            <article className="rounded-[32px] border border-[var(--color-border)] bg-white p-8 shadow-sm">
-              <p className="text-xs uppercase tracking-[0.4em] text-[var(--color-primary)]">Por que existimos</p>
-              <h2 className="text-3xl font-semibold text-[var(--color-text)]">{story.title}</h2>
-              <p className="mt-4 text-sm text-[var(--color-text-secondary)]">{story.body}</p>
-              <ul className="mt-6 space-y-3 text-sm text-[var(--color-text)]">
-                {story.highlights.map((highlight) => (
-                  <li key={highlight} className="flex items-start gap-2">
-                    <span className="mt-1 h-2 w-2 rounded-full bg-[var(--color-primary)]" />
-                    {highlight}
-                  </li>
-                ))}
-              </ul>
-            </article>
-            <article className="rounded-[32px] border border-[var(--color-border)] bg-[var(--color-surface)] p-8 shadow-sm">
-              <p className="text-xs uppercase tracking-[0.4em] text-[var(--color-primary)]">Segurança e auditoria</p>
-              <h2 className="text-3xl font-semibold text-[var(--color-text)]">{security.title}</h2>
-              <p className="mt-4 text-sm text-[var(--color-text-secondary)]">{security.description}</p>
-              <ul className="mt-6 space-y-3 text-sm text-[var(--color-text)]">
-                {security.bullets.map((bullet) => (
-                  <li key={bullet} className="flex items-start gap-2">
-                    <span className="mt-1 h-2 w-2 rounded-full bg-[var(--color-primary)]" />
-                    {bullet}
-                  </li>
-                ))}
-              </ul>
-            </article>
-          </div>
-          {security.callouts && security.callouts.length > 0 && (
-            <div className="grid gap-4 md:grid-cols-3">
-              {security.callouts.map((callout) => (
-                <div key={callout.title} className="rounded-2xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
-                  <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-primary)]">{callout.highlight}</p>
-                  <h3 className="mt-2 text-lg font-semibold text-[var(--color-text)]">{callout.title}</h3>
-                  <p className="text-sm text-[var(--color-text-secondary)]">{callout.description}</p>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      <section id="galeria" className="container section space-y-6">
-        <div>
-          <p className="text-xs uppercase tracking-[0.4em] text-[var(--color-primary)]">Galeria</p>
-          <h2 className="text-3xl font-semibold text-[var(--color-text)]">Alguns ativos auditados</h2>
-          <p className="text-sm text-[var(--color-text-secondary)]">Cada card representa um ativo com métricas reais.</p>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {gallery.map((item) => (
-            <motion.div
-              key={item}
-              className="aspect-video rounded-3xl border border-[var(--color-border)] bg-gradient-to-br from-[#cfd5ff] to-white shadow-sm"
-              whileHover={{ scale: 1.02 }}
-            />
-          ))}
-        </div>
-      </section>
-
-      <section id="faq" className="section section-muted">
-        <div className="container space-y-6">
-          <div>
-            <p className="text-xs uppercase tracking-[0.4em] text-[var(--color-primary)]">FAQ</p>
-            <h2 className="text-3xl font-semibold text-[var(--color-text)]">Perguntas frequentes</h2>
-          </div>
-          <div className="space-y-4">
-            {faq.map((item, index) => (
-              <details
-                key={item.question}
-                className="rounded-3xl border border-[var(--color-border)] bg-white p-5 shadow-sm"
-                open={index === 0}
-              >
-                <summary className="cursor-pointer text-lg font-semibold text-[var(--color-text)]">
-                  {item.question}
-                </summary>
-                <p className="mt-3 text-sm text-[var(--color-text-secondary)]">{item.answer}</p>
-              </details>
+              </div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      <section id="cta" className="container section">
-        <div className="rounded-[32px] border border-transparent bg-gradient-to-r from-[#0e0f24] via-[#1b1140] to-[#120d2c] p-[1px] shadow-[0_20px_70px_rgba(12,15,35,0.4)]">
-          <div className="rounded-[32px] bg-[#080914] p-10 text-white">
-            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-              <div className="space-y-4">
-                <p className="text-xs uppercase tracking-[0.4em] text-white/60">Pronto para negociar</p>
-                <h2 className="text-3xl font-semibold">Abra o SMC agora mesmo</h2>
-                <p className="text-sm text-white/70">
-                  Listagens auditadas, compradores verificados e dados para defender seu valuation. Tudo em um só fluxo.
-                </p>
-              </div>
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <Link className="button primary text-base" href="/feed">
-                  Explorar ativos
+      {/* CTA */}
+      <section className="py-24 bg-slate-50">
+        <div className="container">
+          <div className="relative overflow-hidden rounded-[3rem] bg-[#050611] px-8 py-20 text-center text-white md:px-20">
+            <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-20" />
+            <div className="absolute -top-[50%] left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-indigo-600/30 blur-[120px]" />
+
+            <div className="relative z-10 max-w-3xl mx-auto space-y-8">
+              <h2 className="text-4xl font-bold md:text-5xl">Pronto para o próximo deal?</h2>
+              <p className="text-xl text-slate-400">
+                Junte-se a mais de 2.400 investidores e founders negociando ativos digitais com segurança.
+              </p>
+              <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+                <Link className="button primary h-14 px-8 text-lg" href="/feed">
+                  Ver oportunidades
                 </Link>
-                <Link className="button secondary text-base" href="/wizard">
-                  Enviar meu ativo
+                <Link className="button secondary h-14 px-8 text-lg border-white/20 text-white hover:bg-white/10" href="/wizard">
+                  Vender ativo
                 </Link>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }
 
-function ProofBar({ proofLogos }: { proofLogos: string[] }) {
+// --- Subcomponents ---
+
+function MarqueeLogos({ logos }: { logos: string[] }) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-6 rounded-2xl border border-white/10 bg-white/5 p-4 text-white/80">
-      <div className="flex items-center gap-4">
-        <div className="flex -space-x-2">
-          {proofLogos.slice(0, 4).map((logo) => (
-            <div key={logo} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-white/20 text-xs font-semibold text-white">
-              {logo.slice(0, 2)}
-            </div>
-          ))}
-        </div>
-        <div>
-          <p className="text-sm font-semibold text-white">+{proofLogos.length * 40} compradores</p>
-          <p className="text-xs uppercase tracking-[0.3em] text-white/60">Operações acompanhadas</p>
-        </div>
-      </div>
-      <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.3em]">
-        {proofLogos.map((logo) => (
-          <span key={logo} className="text-white/70">
+    <div className="relative w-full overflow-hidden mask-linear-fade">
+      <motion.div
+        className="flex w-max gap-12"
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+      >
+        {[...logos, ...logos, ...logos].map((logo, i) => (
+          <span key={i} className="text-lg font-semibold text-white/40 whitespace-nowrap">
             {logo}
           </span>
         ))}
-      </div>
+      </motion.div>
     </div>
-  );
-}
-
-function AnimatedStat({
-  value,
-  prefix,
-  suffix,
-  description
-}: {
-  value: number;
-  prefix?: string;
-  suffix?: string;
-  description: string;
-}) {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const isInView = useInView(ref, { once: true, amount: 0.6 });
-  const motionValue = useMotionValue(0);
-  const springValue = useSpring(motionValue, { stiffness: 90, damping: 20 });
-  const [displayValue, setDisplayValue] = useState(0);
-
-  useEffect(() => {
-    const unsubscribe = springValue.on('change', (latest) => {
-      setDisplayValue(latest);
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, [springValue]);
-
-  useEffect(() => {
-    if (isInView) {
-      motionValue.set(value);
-    }
-  }, [isInView, motionValue, value]);
-
-  return (
-    <div ref={ref}>
-      <p className="text-3xl font-semibold">
-        {prefix}
-        {Math.round(displayValue)}
-        {suffix}
-      </p>
-      <p className="text-xs text-white/70">{description}</p>
-    </div>
-  );
-}
-
-function HeroVisualization() {
-  return (
-    <div className="space-y-6 rounded-[28px] border border-white/15 bg-gradient-to-b from-[#141731] to-[#070816] p-6">
-      <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white/60">
-        <span>MRR + Health Score</span>
-        <span>Atualização automática</span>
-      </div>
-      <div className="relative h-60 overflow-hidden rounded-3xl border border-white/10 bg-black/20 p-4">
-        <svg className="absolute inset-0 h-full w-full opacity-20">
-          <defs>
-            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-        </svg>
-        <motion.svg className="h-full w-full" viewBox="0 0 400 240" fill="none">
-          <motion.path
-            d="M10 200 C 80 120, 120 220, 190 150 C 240 110, 270 80, 320 110 C 360 140, 390 60, 390 60"
-            stroke="url(#lineGradientPrimary)"
-            strokeWidth="5"
-            strokeLinecap="round"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
-            transition={{ duration: 1.6, ease: 'easeInOut' }}
-          />
-          <motion.path
-            d="M10 220 C 70 180, 100 140, 170 190 C 220 230, 270 200, 320 210 C 360 220, 390 200, 390 200"
-            stroke="rgba(98,226,206,0.5)"
-            strokeWidth="3"
-            strokeLinecap="round"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
-            transition={{ duration: 1.8, ease: 'easeInOut', delay: 0.2 }}
-          />
-          <defs>
-            <linearGradient id="lineGradientPrimary" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#6b5bff" />
-              <stop offset="100%" stopColor="#00c2ff" />
-            </linearGradient>
-          </defs>
-        </motion.svg>
-      </div>
-      <div className="grid gap-4 md:grid-cols-3">
-        {[
-          { title: 'Score operacional', detail: '82/100', trend: '+6 pts • 30 dias' },
-          { title: 'Churn previsto', detail: '2,8%', trend: '-0,4 p.p.' },
-          { title: 'Ticket médio', detail: 'R$ 297', trend: '+11% YoY' }
-        ].map((metric) => (
-          <div key={metric.title} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-xs uppercase tracking-[0.3em] text-white/70">{metric.title}</p>
-            <p className="text-xl font-semibold text-white">{metric.detail}</p>
-            <p className="text-xs text-white/60">{metric.trend}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function HeroProductMock() {
-  return (
-    <motion.div
-      className="mt-6 space-y-4 rounded-[28px] border border-white/15 bg-gradient-to-b from-white/10 to-white/5 p-6"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2 }}
-    >
-      <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white/70">
-        <span>Dashboard do comprador</span>
-        <span className="text-emerald-300">Filtro: SaaS B2B</span>
-      </div>
-      <div className="rounded-2xl border border-white/10 bg-black/30 p-4 backdrop-blur">
-        <div className="flex items-center justify-between text-sm text-white/60">
-          <span>Ativo</span>
-          <span>MRR</span>
-          <span>Múltiplo</span>
-        </div>
-        {[1, 2, 3].map((row) => (
-          <div key={row} className="mt-3 flex items-center justify-between rounded-xl bg-white/5 px-3 py-2 text-sm">
-            <span>Projeto #{row}</span>
-            <span className="text-emerald-200">R$ {(28 + row * 4).toLocaleString('pt-BR')}</span>
-            <span>4.{row}x</span>
-          </div>
-        ))}
-      </div>
-      <div className="flex flex-wrap gap-3 text-xs">
-        {['Due diligence ativa', 'Deal-room compartilhado', 'Compradores verificados'].map((chip) => (
-          <span key={chip} className="rounded-full border border-white/30 bg-white/10 px-3 py-1 text-white/80">
-            {chip}
-          </span>
-        ))}
-      </div>
-    </motion.div>
   );
 }
 
 function FloatingCTA() {
+  const { scrollY } = useScroll();
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    return scrollY.on('change', (latest) => {
+      setIsVisible(latest > 500);
+    });
+  }, [scrollY]);
+
   return (
-    <div className="pointer-events-none fixed bottom-4 right-4 z-40 hidden md:block">
-      <div className="pointer-events-auto flex items-center gap-3 rounded-full bg-gradient-to-r from-[#6b5bff] to-[#b794ff] px-5 py-3 text-sm text-white shadow-lg shadow-purple-500/40">
-        <span>Listar ativo agora?</span>
-        <Link className="font-semibold" href="/wizard">
-          Abrir wizard →
-        </Link>
-      </div>
-    </div>
+    <motion.div
+      className="fixed bottom-8 right-8 z-50 hidden md:block"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
+    >
+      <Link
+        href="/wizard"
+        className="flex items-center gap-3 rounded-full bg-indigo-600 px-6 py-3 text-white shadow-lg shadow-indigo-500/30 transition-transform hover:scale-105 hover:bg-indigo-700"
+      >
+        <span className="font-medium">Vender meu ativo</span>
+        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20">→</span>
+      </Link>
+    </motion.div>
   );
 }
 
@@ -659,47 +480,50 @@ function StickyNavbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 40);
-    handler();
+    const handler = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handler);
     return () => window.removeEventListener('scroll', handler);
   }, []);
 
-  const textColor = scrolled ? 'text-[var(--color-text)]' : 'text-white';
-
-  const navLinks = [
-    { label: 'Como funciona', href: '#como-funciona' },
-    { label: 'Produto', href: '#produto' },
-    { label: 'Perfis', href: '#perfis' },
-    { label: 'FAQ', href: '#faq' }
-  ];
-
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-40 transition-all duration-300 ${
-        scrolled ? 'bg-white/85 shadow-lg backdrop-blur-lg' : 'bg-transparent'
-      }`}
+      className={`fixed inset-x-0 top-0 z-40 transition-all duration-300 ${scrolled ? 'bg-white/80 shadow-sm backdrop-blur-md py-4' : 'bg-transparent py-6'
+        }`}
     >
-      <div className="container flex items-center justify-between gap-6 py-4">
-        <Link href="/" className={`font-heading text-lg font-semibold ${textColor}`}>
-          <span className="text-[var(--color-primary)]">SMC</span> Market Cap
+      <div className="container flex items-center justify-between">
+        <Link href="/" className="text-xl font-bold">
+          <span className={scrolled ? 'text-slate-900' : 'text-white'}>SMC</span>
         </Link>
-        <nav className={`hidden items-center gap-6 text-sm md:flex ${textColor}`}>
-          {navLinks.map((link) => (
-            <a key={link.href} href={link.href} className="transition hover:text-[var(--color-primary)]">
-              {link.label}
+
+        <nav className="hidden md:flex items-center gap-8">
+          {['Como funciona', 'Recursos', 'Depoimentos'].map((item) => (
+            <a
+              key={item}
+              href={`#${item.toLowerCase().replace(' ', '-')}`}
+              className={`text-sm font-medium transition-colors ${scrolled ? 'text-slate-600 hover:text-indigo-600' : 'text-white/80 hover:text-white'
+                }`}
+            >
+              {item}
             </a>
           ))}
         </nav>
-        <div className="flex items-center gap-3">
-          <Link className={`hidden text-sm transition md:inline-flex ${textColor}`} href="/auth/login">
-            Login
+
+        <div className="flex items-center gap-4">
+          <Link
+            href="/auth/login"
+            className={`text-sm font-medium ${scrolled ? 'text-slate-900' : 'text-white'
+              }`}
+          >
+            Entrar
           </Link>
           <Link
-            className="button primary bg-gradient-to-r from-[#6b5bff] via-[#8f74ff] to-[#6c5ce7] text-sm shadow-lg shadow-purple-500/30"
             href="/feed"
+            className={`rounded-full px-5 py-2 text-sm font-medium transition-all ${scrolled
+              ? 'bg-slate-900 text-white hover:bg-slate-800'
+              : 'bg-white text-slate-900 hover:bg-slate-100'
+              }`}
           >
-            Explorar ativos
+            Começar
           </Link>
         </div>
       </div>
