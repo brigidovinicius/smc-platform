@@ -113,21 +113,21 @@ const howItWorks = [
   {
     title: 'Envie seu ativo',
     description:
-      'Cadastro guiado com métricas de MRR, churn, CAC, canais de aquisição e stack tecnológico. Tudo padronizado.',
+      'Pitch guiado e intuitivo que organiza suas métricas em minutos. Interface simples que padroniza MRR, churn, CAC e stack sem planilhas complexas.',
     highlight: '1 • Intake',
     icon: 'Upload'
   },
   {
     title: 'Receba valuation automático',
     description:
-      'Nosso motor aplica múltiplos comparáveis, sanity check de métricas e gera dossiê pronto para compartilhar.',
+      'Motor inteligente analisa seus dados e gera dossiê profissional pronto para apresentar. Valuation baseado em comparáveis reais do mercado.',
     highlight: '2 • Valuation',
     icon: 'Calculator'
   },
   {
     title: 'Negocie com compradores qualificados',
     description:
-      'Acesso a funds, clubes de compra e operadores individuais com NDA, trilha de negociação e escrow seguro.',
+      'Processo facilitado com compradores verificados, NDA digital e trilha de negociação transparente. Do primeiro contato ao closing.',
     highlight: '3 • Negociação',
     icon: 'Handshake'
   }
@@ -179,9 +179,9 @@ const useCases = [
     highlight: 'Founders'
   },
   {
-    title: 'Compradores institucionais',
-    description: 'Receba pipeline com métricas padronizadas e histórico auditável para comitês e LPs.',
-    highlight: 'Funds & studios'
+    title: 'Investidores e compradores',
+    description: 'Acesso fácil às métricas principais (MRR, churn, CAC, LTV) padronizadas e auditáveis. Pipeline qualificado para decisões rápidas e informadas.',
+    highlight: 'Investidores'
   },
   {
     title: 'Flippers e operadores',
