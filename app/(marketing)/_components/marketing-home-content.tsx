@@ -190,8 +190,8 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
             <div className="relative z-10 rounded-3xl border border-white/10 bg-[#0B0D18]/80 p-2 shadow-2xl backdrop-blur-xl ring-1 ring-white/10">
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-slate-900">
                 <Image
-                  src="/images/hero-dashboard.png"
-                  alt="SaaS Market Cap Dashboard"
+                  src="/images/hero-dashboard.webp"
+                  alt="Painel de controle do SaaS Market Cap mostrando métricas de valuation, MRR e análise de ativos digitais em tempo real"
                   fill
                   className="object-cover"
                   priority
@@ -296,8 +296,8 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
                 </div>
                 <div className="relative h-48 w-full overflow-hidden rounded-xl bg-blue-50/50">
                   <Image
-                    src="/images/feature-valuation.png"
-                    alt="Valuation Chart"
+                    src="/images/feature-valuation.webp"
+                    alt="Gráfico de valuation automático mostrando múltiplos de ARR, análise de MRR e recomendações de precificação para SaaS"
                     fill
                     className="object-contain p-4 transition-transform duration-500 group-hover:scale-110"
                   />
@@ -316,8 +316,8 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
 
                 <div className="relative flex-1 min-h-[200px] w-full overflow-hidden rounded-xl bg-purple-50/30 mb-4">
                   <Image
-                    src="/images/feature-dealroom.png"
-                    alt="Deal Room Security"
+                    src="/images/feature-dealroom.webp"
+                    alt="Deal room seguro com criptografia, controle de acesso e compartilhamento de documentos confidenciais para M&A de ativos digitais"
                     fill
                     className="object-contain p-4 transition-transform duration-500 group-hover:scale-110"
                   />
@@ -346,8 +346,8 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
                 <p className="text-sm text-slate-600 mb-4">{features[1].description}</p>
                 <div className="relative h-32 w-full mt-auto overflow-hidden rounded-xl bg-indigo-50/30">
                   <Image
-                    src="/images/feature-duediligence.png"
-                    alt="AI Due Diligence"
+                    src="/images/feature-duediligence.webp"
+                    alt="Due diligence assistida por IA com análise automática de métricas, detecção de anomalias e verificação de dados financeiros"
                     fill
                     className="object-contain p-2 transition-transform duration-500 group-hover:scale-110"
                   />

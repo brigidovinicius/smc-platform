@@ -1,0 +1,36 @@
+# https://www.robotstxt.org/robotstxt.html
+
+# Allow all major search engine crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Allow AI crawlers explicitly
+User-agent: GPTBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: *
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /auth/
+
+# Allow specific public paths
+Allow: /feed
+Allow: /wizard
+Allow: /blog
+
+# Crawl-delay for polite crawlers
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://smc-platform.vercel.app/sitemap.xml
+# When using custom domain, update to: https://saasmarketcap.com/sitemap.xml

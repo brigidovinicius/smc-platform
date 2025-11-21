@@ -1,7 +1,7 @@
 import { getAllPosts, getAllCategories } from './blog';
 
 export function generateBlogSitemap() {
-  const baseUrl = 'https://saasmarketcap.com';
+  const baseUrl = 'https://smc-platform.vercel.app';
   const posts = getAllPosts();
   const categories = getAllCategories();
 

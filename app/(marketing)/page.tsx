@@ -1,10 +1,82 @@
 import type { Metadata } from 'next';
 import { MarketingHomeContent } from './_components/marketing-home-content';
+import { StructuredData } from './_components/structured-data';
+import { SITE_CONFIG } from '@/lib/site-config';
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_CONFIG.url),
   title: 'SMC – Avalie, compre e venda ativos digitais com dados reais',
   description:
-    'O SaaS Market Cap combina valuation automático, due diligence assistida por IA e compradores verificados para founders, investidores e flippers.'
+    'O SaaS Market Cap combina valuation automático, due diligence assistida por IA e compradores verificados para founders, investidores e flippers.',
+  keywords: [
+    'SaaS marketplace',
+    'comprar SaaS',
+    'vender SaaS',
+    'valuation automático',
+    'due diligence IA',
+    'M&A ativos digitais',
+    'marketplace ativos digitais',
+    'investir em SaaS',
+    'múltiplos ARR',
+    'MRR',
+    'micro-SaaS',
+    'newsletters pagas',
+    'apps digitais',
+    'deal room',
+    'compradores verificados'
+  ],
+  authors: [{ name: 'SaaS Market Cap' }],
+  creator: 'SaaS Market Cap',
+  publisher: 'SaaS Market Cap',
+  alternates: {
+    canonical: SITE_CONFIG.url
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1
+    }
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'pt_BR',
+    url: SITE_CONFIG.url,
+    siteName: 'SaaS Market Cap',
+    title: 'SMC – Marketplace de Ativos Digitais com Valuation Automático',
+    description:
+      'Compre e venda SaaS, newsletters e apps com dados verificados. Valuation automático, due diligence com IA e compradores qualificados. Mais de 2.400 investidores ativos.',
+    images: [
+      {
+        url: '/images/hero-dashboard.webp',
+        width: 1024,
+        height: 1024,
+        alt: 'Painel de controle do SaaS Market Cap mostrando métricas de valuation e análise de ativos digitais'
+      }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SMC – Marketplace de Ativos Digitais',
+    description:
+      'Valuation automático, due diligence com IA e compradores verificados para negociar SaaS e ativos digitais.',
+    images: ['/images/hero-dashboard.webp'],
+    creator: '@saasmarketcap'
+  },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5
+  },
+  verification: {
+    // TODO: Adicione seu código real do Google Search Console aqui
+    // Obtenha em: https://search.google.com/search-console
+    google: 'ADICIONE_SEU_CODIGO_AQUI'
+  }
 };
 
 const heroStats = [
@@ -258,18 +330,21 @@ const security = {
 
 export default function MarketingHome() {
   return (
-    <MarketingHomeContent
-      heroStats={heroStats}
-      proofLogos={proofLogos}
-      howItWorks={howItWorks}
-      features={features}
-      useCases={useCases}
-      productShots={productShots}
-      testimonials={testimonials}
-      faq={faq}
-      gallery={galleryPlaceholders}
-      story={story}
-      security={security}
-    />
+    <>
+      <StructuredData faq={faq} />
+      <MarketingHomeContent
+        heroStats={heroStats}
+        proofLogos={proofLogos}
+        howItWorks={howItWorks}
+        features={features}
+        useCases={useCases}
+        productShots={productShots}
+        testimonials={testimonials}
+        faq={faq}
+        gallery={galleryPlaceholders}
+        story={story}
+        security={security}
+      />
+    </>
   );
 }
