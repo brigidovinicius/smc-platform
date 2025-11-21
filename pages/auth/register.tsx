@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
+import { signIn } from 'next-auth/react';
 
 const RegisterPage = () => {
   const [name, setName] = useState('');
@@ -53,6 +54,9 @@ const RegisterPage = () => {
           Criar conta
         </button>
       </form>
+      <button className="button secondary" style={{ marginTop: '1rem', width: '100%' }} onClick={() => signIn('google', { callbackUrl: '/' })}>
+        Entrar com Google
+      </button>
       <p style={{ marginTop: '1rem' }}>
         Já tem conta? <Link href="/auth/login">Entrar</Link>
       </p>

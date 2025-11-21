@@ -17,6 +17,8 @@ export async function listOffers(params: ListParams = {}) {
 
   if (params.status) {
     where.status = params.status;
+  } else {
+    where.status = 'ACTIVE';
   }
 
   const [items, total] = await Promise.all([
@@ -47,7 +49,7 @@ export function getOfferById(id: string) {
 
 export function getOfferBySlug(slug: string) {
   return prisma.offer.findFirst({
-    where: { asset: { slug } },
+    where: { asset: { slug }, status: 'ACTIVE' },
     include: { asset: true, seller: true, buyer: true }
   });
 }

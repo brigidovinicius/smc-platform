@@ -7,44 +7,7 @@ import OfferCard from '@/components/OfferCard';
 import AssetCard from '@/components/AssetCard';
 import MarketGrid from '@/components/MarketGrid';
 import EmptyState from '@/components/EmptyState';
-
-const mockAssets = [
-  {
-    id: '1',
-    title: 'CRM micro-SaaS',
-    stage: 'Pronto para venda',
-    readiness: 92,
-    score: 780,
-    health: 'Saudável'
-  },
-  {
-    id: '2',
-    title: 'Marketplace de templates',
-    stage: 'Em due diligence',
-    readiness: 76,
-    score: 640,
-    health: 'Estável'
-  }
-];
-
-const mockOffers = [
-  {
-    id: 'offer-1',
-    title: 'SaaS de billing recorrente',
-    summary: 'Plataforma com 120 contas SMB e integrações prontas com Stripe.',
-    price: 450000,
-    classification: 'SAAS',
-    status: 'ACTIVE'
-  },
-  {
-    id: 'offer-2',
-    title: 'Marketplace de templates no-code',
-    summary: 'Receita média R$ 12k/mês, comunidade com 50k visitas.',
-    price: 220000,
-    classification: 'MARKETPLACE',
-    status: 'UNDER_NEGOTIATION'
-  }
-];
+import { getUserAssets, getUserOffers, getDashboardStats } from '@/lib/services/dashboard';
 
 const readinessTasks = [
   { id: 'task-1', title: 'Atualizar MRR dos últimos 6 meses', description: 'Suba os indicadores na aba Métricas', status: 'inProgress', statusLabel: 'Em andamento' },
@@ -58,7 +21,7 @@ const badges = [
   { label: 'Dados auditados', variant: 'warning' }
 ];
 
-export default function Dashboard() {
+export default function Dashboard({ assets, offers, stats }) {
   const { data: session } = useSession();
 
   return (
@@ -75,45 +38,51 @@ export default function Dashboard() {
         }
       >
         <div className="grid md:grid-cols-3 gap-4">
-          <StatBlock label="Readiness score" value="82%" sublabel="Pronto para due diligence" trend="+6% este mês" />
-          <StatBlock label="Valuation sugerido" value="R$ 950k" sublabel="Com base em MRR e churn" />
-          <StatBlock label="XP de vendedor" value="1.450" sublabel="Próximo nível: Builder" />
+          <StatBlock label="Readiness score" value={`${stats.readinessScore}%`} sublabel="Pronto para due diligence" trend="+6% este mês" />
+          <StatBlock label="Valuation sugerido" value={stats.valuation} sublabel="Com base em MRR e churn" />
+          <StatBlock label="Ativos listados" value={stats.assetsCount} sublabel="Total em carteira" />
         </div>
       </Card>
 
       <Card title="Meus ativos" description="Selecione um ativo para ajustar métricas, readiness e badges.">
-        {mockAssets.length ? (
+        {assets.length ? (
           <MarketGrid
-            items={mockAssets}
+            items={assets}
             renderItem={(asset) => (
               <div key={asset.id} className="space-y-2">
                 <AssetCard
                   asset={{
-                    name: asset.title,
-                    category: asset.stage,
-                    description: 'Resumo do ativo pronto para venda.',
-                    mrr: 'R$ 28k',
-                    churn: '1.8%'
+                    name: asset.name,
+                    category: asset.category,
+                    description: asset.description,
+                    mrr: asset.mrr ? `R$ ${Number(asset.mrr).toLocaleString('pt-BR')}` : 'N/A',
+                    churn: asset.churnRate ? `${asset.churnRate}%` : 'N/A'
                   }}
                 />
                 <div className="flex gap-4 text-sm text-slate-300">
-                  <span>Readiness: {asset.readiness}%</span>
-                  <span>Score: {asset.score}</span>
-                  <Badge variant="success">{asset.health}</Badge>
+                  <Badge variant="success">Saudável</Badge>
                 </div>
               </div>
             )}
           />
         ) : (
-          <EmptyState />
+          <EmptyState title="Nenhum ativo" description="Cadastre seu primeiro ativo para começar." />
         )}
       </Card>
 
       <Card title="Ofertas ativas" description="Resumo das propostas em negociação.">
-        {mockOffers.length ? (
+        {offers.length ? (
           <MarketGrid
-            items={mockOffers}
-            renderItem={(offer) => <OfferCard key={offer.id} offer={offer} />}
+            items={offers}
+            renderItem={(offer) => <OfferCard key={offer.id} offer={{
+              ...offer,
+              title: offer.asset?.name ?? 'Oferta',
+              summary: offer.asset?.description ?? '',
+              classification: offer.asset?.category ?? 'SaaS',
+              revenueRange: offer.asset?.mrr ? `MRR R$ ${Number(offer.asset.mrr).toLocaleString('pt-BR')}` : 'Sob consulta',
+              investmentRange: { min: Number(offer.price), max: Number(offer.price) },
+              valuationMultiple: 'N/A'
+            }} />}
           />
         ) : (
           <EmptyState title="Sem ofertas" description="Publique seu ativo para receber propostas." />
@@ -148,13 +117,32 @@ export async function getServerSideProps(context) {
   if (!session) {
     return {
       redirect: {
-        destination: '/login?callbackUrl=/dashboard',
+        destination: '/auth/login?callbackUrl=/dashboard',
         permanent: false
       }
     };
   }
 
+  // @ts-ignore
+  const userId = session.user.id;
+
+  const [assets, offers, stats] = await Promise.all([
+    getUserAssets(userId),
+    getUserOffers(userId),
+    getDashboardStats(userId)
+  ]);
+
+  // Serialize Decimal to string/number for JSON serialization
+  const serialize = (obj) => JSON.parse(JSON.stringify(obj, (key, value) =>
+    typeof value === 'object' && value !== null && 's' in value && 'e' in value ? Number(value) : value
+  ));
+
   return {
-    props: { session }
+    props: {
+      session,
+      assets: serialize(assets),
+      offers: serialize(offers),
+      stats
+    }
   };
 }

@@ -77,8 +77,8 @@ model SaaSAsset {
   slug        String   @unique
   description String
   category    String
-  mrr         Float?
-  arr         Float?
+  mrr         Decimal?
+  arr         Decimal?
   churnRate   Float?
   ownerId     String
   owner       User     @relation(fields: [ownerId], references: [id])
@@ -98,7 +98,7 @@ model Offer {
   seller    User        @relation("UserOffers", fields: [sellerId], references: [id])
   buyerId   String?
   buyer     User?       @relation("UserBuys", fields: [buyerId], references: [id])
-  price     Float
+  price     Decimal
   status    OfferStatus @default(ACTIVE)
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
@@ -117,7 +117,7 @@ model Transaction {
   seller    User     @relation("TransactionSeller", fields: [sellerId], references: [id])
   buyerId   String
   buyer     User     @relation("TransactionBuyer", fields: [buyerId], references: [id])
-  value     Float
+  value     Decimal
   closedAt  DateTime @default(now())
   createdAt DateTime @default(now())
 }
