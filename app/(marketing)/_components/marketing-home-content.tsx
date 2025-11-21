@@ -249,7 +249,7 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
                         {index + 1}
                       </div>
                       <h3 className="mb-3 text-2xl font-bold text-slate-900">{item.title}</h3>
-                      <p className="text-slate-600 leading-relaxed">{item.description}</p>
+                      <p className="text-slate-300 text-sm leading-relaxed">{item.description}</p>
                     </div>
 
                     <div className="relative flex items-center justify-center md:w-24">
@@ -292,7 +292,7 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
                     {features[0].icon && iconMap[features[0].icon] && <ChartLine size={24} />}
                   </div>
                   <h3 className="mb-2 text-xl font-bold text-slate-900">{features[0].title}</h3>
-                  <p className="text-slate-600">{features[0].description}</p>
+                  <p className="text-slate-300 text-sm">{features[0].description}</p>
                 </div>
                 <div className="relative h-48 w-full overflow-hidden rounded-xl bg-blue-50/50">
                   <Image
@@ -517,7 +517,7 @@ function StickyNavbar() {
             Entrar
           </Link>
           <Link
-            href="/feed"
+            href="/auth/register?callbackUrl=/feed"
             className={`rounded-full px-5 py-2 text-sm font-medium transition-all ${scrolled
               ? 'bg-slate-900 text-white hover:bg-slate-800'
               : 'bg-white text-slate-900 hover:bg-slate-100'

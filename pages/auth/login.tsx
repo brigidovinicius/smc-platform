@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import type { FormEvent } from 'react';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -16,7 +17,7 @@ const LoginPage = () => {
     }
   }, [router.query]);
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
     const result = await signIn('credentials', {
@@ -67,6 +68,11 @@ const LoginPage = () => {
       </button>
       <p style={{ marginTop: '1rem' }}>
         Não tem conta? <Link href="/auth/register">Cadastre-se</Link>
+      </p>
+      <p style={{ marginTop: '0.5rem', textAlign: 'center' }}>
+        <Link href="/auth/forgot-password" style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
+          Esqueci minha senha
+        </Link>
       </p>
     </div>
   );
