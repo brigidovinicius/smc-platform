@@ -25,7 +25,7 @@ export function Footer() {
                         <ul className="space-y-3 text-sm text-[var(--color-text-secondary)]">
                             <li><Link href="/feed" className="hover:text-[var(--color-primary)]">Marketplace</Link></li>
                             <li><Link href="/wizard" className="hover:text-[var(--color-primary)]">Vender ativo</Link></li>
-                            <li><Link href="#" className="hover:text-[var(--color-primary)]">Preços</Link></li>
+                            <li><Link href="/pricing" className="hover:text-[var(--color-primary)]">Preços</Link></li>
                             <li><Link href="/auth/login" className="hover:text-[var(--color-primary)]">Login</Link></li>
                         </ul>
                     </div>
@@ -33,19 +33,19 @@ export function Footer() {
                     <div>
                         <h4 className="mb-4 font-semibold text-[var(--color-text)]">Recursos</h4>
                         <ul className="space-y-3 text-sm text-[var(--color-text-secondary)]">
-                            <li><Link href="#" className="hover:text-[var(--color-primary)]">Blog</Link></li>
-                            <li><Link href="#" className="hover:text-[var(--color-primary)]">Calculadora de Valuation</Link></li>
-                            <li><Link href="#" className="hover:text-[var(--color-primary)]">FAQ</Link></li>
-                            <li><Link href="#" className="hover:text-[var(--color-primary)]">Suporte</Link></li>
+                            <li><Link href="/blog" className="hover:text-[var(--color-primary)]">Blog</Link></li>
+                            <li><Link href="/calculator" className="hover:text-[var(--color-primary)]">Calculadora de Valuation</Link></li>
+                            <li><Link href="/faq" className="hover:text-[var(--color-primary)]">FAQ</Link></li>
+                            <li><Link href="mailto:support@saasmarketcap.com" className="hover:text-[var(--color-primary)]">Suporte</Link></li>
                         </ul>
                     </div>
 
                     <div>
                         <h4 className="mb-4 font-semibold text-[var(--color-text)]">Legal</h4>
                         <ul className="space-y-3 text-sm text-[var(--color-text-secondary)]">
-                            <li><Link href="#" className="hover:text-[var(--color-primary)]">Termos de Uso</Link></li>
-                            <li><Link href="#" className="hover:text-[var(--color-primary)]">Privacidade</Link></li>
-                            <li><Link href="#" className="hover:text-[var(--color-primary)]">Cookies</Link></li>
+                            <li><Link href="/legal/terms" className="hover:text-[var(--color-primary)]">Termos de Uso</Link></li>
+                            <li><Link href="/legal/privacy" className="hover:text-[var(--color-primary)]">Privacidade</Link></li>
+                            <li><Link href="/legal/cookies" className="hover:text-[var(--color-primary)]">Cookies</Link></li>
                         </ul>
                     </div>
                 </div>
