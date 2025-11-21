@@ -249,7 +249,7 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
                         {index + 1}
                       </div>
                       <h3 className="mb-3 text-2xl font-bold text-slate-900">{item.title}</h3>
-                      <p className="text-slate-300 text-sm leading-relaxed">{item.description}</p>
+                      <p className="text-slate-600 text-sm leading-relaxed">{item.description}</p>
                     </div>
 
                     <div className="relative flex items-center justify-center md:w-24">
