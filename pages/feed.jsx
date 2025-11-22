@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { ArrowRightCircle, Filter, Shield, Zap, Layers } from 'lucide-react';
 import { listOffers } from '@/lib/services/offers';
 
 const SITE_URL = 'https://smc-platform.vercel.app';
@@ -119,6 +120,8 @@ const FeedPage = ({ offers }) => {
   const [nicheFilter, setNicheFilter] = useState('Todos');
   const [visibleCount, setVisibleCount] = useState(9);
 
+  const totalOffers = offers.length;
+
   const classifications = useMemo(
     () => ['Todos', ...new Set(offers.map((offer) => offer.classification))],
     [offers]
@@ -161,6 +164,16 @@ const FeedPage = ({ offers }) => {
     setRevenueFilter('Todos');
     setNicheFilter('Todos');
   };
+
+  const uniqueNiches = niches.length > 0 ? niches.length - 1 : 0;
+  const averageTicket = useMemo(() => {
+    const withPrice = offers.filter((offer) => offer.investmentRange?.min && offer.investmentRange?.max);
+    if (!withPrice.length) return 'Sob consulta';
+    const avg =
+      withPrice.reduce((acc, offer) => acc + (offer.investmentRange.min + offer.investmentRange.max) / 2, 0) /
+      withPrice.length;
+    return `R$ ${(avg / 1000).toFixed(0)}k`;
+  }, [offers]);
 
   const schemaData = useMemo(
     () => ({
@@ -219,34 +232,85 @@ const FeedPage = ({ offers }) => {
           <span className="text-slate-300">Oportunidades</span>
         </nav>
 
-        <header className="space-y-4 text-center">
-          <p className="tracking-[0.4em] uppercase text-xs text-blue-200">SMC FEED</p>
-          <h1 className="text-4xl font-bold">Oportunidades de SaaS e ativos digitais para investidores e founders</h1>
-          <p className="text-slate-300">
-            Visualize oportunidades reais de aquisição de SaaS, marketplaces e newsletters. Esta prévia é aberta ao público –
-            detalhes completos exigem login. Atualizamos diariamente com ativos que possuem métricas claras de MRR, churn e
-            faixa de investimento.
-          </p>
-          <div className="flex justify-center gap-4 flex-wrap">
-            <Link href="/auth/login?callbackUrl=/feed" className="button primary">
-              Receber memorando completo
-            </Link>
-            <Link href="/wizard" className="button secondary">
-              Quero listar meu ativo
-            </Link>
-          </div>
-        </header>
+        <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#0c1230] via-[#0b1230] to-[#0d1636] p-8 md:p-12 shadow-2xl space-y-8">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,0.22),transparent_35%),radial-gradient(circle_at_80%_10%,rgba(59,130,246,0.2),transparent_40%)]" />
+          <div className="relative grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+            <div className="space-y-4">
+              <p className="tracking-[0.4em] uppercase text-xs text-blue-200">SMC FEED · Prévia pública</p>
+              <h1 className="text-4xl md:text-5xl font-bold leading-[1.1]">
+                Oportunidades de SaaS, marketplaces e newsletters com métricas auditadas.
+              </h1>
+              <p className="text-slate-300 max-w-2xl">
+                Memorandos enxutos com faixa de investimento, MRR e nicho. Filtre por ticket, classificação e MRR para
+                encontrar ativos alinhados ao seu perfil. Para dados completos, faça login.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link href="/auth/login?callbackUrl=/feed" className="inline-flex items-center gap-2 rounded-full bg-white text-[#050711] px-5 py-3 text-sm font-semibold hover:translate-y-[-1px] transition">
+                  Receber memorando completo
+                  <ArrowRightCircle className="h-4 w-4" />
+                </Link>
+                <Link href="/wizard" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10 transition">
+                  Listar meu ativo
+                </Link>
+              </div>
+              <div className="flex flex-wrap items-center gap-3 text-xs text-slate-300">
+                <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-emerald-200">
+                  <Shield className="h-3.5 w-3.5" />
+                  Inventário curado e auditado
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-blue-400/10 px-3 py-1 text-blue-100">
+                  <Zap className="h-3.5 w-3.5" />
+                  Atualização diária
+                </span>
+              </div>
+            </div>
 
-        <section className="bg-[#081024] border border-white/5 rounded-3xl p-6 space-y-4 text-left">
-          <h2 className="text-2xl font-semibold">Como usamos este feed</h2>
-          <p className="text-slate-300">
-            Nosso time faz curadoria com base em MRR, churn, CAC e múltiplos de saída praticados no mercado brasileiro.
-            Investidores e microfundos encontram aqui negócios prontos para due diligence. Founders usam este espaço para
-            expor seus ativos e acelerar negociações com tickets entre R$ 20 mil e R$ 2 milhões.
-          </p>
+            <div className="grid gap-4">
+              {[
+                { label: 'Ativos publicados', value: totalOffers, hint: 'Curados pelo time SMC', icon: Layers },
+                { label: 'Ticket médio', value: averageTicket, hint: 'Equity + cash-out', icon: Shield },
+                { label: 'Nichos', value: uniqueNiches || '—', hint: 'Categorias distintas', icon: Filter }
+              ].map((stat) => {
+                const Icon = stat.icon;
+                return (
+                  <div key={stat.label} className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-5 py-4 shadow-lg shadow-black/30">
+                    <div>
+                      <p className="text-sm text-slate-300">{stat.label}</p>
+                      <p className="text-2xl font-semibold text-white">{stat.value}</p>
+                      <p className="text-xs text-slate-400">{stat.hint}</p>
+                    </div>
+                    <div className="h-11 w-11 rounded-full bg-white/10 flex items-center justify-center text-blue-200">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-[#081024] border border-white/5 rounded-3xl p-6 space-y-4 text-left shadow-xl">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-blue-200">
+              <Shield className="h-5 w-5" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-semibold">Como usamos este feed</h2>
+              <p className="text-slate-300">
+                Curadoria baseada em MRR, churn, CAC e comparáveis. Founders usam para captar propostas; investidores, para filtrar tickets e nichos.
+              </p>
+            </div>
+          </div>
         </section>
 
         <section className="bg-[#081024] border border-white/5 rounded-3xl p-6 space-y-4" aria-label="Filtros do feed">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2 text-slate-200">
+              <Filter className="h-4 w-4 text-blue-200" />
+              <span className="text-sm font-semibold">Refine por ticket, MRR e nicho</span>
+            </div>
+            <span className="text-xs text-slate-400">Prévia pública · Detalhes completos pedem login</span>
+          </div>
           <div className="grid gap-4 lg:grid-cols-4">
             <label className="flex flex-col gap-1 text-sm">
               <span className="text-slate-400">Classificação</span>
@@ -324,6 +388,27 @@ const FeedPage = ({ offers }) => {
               </button>
             </div>
           )}
+        </section>
+
+        <section className="grid gap-4 md:grid-cols-3">
+          {[
+            { title: 'Due diligence enxuta', desc: 'Memorando resume MRR, churn e stack. Dados completos sob NDA.', icon: Shield },
+            { title: 'Tickets variados', desc: 'De R$ 20k a R$ 2mi. Filtre conforme tese e risco.', icon: Layers },
+            { title: 'Atualizações diárias', desc: 'Operadores adicionam métricas e marcos em tempo real.', icon: Zap }
+          ].map((item) => {
+            const Icon = item.icon;
+            return (
+              <div key={item.title} className="rounded-2xl border border-white/10 bg-[#081024] p-5 shadow-lg flex gap-3">
+                <div className="h-10 w-10 rounded-xl bg-white/10 flex items-center justify-center text-blue-200">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm text-blue-200 uppercase tracking-[0.2em]">{item.title}</p>
+                  <p className="text-slate-300 text-sm">{item.desc}</p>
+                </div>
+              </div>
+            );
+          })}
         </section>
 
         <section className="space-y-6">
