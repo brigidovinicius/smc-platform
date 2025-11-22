@@ -1,5 +1,4 @@
 import Feed from './feed';
-import { getSession } from 'next-auth/react';
 import Head from 'next/head';
 
 const MarketplacePage = () => {
@@ -15,18 +14,3 @@ const MarketplacePage = () => {
 };
 
 export default MarketplacePage;
-
-export const getServerSideProps = async (context) => {
-    const session = await getSession(context);
-
-    if (!session) {
-        return {
-            redirect: {
-                destination: '/auth/login?callbackUrl=/marketplace',
-                permanent: false
-            }
-        };
-    }
-
-    return { props: { session } };
-};

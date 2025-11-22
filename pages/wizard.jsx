@@ -11,7 +11,7 @@ export const getServerSideProps = async (context) => {
   if (!session) {
     return {
       redirect: {
-        destination: '/auth/login',
+        destination: '/auth/login?callbackUrl=/wizard',
         permanent: false
       }
     };
