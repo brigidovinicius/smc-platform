@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo, useState, useEffect, useCallback } from 'react';
 import { wizardSteps } from '@/lib/wizardSteps';
 import { CheckCircle, Save, Trash2, ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
@@ -173,17 +175,17 @@ const RegisterWizard = () => {
                 <div
                   key={step.id}
                   className={`group flex items-center gap-3 p-3 rounded-xl transition-all duration-200 border ${isActive
-                      ? 'bg-white border-indigo-200 shadow-md shadow-indigo-500/5 scale-105'
-                      : isCompleted
-                        ? 'bg-white/50 border-slate-200 text-slate-500'
-                        : 'bg-transparent border-transparent text-slate-400'
+                    ? 'bg-white border-indigo-200 shadow-md shadow-indigo-500/5 scale-105'
+                    : isCompleted
+                      ? 'bg-white/50 border-slate-200 text-slate-500'
+                      : 'bg-transparent border-transparent text-slate-400'
                     }`}
                 >
                   <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold transition-colors ${isActive
-                      ? 'bg-indigo-600 text-white'
-                      : isCompleted
-                        ? 'bg-emerald-100 text-emerald-600'
-                        : 'bg-slate-100 text-slate-400'
+                    ? 'bg-indigo-600 text-white'
+                    : isCompleted
+                      ? 'bg-emerald-100 text-emerald-600'
+                      : 'bg-slate-100 text-slate-400'
                     }`}>
                     {isCompleted ? <CheckCircle size={16} /> : index + 1}
                   </div>
@@ -227,8 +229,8 @@ const RegisterWizard = () => {
                   onChange={(event) => handleChange(currentStep, event.target.value)}
                   onBlur={() => setTouchedSteps((prev) => ({ ...prev, [currentStep.id]: true }))}
                   className={`w-full min-h-[240px] p-4 rounded-xl border bg-slate-50 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 transition-all resize-none ${shouldShowError
-                      ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
-                      : 'border-slate-200 focus:border-indigo-500 focus:ring-indigo-500/20'
+                    ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
+                    : 'border-slate-200 focus:border-indigo-500 focus:ring-indigo-500/20'
                     }`}
                 />
                 <div className="absolute bottom-4 right-4 text-xs font-medium text-slate-400 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-md border border-slate-100">
