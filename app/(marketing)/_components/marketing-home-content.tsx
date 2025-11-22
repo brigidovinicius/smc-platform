@@ -110,25 +110,26 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
       {/* HERO SECTION */}
       <section
         id="hero"
-        className="relative min-h-[90vh] overflow-hidden bg-[#050611] text-white"
+        className="relative min-h-[90vh] overflow-hidden bg-[#02040a] text-white"
       >
-        {/* Background Effects */}
-        <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-20" />
-        <div className="absolute -top-[20%] -left-[10%] h-[800px] w-[800px] rounded-full bg-purple-600/20 blur-[120px]" />
-        <div className="absolute top-[10%] -right-[10%] h-[600px] w-[600px] rounded-full bg-blue-600/20 blur-[100px]" />
+        {/* Background Effects - Premium Glow */}
+        <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.15]" />
+        <div className="absolute -top-[20%] -left-[10%] h-[800px] w-[800px] rounded-full bg-indigo-600/15 blur-[120px]" />
+        <div className="absolute top-[10%] -right-[10%] h-[600px] w-[600px] rounded-full bg-blue-600/10 blur-[100px]" />
+        <div className="absolute bottom-0 left-1/2 h-[400px] w-[1000px] -translate-x-1/2 rounded-full bg-indigo-500/5 blur-[80px]" />
 
         <div className="container relative z-10 grid gap-16 py-32 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div className="space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 backdrop-blur-md"
+              className="inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-4 py-1.5 backdrop-blur-md transition-colors hover:bg-indigo-500/15"
             >
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
               </span>
-              <span className="text-xs font-medium tracking-wide text-white/90 uppercase">Beta Público · Dados auditados</span>
+              <span className="text-xs font-medium tracking-wide text-indigo-200 uppercase">Beta Público · Dados auditados</span>
             </motion.div>
 
             <div className="space-y-6">
@@ -259,8 +260,8 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
                     </div>
 
                     <div className="flex-1">
-                      <div className="aspect-video rounded-2xl bg-slate-50 border border-slate-100 p-8 flex items-center justify-center group hover:border-indigo-100 transition-colors">
-                        <div className="h-20 w-20 rounded-2xl bg-white shadow-sm flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform duration-300">
+                      <div className="aspect-video rounded-2xl bg-white border border-slate-100 p-8 flex items-center justify-center group hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-500/5 transition-all duration-300">
+                        <div className="h-20 w-20 rounded-2xl bg-indigo-50/50 shadow-sm flex items-center justify-center text-indigo-600 group-hover:scale-110 group-hover:bg-indigo-100 transition-all duration-300">
                           <Icon size={40} strokeWidth={1.5} />
                         </div>
                       </div>
@@ -283,49 +284,49 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
             </p>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-3 md:grid-rows-2 h-auto md:h-[600px]">
+          <div className="grid gap-6 md:grid-cols-3 md:grid-rows-2 h-auto md:h-[600px]">
             {/* Large Item 1 */}
-            <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 md:col-span-2">
+            <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-900/5 transition-all hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1 md:col-span-2">
               <div className="relative z-10 grid md:grid-cols-2 gap-8 items-center">
                 <div>
-                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100 transition-colors">
                     {features[0].icon && iconMap[features[0].icon] && <ChartLine size={24} />}
                   </div>
                   <h3 className="mb-2 text-xl font-bold text-slate-900">{features[0].title}</h3>
-                  <p className="text-slate-300 text-sm">{features[0].description}</p>
+                  <p className="text-slate-500 text-sm leading-relaxed">{features[0].description}</p>
                 </div>
-                <div className="relative h-48 w-full overflow-hidden rounded-xl bg-blue-50/50">
+                <div className="relative h-48 w-full overflow-hidden rounded-xl bg-slate-50 border border-slate-100 group-hover:border-indigo-100 transition-colors">
                   <Image
                     src="/images/feature-valuation.webp"
                     alt="Gráfico de valuation automático mostrando múltiplos de ARR, análise de MRR e recomendações de precificação para SaaS"
                     fill
-                    className="object-contain p-4 transition-transform duration-500 group-hover:scale-110"
+                    className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
               </div>
             </div>
 
             {/* Tall Item */}
-            <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 md:row-span-2">
+            <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-900/5 transition-all hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1 md:row-span-2">
               <div className="relative z-10 h-full flex flex-col">
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 text-purple-600">
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100 transition-colors">
                   {features[2].icon && iconMap[features[2].icon] && <Shield size={24} />}
                 </div>
                 <h3 className="mb-2 text-xl font-bold text-slate-900">{features[2].title}</h3>
-                <p className="text-slate-600 mb-8">{features[2].description}</p>
+                <p className="text-slate-500 mb-8 leading-relaxed">{features[2].description}</p>
 
-                <div className="relative flex-1 min-h-[200px] w-full overflow-hidden rounded-xl bg-purple-50/30 mb-4">
+                <div className="relative flex-1 min-h-[200px] w-full overflow-hidden rounded-xl bg-slate-50 border border-slate-100 mb-4 group-hover:border-indigo-100 transition-colors">
                   <Image
                     src="/images/feature-dealroom.webp"
                     alt="Deal room seguro com criptografia, controle de acesso e compartilhamento de documentos confidenciais para M&A de ativos digitais"
                     fill
-                    className="object-contain p-4 transition-transform duration-500 group-hover:scale-110"
+                    className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
 
-                <div className="mt-auto rounded-xl bg-slate-50 border border-slate-100 p-4 group-hover:border-purple-100 transition-colors">
+                <div className="mt-auto rounded-xl bg-slate-50 border border-slate-100 p-4 group-hover:border-indigo-100 transition-colors">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                    <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                     <span className="text-xs font-medium text-slate-500">Deal Room Ativo</span>
                   </div>
                   <div className="space-y-2">
@@ -337,31 +338,31 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
             </div>
 
             {/* Small Item 1 */}
-            <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1">
+            <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-900/5 transition-all hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1">
               <div className="flex flex-col h-full">
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100 transition-colors">
                   {features[1].icon && iconMap[features[1].icon] && <Brain size={24} />}
                 </div>
                 <h3 className="mb-2 text-lg font-bold text-slate-900">{features[1].title}</h3>
-                <p className="text-sm text-slate-600 mb-4">{features[1].description}</p>
-                <div className="relative h-32 w-full mt-auto overflow-hidden rounded-xl bg-indigo-50/30">
+                <p className="text-sm text-slate-500 mb-4 leading-relaxed">{features[1].description}</p>
+                <div className="relative h-32 w-full mt-auto overflow-hidden rounded-xl bg-slate-50 border border-slate-100 group-hover:border-indigo-100 transition-colors">
                   <Image
                     src="/images/feature-duediligence.webp"
                     alt="Due diligence assistida por IA com análise automática de métricas, detecção de anomalias e verificação de dados financeiros"
                     fill
-                    className="object-contain p-2 transition-transform duration-500 group-hover:scale-110"
+                    className="object-contain p-2 transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
               </div>
             </div>
 
             {/* Small Item 2 */}
-            <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-pink-50 text-pink-600">
+            <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-900/5 transition-all hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1">
+              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100 transition-colors">
                 {features[5].icon && iconMap[features[5].icon] && <Zap size={24} />}
               </div>
               <h3 className="mb-2 text-lg font-bold text-slate-900">{features[5].title}</h3>
-              <p className="text-sm text-slate-600">{features[5].description}</p>
+              <p className="text-sm text-slate-500 leading-relaxed">{features[5].description}</p>
             </div>
           </div>
         </div>
@@ -402,9 +403,10 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
       {/* CTA */}
       <section className="py-24 bg-slate-50">
         <div className="container">
-          <div className="relative overflow-hidden rounded-[3rem] bg-[#050611] px-8 py-20 text-center text-white md:px-20">
-            <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-20" />
-            <div className="absolute -top-[50%] left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-indigo-600/30 blur-[120px]" />
+          <div className="relative overflow-hidden rounded-[3rem] bg-[#02040a] px-8 py-20 text-center text-white md:px-20 ring-1 ring-white/10">
+            <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.15]" />
+            <div className="absolute -top-[50%] left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-indigo-600/20 blur-[120px]" />
+            <div className="absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full bg-blue-600/10 blur-[100px]" />
 
             <div className="relative z-10 max-w-3xl mx-auto space-y-8">
               <h2 className="text-4xl font-bold md:text-5xl">Pronto para o próximo deal?</h2>
