@@ -1,17 +1,18 @@
 import Head from 'next/head';
 import Link from 'next/link';
+import { ShieldCheck, Lightning, FileText, TrendUp, ListChecks } from '@phosphor-icons/react';
 import { useSession, getSession } from 'next-auth/react';
 
 const quickActions = [
-  { title: 'Explorar ativos', description: 'Ver oportunidades curadas e memorandos públicos.', href: '/feed', tone: 'primary' },
-  { title: 'Criar ativo', description: 'Envie dados e receba valuation automático.', href: '/wizard', tone: 'ghost' },
-  { title: 'Ir ao dashboard', description: 'Acompanhe readiness e ofertas recebidas.', href: '/dashboard', tone: 'outline' }
+  { title: 'Explorar ativos', description: 'Ver oportunidades curadas e memorandos públicos.', href: '/feed', tone: 'primary', Icon: TrendUp },
+  { title: 'Criar ativo', description: 'Envie dados e receba valuation automático.', href: '/wizard', tone: 'ghost', Icon: FileText },
+  { title: 'Ir ao dashboard', description: 'Acompanhe readiness e ofertas recebidas.', href: '/dashboard', tone: 'outline', Icon: Lightning }
 ];
 
 const readinessPillars = [
-  { label: 'Dados auditados', detail: 'Padronize MRR, churn e CAC antes de abrir negociação.' },
-  { label: 'Valuation sugerido', detail: 'Múltiplos baseados em comparáveis recentes.' },
-  { label: 'Checklist de due diligence', detail: 'Documentos, cohort e governança em um lugar.' }
+  { label: 'Dados auditados', detail: 'Padronize MRR, churn e CAC antes de abrir negociação.', Icon: ShieldCheck },
+  { label: 'Valuation sugerido', detail: 'Múltiplos baseados em comparáveis recentes.', Icon: TrendUp },
+  { label: 'Checklist de due diligence', detail: 'Documentos, cohort e governança em um lugar.', Icon: ListChecks }
 ];
 
 const timeline = [
@@ -64,7 +65,7 @@ const HomeAliasPage = () => {
               </div>
 
               <div className="flex flex-wrap gap-3">
-                {quickActions.map(({ title, description, href, tone }) => (
+                {quickActions.map(({ title, description, href, tone, Icon }) => (
                   <Link
                     key={title}
                     href={href}
@@ -77,7 +78,10 @@ const HomeAliasPage = () => {
                     }`}
                   >
                     <div className="flex items-center justify-between text-sm font-semibold">
-                      <span>{title}</span>
+                      <span className="flex items-center gap-2">
+                        {Icon && <Icon size={18} weight="fill" />}
+                        {title}
+                      </span>
                       <span aria-hidden>→</span>
                     </div>
                     <p className="text-xs text-slate-200/80 mt-1">{description}</p>
@@ -133,9 +137,14 @@ const HomeAliasPage = () => {
               {readinessPillars.map((item) => (
                 <div key={item.label} className="flex gap-3 items-start">
                   <span className="mt-1 h-2 w-2 rounded-full bg-blue-400" />
-                  <div>
-                    <p className="font-medium">{item.label}</p>
-                    <p className="text-sm text-slate-300">{item.detail}</p>
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-blue-200">
+                      {item.Icon && <item.Icon size={18} weight="fill" />}
+                    </div>
+                    <div>
+                      <p className="font-medium">{item.label}</p>
+                      <p className="text-sm text-slate-300">{item.detail}</p>
+                    </div>
                   </div>
                 </div>
               ))}
