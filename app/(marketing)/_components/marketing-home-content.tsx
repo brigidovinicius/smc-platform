@@ -191,7 +191,7 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
             <div className="relative z-10 rounded-3xl border border-white/10 bg-[#0B0D18]/80 p-2 shadow-2xl backdrop-blur-xl ring-1 ring-white/10">
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-slate-900">
                 <Image
-                  src="/images/hero-dashboard.webp"
+                  src="/images/hero-dashboard-v2.png"
                   alt="Painel de controle do SaaS Market Cap mostrando métricas de valuation, MRR e análise de ativos digitais em tempo real"
                   fill
                   className="object-cover"
