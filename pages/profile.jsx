@@ -1,46 +1,166 @@
 import Image from 'next/image';
 import { getSession, signIn, signOut, useSession } from 'next-auth/react';
+import CardWrapper from '@/components/ui/CardWrapper';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { User, Mail, Shield, LogOut, Settings } from 'lucide-react';
+import Link from 'next/link';
 
 const ProfilePage = () => {
   const { data: session, status } = useSession();
 
   if (status === 'loading') {
-    return <p>Carregando sessão...</p>;
+    return (
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 bg-slate-200 rounded w-1/3"></div>
+          <div className="h-64 bg-slate-200 rounded"></div>
+        </div>
+      </div>
+    );
   }
 
   if (!session) {
     return (
-      <div className="card">
-        <p>Você precisa estar logado.</p>
-        <button className="button primary" onClick={() => signIn('google', { callbackUrl: '/dashboard' })}>
-          Entrar com Google
-        </button>
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <CardWrapper
+          title="Acesso necessário"
+          description="Você precisa estar logado para acessar seu perfil."
+        >
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Button onClick={() => signIn('google', { callbackUrl: '/dashboard' })}>
+              Entrar com Google
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/">Voltar para início</Link>
+            </Button>
+          </div>
+        </CardWrapper>
       </div>
     );
   }
 
   return (
-    <section className="card">
-      <h1>Perfil</h1>
-      <p>Nome: {session.user?.name}</p>
-      <p>Email: {session.user?.email}</p>
-      {session.user?.role && <p>Função: {session.user.role}</p>}
-      {session.user?.id && <p>ID do perfil: {session.user.id}</p>}
-      {session.user?.image && (
-        <Image
-          src={session.user.image}
-          alt={session.user.name ?? 'Avatar'}
-          width={80}
-          height={80}
-          style={{ borderRadius: '50%', marginTop: 16, height: 'auto' }}
-          priority
-        />
-      )}
+    <div className="container mx-auto px-4 py-8 max-w-4xl space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Meu Perfil</h1>
+          <p className="text-muted-foreground mt-1">Gerencie suas informações e configurações</p>
+        </div>
+      </div>
 
-      <button className="button secondary" onClick={() => signOut()} style={{ marginTop: 20 }}>
-        Sair
-      </button>
-    </section>
+      <CardWrapper
+        title="Informações pessoais"
+        description="Suas informações de conta e perfil"
+      >
+        <div className="flex flex-col sm:flex-row gap-6">
+          {session.user?.image && (
+            <div className="flex-shrink-0">
+              <Image
+                src={session.user.image}
+                alt={session.user.name ?? 'Avatar'}
+                width={120}
+                height={120}
+                className="rounded-full border-4 border-primary/20"
+                priority
+              />
+            </div>
+          )}
+          
+          <div className="flex-1 space-y-4">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <User className="h-4 w-4" />
+                <span>Nome completo</span>
+              </div>
+              <p className="text-lg font-semibold text-foreground">
+                {session.user?.name ?? 'Não informado'}
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Mail className="h-4 w-4" />
+                <span>Email</span>
+              </div>
+              <p className="text-lg text-foreground">
+                {session.user?.email ?? 'Não informado'}
+              </p>
+            </div>
+
+            {session.user?.role && (
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Shield className="h-4 w-4" />
+                  <span>Função</span>
+                </div>
+                <Badge variant="secondary">{session.user.role}</Badge>
+              </div>
+            )}
+
+            {session.user?.id && (
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <span>ID do perfil</span>
+                </div>
+                <p className="text-sm font-mono text-muted-foreground bg-muted p-2 rounded">
+                  {session.user.id}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </CardWrapper>
+
+      <CardWrapper
+        title="Ações rápidas"
+        description="Acesse rapidamente as principais funcionalidades"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Button variant="outline" className="justify-start h-auto py-4" asChild>
+            <Link href="/dashboard">
+              <div className="flex items-center gap-3">
+                <Settings className="h-5 w-5" />
+                <div className="text-left">
+                  <div className="font-semibold">Dashboard</div>
+                  <div className="text-xs text-muted-foreground">Acompanhe seus ativos</div>
+                </div>
+              </div>
+            </Link>
+          </Button>
+
+          <Button variant="outline" className="justify-start h-auto py-4" asChild>
+            <Link href="/wizard">
+              <div className="flex items-center gap-3">
+                <User className="h-5 w-5" />
+                <div className="text-left">
+                  <div className="font-semibold">Novo Ativo</div>
+                  <div className="text-xs text-muted-foreground">Cadastre um novo ativo</div>
+                </div>
+              </div>
+            </Link>
+          </Button>
+        </div>
+      </CardWrapper>
+
+      <CardWrapper>
+        <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
+          <div>
+            <p className="text-sm text-muted-foreground">
+              Deseja sair da sua conta?
+            </p>
+          </div>
+          <Button 
+            variant="destructive" 
+            onClick={() => signOut({ callbackUrl: '/' })}
+            className="w-full sm:w-auto"
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Sair da conta
+          </Button>
+        </div>
+      </CardWrapper>
+    </div>
   );
 };
 

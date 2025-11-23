@@ -12,7 +12,7 @@ export function generateBlogSitemap() {
   ];
 
   posts.forEach((post) => urls.push(`${baseUrl}/blog/${post.slug}`));
-  categories.forEach((category) => urls.push(`${baseUrl}/blog/categories/${category.category}`));
+  categories.forEach((category) => urls.push(`${baseUrl}/blog/categories/${category}`));
 
   return `<?xml version="1.0" encoding="UTF-8"?>
   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

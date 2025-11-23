@@ -1,0 +1,121 @@
+'use client';
+
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Search, X, Filter } from 'lucide-react';
+
+interface BlogFiltersProps {
+  categories: string[];
+  totalPosts: number;
+  searchQuery?: string;
+  onSearchChange?: (query: string) => void;
+  selectedCategory?: string | null;
+  onCategoryChange?: (category: string | null) => void;
+}
+
+export default function BlogFilters({
+  categories,
+  totalPosts,
+  searchQuery = '',
+  onSearchChange,
+  selectedCategory = null,
+  onCategoryChange,
+}: BlogFiltersProps) {
+  const clearFilters = () => {
+    onSearchChange?.('');
+    onCategoryChange?.(null);
+  };
+
+  const hasActiveFilters = searchQuery || selectedCategory;
+
+  return (
+    <div className="space-y-6">
+      {/* Search Bar */}
+      <div className="relative">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+        <Input
+          type="text"
+          placeholder="Buscar posts..."
+          value={searchQuery}
+          onChange={(e) => onSearchChange?.(e.target.value)}
+          className="pl-12 pr-4 py-6 text-base bg-background border-input"
+        />
+      </div>
+
+      {/* Categories Filter */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+        <div className="flex items-center gap-2">
+          <Filter className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm font-medium text-foreground">Categorias:</span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant={selectedCategory === null ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => onCategoryChange?.(null)}
+            className="text-sm"
+          >
+            Todas
+          </Button>
+          {categories.map((category) => (
+            <Button
+              key={category}
+              variant={selectedCategory === category ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => onCategoryChange?.(category)}
+              className="text-sm capitalize"
+            >
+              {category}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      {/* Active Filters Display */}
+      {hasActiveFilters && (
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-sm text-muted-foreground">Filtros ativos:</span>
+          {searchQuery && (
+            <Badge variant="secondary" className="gap-2">
+              Busca: &ldquo;{searchQuery}&rdquo;
+              <button
+                onClick={() => onSearchChange?.('')}
+                className="ml-1 hover:text-destructive"
+                aria-label="Remover filtro de busca"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </Badge>
+          )}
+          {selectedCategory && (
+            <Badge variant="secondary" className="gap-2 capitalize">
+              Categoria: {selectedCategory}
+              <button
+                onClick={() => onCategoryChange?.(null)}
+                className="ml-1 hover:text-destructive"
+                aria-label="Remover filtro de categoria"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </Badge>
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={clearFilters}
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
+            Limpar todos
+          </Button>
+        </div>
+      )}
+
+      {/* Results Count */}
+      <div className="text-sm text-muted-foreground">
+        {totalPosts === 1 ? '1 post encontrado' : `${totalPosts} posts encontrados`}
+      </div>
+    </div>
+  );
+}
+

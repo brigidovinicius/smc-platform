@@ -62,25 +62,67 @@ export const getAllPosts = (): BlogPost[] => {
 };
 
 export const getPostBySlug = (slug: string): BlogPost | null => {
-  const filePath = path.join(BLOG_DIR, `${slug}.mdx`);
-  const raw = readFileSafe(filePath);
-  if (!raw) {
+  if (!fs.existsSync(BLOG_DIR)) {
     return null;
   }
-  const { data, content } = matter(raw);
-  return {
-    slug,
-    title: data.title ?? 'Untitled',
-    excerpt: data.excerpt ?? '',
-    date: data.date ?? new Date().toISOString(),
-    category: data.category,
-    author: data.author,
-    tags: data.tags ?? [],
-    content
-  };
+
+  // Try to find by filename first
+  const filePath = path.join(BLOG_DIR, `${slug}.mdx`);
+  let raw = readFileSafe(filePath);
+  
+  if (raw) {
+    const { data, content } = matter(raw);
+    return {
+      slug: data.slug ?? slug,
+      title: data.title ?? 'Untitled',
+      excerpt: data.excerpt ?? '',
+      date: data.date ?? new Date().toISOString(),
+      category: data.category,
+      author: data.author,
+      tags: data.tags ?? [],
+      content
+    };
+  }
+
+  // If not found by filename, search by slug in frontmatter
+  const files = fs.readdirSync(BLOG_DIR).filter((file) => file.endsWith('.mdx'));
+  
+  for (const file of files) {
+    const fileRaw = readFileSafe(path.join(BLOG_DIR, file));
+    if (!fileRaw) continue;
+    
+    const { data, content } = matter(fileRaw);
+    const postSlug = data.slug ?? file.replace(/\.mdx$/, '');
+    
+    if (postSlug === slug) {
+      return {
+        slug: postSlug,
+        title: data.title ?? 'Untitled',
+        excerpt: data.excerpt ?? '',
+        date: data.date ?? new Date().toISOString(),
+        category: data.category,
+        author: data.author,
+        tags: data.tags ?? [],
+        content
+      };
+    }
+  }
+
+  return null;
 };
 
-export const getAllCategories = () => {
+export const getAllCategories = (): string[] => {
+  const posts = getAllPosts();
+  const categories = new Set<string>();
+  posts.forEach((post) => {
+    if (post.category) {
+      categories.add(post.category);
+    }
+  });
+  return Array.from(categories).sort();
+};
+
+export const getCategoriesWithCount = () => {
   const posts = getAllPosts();
   const counts: Record<string, number> = {};
   posts.forEach((post) => {
@@ -118,3 +160,14 @@ export const getAuthorBySlug = (slug: string): BlogAuthor | null => {
 
 export const getPostsByAuthor = (authorSlug: string) =>
   getAllPosts().filter((post) => post.author === authorSlug);
+
+export const getRelatedPosts = (currentSlug: string, category?: string, limit: number = 3): BlogPost[] => {
+  const posts = getAllPosts();
+  return posts
+    .filter((post) => {
+      if (post.slug === currentSlug) return false;
+      if (category && post.category === category) return true;
+      return false;
+    })
+    .slice(0, limit);
+};

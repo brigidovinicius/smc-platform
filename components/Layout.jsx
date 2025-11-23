@@ -2,10 +2,12 @@ import Navbar from './Navbar';
 
 export default function Layout({ children }) {
   return (
-    <div className="app-root">
+    <div className="min-h-screen bg-background text-foreground">
       <Navbar />
-      <main className="app-main">
-        <div className="app-container">{children}</div>
+      <main className="min-h-[calc(100vh-80px)]">
+        <div className="container mx-auto px-4 py-8">
+          {children}
+        </div>
       </main>
     </div>
   );

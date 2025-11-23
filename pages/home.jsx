@@ -32,7 +32,7 @@ const HomeAliasPage = () => {
   const firstName = session?.user?.name?.split(' ')[0] ?? 'Founder';
 
   return (
-    <main className="min-h-screen bg-[#050711] text-white">
+    <div className="min-h-screen bg-[#050711] text-white -mx-4 -my-8 px-4 py-8">
       <Head>
         <title>Home · SMC Platform</title>
         <meta
@@ -41,7 +41,7 @@ const HomeAliasPage = () => {
         />
       </Head>
 
-      <div className="max-w-6xl mx-auto px-4 py-12 space-y-10">
+      <div className="max-w-6xl mx-auto space-y-10">
         <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#0e1a3a] via-[#0b1230] to-[#111829] p-8 md:p-12 shadow-2xl">
           <div
             className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_top_right,#3b82f6,transparent_35%),radial-gradient(circle_at_bottom_left,#8b5cf6,transparent_30%)]"
@@ -186,7 +186,7 @@ const HomeAliasPage = () => {
           </article>
         </section>
       </div>
-    </main>
+    </div>
   );
 };
 

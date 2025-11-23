@@ -156,7 +156,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Blog categories
     const categories = getAllCategories();
     const categoryPages: MetadataRoute.Sitemap = categories.map((category) => ({
-        url: `${baseUrl}/blog/categories/${category.category}`,
+      url: `${baseUrl}/blog/categories/${category}`,
         lastModified: currentDate,
         changeFrequency: 'weekly' as const,
         priority: 0.6
