@@ -59,7 +59,7 @@ export default function Dashboard({ assets, offers, stats }) {
                     churn: asset.churnRate ? `${asset.churnRate}%` : 'N/A'
                   }}
                 />
-                <div className="flex gap-4 text-sm text-slate-300">
+                <div className="flex gap-4 text-sm text-muted-foreground">
                   <Badge variant="default">Saudável</Badge>
                 </div>
               </div>

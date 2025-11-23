@@ -11,7 +11,7 @@ interface BlogCardProps {
 }
 
 const BlogCard = ({ slug, title, excerpt, date, category }: BlogCardProps) => (
-  <Card className="bg-[#050b1a] border-white/5 hover:border-white/10 transition-colors h-full flex flex-col">
+  <Card className="bg-card border-border hover:border-primary/50 transition-colors h-full flex flex-col">
     <CardHeader className="pb-3">
       {category && (
         <Badge variant="outline" className="w-fit mb-2 text-xs">
@@ -25,10 +25,10 @@ const BlogCard = ({ slug, title, excerpt, date, category }: BlogCardProps) => (
       </CardTitle>
     </CardHeader>
     <CardContent className="space-y-3 flex-1 flex flex-col">
-      <CardDescription className="text-slate-300 text-sm line-clamp-3 flex-1">
+      <CardDescription className="text-muted-foreground text-sm line-clamp-3 flex-1">
         {excerpt}
       </CardDescription>
-      <p className="text-xs text-slate-500 mt-auto">{new Date(date).toLocaleDateString('pt-BR')}</p>
+      <p className="text-xs text-muted-foreground mt-auto">{new Date(date).toLocaleDateString('pt-BR')}</p>
     </CardContent>
   </Card>
 );
