@@ -10,7 +10,8 @@
     "generate:post": "node scripts/generateDailyPost.js",
     "schedule:posts": "node scripts/scheduleGeneratePost.js",
     "postinstall": "node scripts/postinstall-safe.js",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "vercel-build": "prisma generate && prisma migrate deploy && next build"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
