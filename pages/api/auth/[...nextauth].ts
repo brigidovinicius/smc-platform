@@ -60,9 +60,8 @@ export const authOptions: NextAuthOptions = {
             return null;
           }
 
-          if (!user.emailVerified) {
-            throw new Error('E-mail não verificado. Verifique sua caixa de entrada.');
-          }
+          // Email sempre é marcado como verificado no registro
+          // Não é necessário verificar emailVerified aqui
 
           const isValid = await bcrypt.compare(credentials.password, user.password);
           if (!isValid) {

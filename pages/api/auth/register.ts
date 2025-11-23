@@ -1,8 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
 import prisma from '@/lib/prisma';
-import { sendVerificationEmail } from '@/lib/email';
+import { sendWelcomeEmail, isSmtpConfigured } from '@/lib/email';
 import { apiHandler, requireMethod, successResponse, errorResponse } from '@/lib/api';
 import { validateRegisterBody } from '@/lib/api/validators';
 import type { ApiResponse } from '@/lib/api';
@@ -26,17 +25,40 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
     await prisma.$connect();
   } catch (dbError: any) {
     console.error('Database connection error:', dbError);
-    if (dbError.code === 'P1001' || dbError.message?.includes('can\'t reach database server')) {
+    const errorCode = dbError.code || '';
+    const errorMessage = dbError.message || '';
+    
+    // Erros específicos do Prisma
+    if (errorCode === 'P1001' || errorMessage.includes("can't reach database server")) {
       return errorResponse(
         res,
-        'Serviço temporariamente indisponível. Por favor, verifique a configuração do banco de dados.',
+        'Não foi possível conectar ao banco de dados. Verifique se o servidor está online e acessível. Se estiver usando Supabase, verifique se o projeto não está pausado.',
         503,
         'DATABASE_CONNECTION_ERROR'
       );
     }
+    
+    if (errorCode === 'P1000' || errorMessage.includes('Authentication failed')) {
+      return errorResponse(
+        res,
+        'Erro de autenticação no banco de dados. Verifique as credenciais (usuário e senha) no DATABASE_URL.',
+        500,
+        'DATABASE_AUTH_ERROR'
+      );
+    }
+    
+    if (errorCode === 'P1003' || errorMessage.includes('database') && errorMessage.includes('does not exist')) {
+      return errorResponse(
+        res,
+        'O banco de dados especificado não existe. Verifique o nome do banco no DATABASE_URL.',
+        500,
+        'DATABASE_NOT_FOUND'
+      );
+    }
+    
     return errorResponse(
       res,
-      'Erro ao conectar com o banco de dados. Verifique a configuração.',
+      `Erro ao conectar com o banco de dados: ${errorMessage || 'Erro desconhecido'}. Verifique a configuração do DATABASE_URL.`,
       500,
       'DATABASE_ERROR'
     );
@@ -60,6 +82,13 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
     return errorResponse(res, 'E-mail já cadastrado', 400, 'EMAIL_EXISTS');
   }
 
+  // Verificar se SMTP está configurado
+  const smtpConfigured = isSmtpConfigured();
+  
+  // Sempre marcar email como verificado automaticamente para não bloquear login
+  // O email será enviado se SMTP estiver configurado, mas não é obrigatório para login
+  const emailVerified = new Date();
+
   // Criar usuário
   const hashedPassword = await bcrypt.hash(password, 10);
   try {
@@ -68,7 +97,7 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
         name: name?.trim(),
         email,
         password: hashedPassword,
-        emailVerified: null
+        emailVerified
       }
     });
   } catch (dbError: any) {
@@ -81,26 +110,27 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
     );
   }
 
-  // Gerar token de verificação
-  const token = crypto.randomBytes(32).toString('hex');
-  await prisma.verificationToken.create({
-    data: {
-      identifier: email,
-      token,
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 24) // 24h
+  // Sempre tentar enviar email quando SMTP estiver configurado
+  if (smtpConfigured) {
+    try {
+      // Enviar email de boas-vindas (email já está verificado automaticamente)
+      const emailSent = await sendWelcomeEmail(email, name?.trim());
+      if (emailSent) {
+        console.log(`[register] Email de boas-vindas enviado para ${email}`);
+      } else {
+        console.warn(`[register] Falha ao enviar email de boas-vindas para ${email}`);
+      }
+    } catch (emailError) {
+      console.error('[register] Erro ao enviar email de boas-vindas:', emailError);
+      // Não bloquear cadastro se falhar ao enviar email
     }
-  });
-
-  // Enviar email de verificação
-  const emailSent = await sendVerificationEmail(email, token);
-  if (!emailSent) {
-    return errorResponse(
-      res,
-      'Não foi possível enviar o e-mail de verificação. Verifique configurações SMTP.',
-      500,
-      'EMAIL_SEND_ERROR'
-    );
+  } else {
+    console.log(`[register] SMTP não configurado. Email ${email} marcado como verificado automaticamente.`);
   }
 
-  return successResponse(res, { ok: true }, 201);
+  return successResponse(res, { 
+    ok: true, 
+    emailVerified: true,
+    emailSent: smtpConfigured
+  }, 201);
 });

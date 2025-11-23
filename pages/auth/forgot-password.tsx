@@ -6,12 +6,12 @@ const ForgotPasswordPage = () => {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
-    setError('');
+    setError(null);
 
     try {
       const response = await fetch('/api/auth/forgot-password', {
@@ -20,11 +20,12 @@ const ForgotPasswordPage = () => {
         body: JSON.stringify({ email })
       });
 
+      const data = await response.json();
+
       if (response.ok) {
         setSubmitted(true);
       } else {
-        const data = await response.json();
-        setError(data.message || 'Erro ao enviar email de recuperação.');
+        setError(data.error || 'Erro ao enviar email de recuperação. Tente novamente.');
       }
     } catch (err) {
       setError('Erro ao enviar email. Tente novamente.');
@@ -35,49 +36,92 @@ const ForgotPasswordPage = () => {
 
   if (submitted) {
     return (
-      <div className="card" style={{ maxWidth: 400, margin: '4rem auto' }}>
-        <h1>Email enviado!</h1>
-        <p>
-          Se existe uma conta com o email <strong>{email}</strong>, você receberá instruções para redefinir sua
-          senha.
-        </p>
-        <Link href="/auth/login" className="button primary" style={{ marginTop: '1rem', display: 'inline-block' }}>
-          Voltar para login
-        </Link>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">Email enviado!</h1>
+            <p className="text-slate-600">
+              Se existe uma conta com o email <strong className="text-slate-900">{email}</strong>, você receberá instruções para redefinir sua senha.
+            </p>
+          </div>
+
+          <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+            <p className="text-emerald-700 text-sm flex items-center gap-2">
+              <span className="text-emerald-500">✓</span>
+              Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.
+            </p>
+          </div>
+
+          <Link
+            href="/auth/login"
+            className="w-full py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all text-center block"
+          >
+            Voltar para login
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="card" style={{ maxWidth: 400, margin: '4rem auto' }}>
-      <h1>Recuperar senha</h1>
-      <p>Digite seu email para receber instruções de recuperação de senha.</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Recuperar senha</h1>
+          <p className="text-slate-600">Digite seu email para receber instruções de recuperação de senha.</p>
+        </div>
 
-      <form onSubmit={handleSubmit} style={{ marginTop: '1.5rem' }}>
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          className="input"
-          placeholder="seu@email.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={{ marginTop: '0.5rem' }}
-        />
+        {error && (
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-700 text-sm flex items-center gap-2">
+              <span>⚠</span>
+              {error}
+            </p>
+          </div>
+        )}
 
-        {error && <p className="input-error">{error}</p>}
+        <form onSubmit={handleSubmit} className="space-y-4 mb-6">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
+              E-mail
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-3 rounded-lg border-2 border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
+              placeholder="seu@email.com"
+            />
+          </div>
 
-        <button type="submit" className="button primary" disabled={loading} style={{ marginTop: '1rem', width: '100%' }}>
-          {loading ? 'Enviando...' : 'Enviar email de recuperação'}
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full py-3 rounded-lg font-semibold text-white transition-all ${
+              loading
+                ? 'bg-slate-400 cursor-not-allowed'
+                : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl'
+            }`}
+          >
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                Enviando...
+              </span>
+            ) : (
+              'Enviar email de recuperação'
+            )}
+          </button>
+        </form>
 
-      <p style={{ marginTop: '1rem', textAlign: 'center' }}>
-        <Link href="/auth/login" style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
-          Voltar para login
-        </Link>
-      </p>
+        <p className="mt-6 text-center text-sm text-slate-600">
+          <Link href="/auth/login" className="text-indigo-600 hover:text-indigo-700 font-medium">
+            Voltar para login
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };

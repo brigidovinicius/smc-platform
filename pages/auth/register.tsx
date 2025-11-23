@@ -92,12 +92,22 @@ const RegisterPage = () => {
         return;
       }
 
-      setSuccess('Conta criada com sucesso! Verifique seu e-mail para ativar a conta.');
-      setName('');
-      setEmail('');
-      setPassword('');
-      setEmailError(null);
-      setPasswordError(null);
+      const data = await response.json();
+      // Mensagem de sucesso baseada se email foi verificado automaticamente
+      if (data.data?.emailVerified) {
+        setSuccess('Conta criada com sucesso! Redirecionando para login...');
+        // Redirecionar para login após 2 segundos se email já estiver verificado
+        setTimeout(() => {
+          router.push('/auth/login?registered=1');
+        }, 2000);
+      } else {
+        setSuccess('Conta criada com sucesso! Verifique seu e-mail para ativar a conta.');
+        setName('');
+        setEmail('');
+        setPassword('');
+        setEmailError(null);
+        setPasswordError(null);
+      }
     } catch (err) {
       setError('Erro ao criar conta. Tente novamente.');
     } finally {

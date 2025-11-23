@@ -17,6 +17,12 @@ const LoginPage = () => {
     if (router.query.verified === '1') {
       setVerifiedMessage('E-mail verificado com sucesso. Faça login para continuar.');
     }
+    if (router.query.registered === '1') {
+      setVerifiedMessage('Conta criada com sucesso! Faça login para continuar.');
+    }
+    if (router.query.passwordReset === '1') {
+      setVerifiedMessage('Senha redefinida com sucesso! Faça login com sua nova senha.');
+    }
   }, [router.query]);
 
   const handleSubmit = async (event: FormEvent) => {
