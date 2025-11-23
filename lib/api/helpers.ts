@@ -143,8 +143,13 @@ export async function getUserFromSession(
   if (!session) return null;
 
   const prisma = (await import('@/lib/prisma')).default;
+  const userEmail = session.user?.email;
+  if (!userEmail) {
+    errorResponse(res, 'Email não encontrado na sessão', 401, 'NO_EMAIL');
+    return null;
+  }
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email! }
+    where: { email: userEmail }
   });
 
   if (!user) {

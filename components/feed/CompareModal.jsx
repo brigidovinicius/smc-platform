@@ -1,7 +1,7 @@
 import { X, Download, Trash2, GitCompare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Badge from '@/components/ui/Badge';
-import Button from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 
 export default function CompareModal({ offers, isOpen, onClose, onRemove, onExport }) {
   if (!isOpen) return null;

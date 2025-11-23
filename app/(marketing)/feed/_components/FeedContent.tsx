@@ -14,6 +14,20 @@ const investmentFilters = [
 
 const revenueFilters = ['Todos', 'MRR < R$ 10k', 'MRR R$ 10k – R$ 20k', 'MRR > R$ 20k'];
 
+interface Offer {
+  id: string;
+  slug: string;
+  title: string;
+  summary: string;
+  classification: string;
+  niche: string;
+  investmentRange?: { min: number; max: number };
+  revenueRange: string;
+  valuationMultiple: string;
+  badges?: string[];
+  metrics?: { mrr?: string };
+}
+
 const determineRevenueBucket = (mrrText = '') => {
   const numeric = Number(mrrText.replace(/\D/g, '')) || 0;
   if (numeric === 0) return 'Todos';
@@ -22,7 +36,7 @@ const determineRevenueBucket = (mrrText = '') => {
   return 'MRR > R$ 20k';
 };
 
-const matchesInvestment = (offer, filter) => {
+const matchesInvestment = (offer: Offer, filter: string): boolean => {
   if (filter === 'all') return true;
   const min = offer.investmentRange?.min || 0;
   const max = offer.investmentRange?.max || min;
@@ -38,20 +52,6 @@ const matchesInvestment = (offer, filter) => {
   }
 };
 
-interface Offer {
-  id: string;
-  slug: string;
-  title: string;
-  summary: string;
-  classification: string;
-  niche: string;
-  investmentRange?: { min: number; max: number };
-  revenueRange: string;
-  valuationMultiple: string;
-  badges?: string[];
-  metrics?: { mrr?: string };
-}
-
 interface FeedContentProps {
   offers: Offer[];
 }
@@ -66,11 +66,11 @@ export function FeedContent({ offers }: FeedContentProps) {
   const totalOffers = offers.length;
 
   const classifications = useMemo(
-    () => ['Todos', ...new Set(offers.map((offer) => offer.classification))],
+    () => ['Todos', ...Array.from(new Set(offers.map((offer) => offer.classification)))],
     [offers]
   );
 
-  const niches = useMemo(() => ['Todos', ...new Set(offers.map((offer) => offer.niche))], [offers]);
+  const niches = useMemo(() => ['Todos', ...Array.from(new Set(offers.map((offer) => offer.niche)))], [offers]);
 
   const filteredOffers = offers.filter((offer) => {
     const classificationMatch = classification === 'Todos' || offer.classification === classification;
@@ -110,7 +110,9 @@ export function FeedContent({ offers }: FeedContentProps) {
 
   const uniqueNiches = niches.length > 0 ? niches.length - 1 : 0;
   const averageTicket = useMemo(() => {
-    const withPrice = offers.filter((offer) => offer.investmentRange?.min && offer.investmentRange?.max);
+    const withPrice = offers.filter((offer): offer is Offer & { investmentRange: { min: number; max: number } } => 
+      !!offer.investmentRange?.min && !!offer.investmentRange?.max
+    );
     if (!withPrice.length) return 'Sob consulta';
     const avg =
       withPrice.reduce((acc, offer) => acc + (offer.investmentRange.min + offer.investmentRange.max) / 2, 0) /

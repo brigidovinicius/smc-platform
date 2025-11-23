@@ -13,7 +13,8 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
   const tokenValidation = validateToken(req.query.token);
   if (!tokenValidation.valid) {
     // Para verificação de email, redirecionamos mesmo com erro para melhor UX
-    return res.redirect(302, '/auth/login?error=invalid_token');
+    res.redirect(302, '/auth/login?error=invalid_token');
+    return;
   }
 
   const { token } = tokenValidation;
@@ -21,7 +22,8 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
   // Buscar token no banco
   const record = await prisma.verificationToken.findUnique({ where: { token } });
   if (!record || record.expires < new Date()) {
-    return res.redirect(302, '/auth/login?error=expired_token');
+    res.redirect(302, '/auth/login?error=expired_token');
+    return;
   }
 
   // Verificar email do usuário
@@ -34,5 +36,5 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
   await prisma.verificationToken.delete({ where: { token } });
 
   // Redirecionar para login com sucesso
-  return res.redirect(302, '/auth/login?verified=1');
+  res.redirect(302, '/auth/login?verified=1');
 });

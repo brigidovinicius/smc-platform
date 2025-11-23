@@ -17,7 +17,7 @@ const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
  */
 function cleanExpiredEntries() {
   const now = Date.now();
-  for (const [key, value] of rateLimitMap.entries()) {
+  for (const [key, value] of Array.from(rateLimitMap.entries())) {
     if (value.resetTime < now) {
       rateLimitMap.delete(key);
     }

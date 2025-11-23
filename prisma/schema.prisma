@@ -23,6 +23,7 @@ model User {
   purchases Offer[]     @relation("UserBuys")
   transactionsSold Transaction[] @relation("TransactionSeller")
   transactionsBought Transaction[] @relation("TransactionBuyer")
+  favorites Favorite[] @relation("UserFavorites")
 }
 
 model Account {
@@ -103,6 +104,7 @@ model Offer {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   transactions Transaction[]
+  favorites Favorite[] @relation("OfferFavorites")
 
   @@index([assetId])
   @@index([sellerId])
@@ -120,6 +122,19 @@ model Transaction {
   value     Decimal
   closedAt  DateTime @default(now())
   createdAt DateTime @default(now())
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation("UserFavorites", fields: [userId], references: [id], onDelete: Cascade)
+  offerId   String
+  offer     Offer    @relation("OfferFavorites", fields: [offerId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, offerId])
+  @@index([userId])
+  @@index([offerId])
 }
 
 enum Role {

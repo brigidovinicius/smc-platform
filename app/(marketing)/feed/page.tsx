@@ -20,7 +20,26 @@ export const metadata: Metadata = {
   }
 };
 
-const normalizeOffer = (offer: any) => {
+interface NormalizedOffer {
+  id: string;
+  slug: string;
+  title: string;
+  summary: string;
+  classification: string;
+  niche: string;
+  investmentRange: {
+    min: number;
+    max: number;
+  };
+  revenueRange: string;
+  valuationMultiple: string;
+  badges: string[];
+  metrics: {
+    mrr?: string;
+  };
+}
+
+const normalizeOffer = (offer: any): NormalizedOffer => {
   const asset = offer.asset ?? null;
   const mrrValue = asset?.mrr ?? null;
   const arrValue = asset?.arr ?? null;
@@ -50,7 +69,7 @@ const normalizeOffer = (offer: any) => {
 };
 
 export default async function FeedPage() {
-  let offers = [];
+  let offers: NormalizedOffer[] = [];
   
   try {
     const offerResult = await listOffers({ pageSize: 50 });
@@ -65,7 +84,7 @@ export default async function FeedPage() {
     name: 'Feed de oportunidades – SMC Platform',
     description:
       'Lista curada de ativos digitais, SaaS e newsletters disponíveis para aquisição com métricas de MRR, churn e ticket de investimento.',
-    mainEntity: offers.map((offer: any, index: number) => ({
+    mainEntity: offers.map((offer, index: number) => ({
       '@type': 'Offer',
       position: index + 1,
       url: `${SITE_URL}/offers/${offer.slug}`,
