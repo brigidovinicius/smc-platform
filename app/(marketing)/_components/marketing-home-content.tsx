@@ -19,6 +19,7 @@ import {
   CheckCircle,
   LucideIcon
 } from 'lucide-react';
+import { GridBackground, Marquee, FeatureCards, HowItWorks } from '@/components/marketing';
 
 const iconMap: Record<string, LucideIcon> = {
   ChartLine,
@@ -112,10 +113,14 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
         id="hero"
         className="relative min-h-[90vh] overflow-hidden bg-[#050611] text-white"
       >
-        {/* Background Effects */}
-        <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-20" />
-        <div className="absolute -top-[20%] -left-[10%] h-[800px] w-[800px] rounded-full bg-purple-600/20 blur-[120px]" />
-        <div className="absolute top-[10%] -right-[10%] h-[600px] w-[600px] rounded-full bg-blue-600/20 blur-[100px]" />
+        {/* Grid Background */}
+        <GridBackground />
+        
+        {/* Background Effects - Mais visíveis */}
+        <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-30" />
+        <div className="absolute -top-[20%] -left-[10%] h-[800px] w-[800px] rounded-full bg-purple-500/30 blur-[120px] animate-pulse" />
+        <div className="absolute top-[10%] -right-[10%] h-[600px] w-[600px] rounded-full bg-blue-500/30 blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-[10%] left-1/2 -translate-x-1/2 h-[400px] w-[400px] rounded-full bg-indigo-500/20 blur-[80px]" />
 
         <div className="container relative z-10 grid gap-16 py-32 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div className="space-y-8">
@@ -176,8 +181,8 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
             </motion.div>
 
             <div className="pt-8">
-              <p className="mb-4 text-xs font-medium uppercase tracking-widest text-slate-500">Confiança de players como</p>
-              <MarqueeLogos logos={proofLogos} />
+              <p className="mb-4 text-xs font-medium uppercase tracking-widest text-slate-400">Confiança de players como</p>
+              <Marquee items={proofLogos} speed={30} className="relative z-10" />
             </div>
           </div>
 
@@ -220,8 +225,11 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
       </section>
 
       {/* HOW IT WORKS - TIMELINE */}
-      <section id="como-funciona" className="py-24 bg-white">
-        <div className="container">
+      <section id="como-funciona" className="py-24 bg-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-5">
+          <GridBackground />
+        </div>
+        <div className="container relative z-10">
           <div className="mb-16 text-center">
             <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-4xl">Como funciona</h2>
             <p className="mx-auto max-w-2xl text-slate-600">
@@ -229,53 +237,16 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
             </p>
           </div>
 
-          <div className="relative">
-            {/* Line */}
-            <div className="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 bg-slate-100 hidden md:block" />
-
-            <div className="space-y-12 md:space-y-24">
-              {howItWorks.map((item, index) => {
-                const Icon = item.icon ? iconMap[item.icon] : CheckCircle;
-                return (
-                  <motion.div
-                    key={item.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-100px" }}
-                    className={`flex flex-col gap-8 md:flex-row ${index % 2 === 1 ? 'md:flex-row-reverse' : ''} items-center`}
-                  >
-                    <div className="flex-1 text-center md:text-left">
-                      <div className={`inline-flex h-12 w-12 items-center justify-center rounded-full bg-indigo-50 text-xl font-bold text-indigo-600 mb-4 md:hidden`}>
-                        {index + 1}
-                      </div>
-                      <h3 className="mb-3 text-2xl font-bold text-slate-900">{item.title}</h3>
-                      <p className="text-slate-600 text-sm leading-relaxed">{item.description}</p>
-                    </div>
-
-                    <div className="relative flex items-center justify-center md:w-24">
-                      <div className="hidden h-12 w-12 items-center justify-center rounded-full bg-indigo-600 text-xl font-bold text-white shadow-lg shadow-indigo-200 md:flex z-10">
-                        {index + 1}
-                      </div>
-                    </div>
-
-                    <div className="flex-1">
-                      <div className="aspect-video rounded-2xl bg-slate-50 border border-slate-100 p-8 flex items-center justify-center group hover:border-indigo-100 transition-colors">
-                        <div className="h-20 w-20 rounded-2xl bg-white shadow-sm flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform duration-300">
-                          <Icon size={40} strokeWidth={1.5} />
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
+          <HowItWorks steps={howItWorks} iconMap={iconMap} />
         </div>
       </section>
 
       {/* FEATURES - BENTO GRID */}
-      <section id="recursos" className="py-24 bg-slate-50">
-        <div className="container">
+      <section id="recursos" className="py-24 bg-slate-50 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-5">
+          <GridBackground />
+        </div>
+        <div className="container relative z-10">
           <div className="mb-16 max-w-2xl">
             <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-4xl">Tudo o que você precisa para negociar</h2>
             <p className="text-slate-600">
@@ -283,87 +254,33 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
             </p>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-3 md:grid-rows-2 h-auto md:h-[600px]">
-            {/* Large Item 1 */}
-            <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 md:col-span-2">
-              <div className="relative z-10 grid md:grid-cols-2 gap-8 items-center">
-                <div>
-                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                    {features[0].icon && iconMap[features[0].icon] && <ChartLine size={24} />}
-                  </div>
-                  <h3 className="mb-2 text-xl font-bold text-slate-900">{features[0].title}</h3>
-                  <p className="text-slate-300 text-sm">{features[0].description}</p>
-                </div>
-                <div className="relative h-48 w-full overflow-hidden rounded-xl bg-blue-50/50">
-                  <Image
-                    src="/images/feature-valuation.webp"
-                    alt="Gráfico de valuation automático mostrando múltiplos de ARR, análise de MRR e recomendações de precificação para SaaS"
-                    fill
-                    className="object-contain p-4 transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Tall Item */}
-            <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 md:row-span-2">
-              <div className="relative z-10 h-full flex flex-col">
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 text-purple-600">
-                  {features[2].icon && iconMap[features[2].icon] && <Shield size={24} />}
-                </div>
-                <h3 className="mb-2 text-xl font-bold text-slate-900">{features[2].title}</h3>
-                <p className="text-slate-600 mb-8">{features[2].description}</p>
-
-                <div className="relative flex-1 min-h-[200px] w-full overflow-hidden rounded-xl bg-purple-50/30 mb-4">
-                  <Image
-                    src="/images/feature-dealroom.webp"
-                    alt="Deal room seguro com criptografia, controle de acesso e compartilhamento de documentos confidenciais para M&A de ativos digitais"
-                    fill
-                    className="object-contain p-4 transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
-
-                <div className="mt-auto rounded-xl bg-slate-50 border border-slate-100 p-4 group-hover:border-purple-100 transition-colors">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-xs font-medium text-slate-500">Deal Room Ativo</span>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="h-2 w-full rounded-full bg-slate-200" />
-                    <div className="h-2 w-3/4 rounded-full bg-slate-200" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Small Item 1 */}
-            <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1">
-              <div className="flex flex-col h-full">
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
-                  {features[1].icon && iconMap[features[1].icon] && <Brain size={24} />}
-                </div>
-                <h3 className="mb-2 text-lg font-bold text-slate-900">{features[1].title}</h3>
-                <p className="text-sm text-slate-600 mb-4">{features[1].description}</p>
-                <div className="relative h-32 w-full mt-auto overflow-hidden rounded-xl bg-indigo-50/30">
-                  <Image
-                    src="/images/feature-duediligence.webp"
-                    alt="Due diligence assistida por IA com análise automática de métricas, detecção de anomalias e verificação de dados financeiros"
-                    fill
-                    className="object-contain p-2 transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Small Item 2 */}
-            <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-pink-50 text-pink-600">
-                {features[5].icon && iconMap[features[5].icon] && <Zap size={24} />}
-              </div>
-              <h3 className="mb-2 text-lg font-bold text-slate-900">{features[5].title}</h3>
-              <p className="text-sm text-slate-600">{features[5].description}</p>
-            </div>
-          </div>
+          <FeatureCards
+            features={[
+              {
+                title: features[0].title,
+                description: features[0].description,
+                icon: features[0].icon && iconMap[features[0].icon] ? iconMap[features[0].icon] : undefined,
+                image: '/images/feature-valuation.webp'
+              },
+              {
+                title: features[1].title,
+                description: features[1].description,
+                icon: features[1].icon && iconMap[features[1].icon] ? iconMap[features[1].icon] : undefined,
+                image: '/images/feature-duediligence.webp'
+              },
+              {
+                title: features[2].title,
+                description: features[2].description,
+                icon: features[2].icon && iconMap[features[2].icon] ? iconMap[features[2].icon] : undefined,
+                image: '/images/feature-dealroom.webp'
+              },
+              {
+                title: features[5].title,
+                description: features[5].description,
+                icon: features[5].icon && iconMap[features[5].icon] ? iconMap[features[5].icon] : undefined
+              }
+            ]}
+          />
         </div>
       </section>
 
@@ -400,11 +317,15 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-slate-50">
+      <section className="py-24 bg-slate-50 relative overflow-hidden">
         <div className="container">
           <div className="relative overflow-hidden rounded-[3rem] bg-[#050611] px-8 py-20 text-center text-white md:px-20">
+            <div className="absolute inset-0 opacity-10">
+              <GridBackground />
+            </div>
             <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-20" />
-            <div className="absolute -top-[50%] left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-indigo-600/30 blur-[120px]" />
+            <div className="absolute -top-[50%] left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-indigo-500/40 blur-[120px] animate-pulse" />
+            <div className="absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full bg-purple-500/30 blur-[100px]" />
 
             <div className="relative z-10 max-w-3xl mx-auto space-y-8">
               <h2 className="text-4xl font-bold md:text-5xl">Pronto para o próximo deal?</h2>
@@ -430,24 +351,6 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
 }
 
 // --- Subcomponents ---
-
-function MarqueeLogos({ logos }: { logos: string[] }) {
-  return (
-    <div className="relative w-full overflow-hidden mask-linear-fade">
-      <motion.div
-        className="flex w-max gap-12"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-      >
-        {[...logos, ...logos, ...logos].map((logo, i) => (
-          <span key={i} className="text-lg font-semibold text-white/40 whitespace-nowrap">
-            {logo}
-          </span>
-        ))}
-      </motion.div>
-    </div>
-  );
-}
 
 function FloatingCTA() {
   const { scrollY } = useScroll();
