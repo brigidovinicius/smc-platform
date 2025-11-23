@@ -38,7 +38,9 @@ const LoginPage = () => {
           'E-mail não verificado': 'E-mail não verificado. Verifique sua caixa de entrada.',
           'Usuário não encontrado': 'E-mail ou senha incorretos',
           'Senha incorreta': 'E-mail ou senha incorretos',
-          'Credenciais inválidas': 'Por favor, preencha todos os campos'
+          'Credenciais inválidas': 'Por favor, preencha todos os campos',
+          'Serviço temporariamente indisponível': 'Serviço temporariamente indisponível. Por favor, tente novamente em alguns instantes.',
+          'Erro ao acessar o banco de dados': 'Erro ao acessar o banco de dados. Verifique a configuração do servidor.'
         };
         setError(errorMessages[result.error] || result.error || 'Erro ao fazer login. Tente novamente.');
       } else if (result?.ok) {

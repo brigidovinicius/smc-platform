@@ -81,7 +81,14 @@ const RegisterPage = () => {
 
       if (!response.ok) {
         const data = await response.json();
-        setError(data.error || 'Erro ao criar conta');
+        // Traduzir mensagens de erro do servidor
+        const errorMessages: Record<string, string> = {
+          'DATABASE_CONNECTION_ERROR': 'Serviço temporariamente indisponível. Por favor, verifique a configuração do banco de dados.',
+          'DATABASE_ERROR': 'Erro ao conectar com o banco de dados. Verifique a configuração.',
+          'EMAIL_EXISTS': 'E-mail já cadastrado. Tente fazer login ou use outro e-mail.',
+          'VALIDATION_ERROR': data.error || 'Dados inválidos. Verifique os campos e tente novamente.'
+        };
+        setError(errorMessages[data.code] || data.error || 'Erro ao criar conta. Tente novamente.');
         return;
       }
 

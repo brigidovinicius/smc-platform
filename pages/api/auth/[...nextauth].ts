@@ -33,9 +33,18 @@ export const authOptions: NextAuthOptions = {
             return null;
           }
 
-          const user = await prisma.user.findUnique({ 
-            where: { email: credentials.email } 
-          });
+          let user;
+          try {
+            user = await prisma.user.findUnique({ 
+              where: { email: credentials.email } 
+            });
+          } catch (dbError: any) {
+            console.error('Database error:', dbError);
+            if (dbError.code === 'P1001' || dbError.message?.includes('can\'t reach database server')) {
+              throw new Error('Serviço temporariamente indisponível. Por favor, tente novamente em alguns instantes.');
+            }
+            throw new Error('Erro ao acessar o banco de dados. Verifique a configuração.');
+          }
 
           if (!user) {
             return null;

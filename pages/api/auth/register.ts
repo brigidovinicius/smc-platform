@@ -21,22 +21,65 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
 
   const { name, email, password } = validation.data;
 
+  // Verificar conexão com banco de dados
+  try {
+    await prisma.$connect();
+  } catch (dbError: any) {
+    console.error('Database connection error:', dbError);
+    if (dbError.code === 'P1001' || dbError.message?.includes('can\'t reach database server')) {
+      return errorResponse(
+        res,
+        'Serviço temporariamente indisponível. Por favor, verifique a configuração do banco de dados.',
+        503,
+        'DATABASE_CONNECTION_ERROR'
+      );
+    }
+    return errorResponse(
+      res,
+      'Erro ao conectar com o banco de dados. Verifique a configuração.',
+      500,
+      'DATABASE_ERROR'
+    );
+  }
+
   // Verificar se email já existe
-  const existing = await prisma.user.findUnique({ where: { email } });
+  let existing;
+  try {
+    existing = await prisma.user.findUnique({ where: { email } });
+  } catch (dbError: any) {
+    console.error('Database query error:', dbError);
+    return errorResponse(
+      res,
+      'Erro ao verificar e-mail. Tente novamente.',
+      500,
+      'DATABASE_ERROR'
+    );
+  }
+
   if (existing) {
     return errorResponse(res, 'E-mail já cadastrado', 400, 'EMAIL_EXISTS');
   }
 
   // Criar usuário
   const hashedPassword = await bcrypt.hash(password, 10);
-  await prisma.user.create({
-    data: {
-      name: name?.trim(),
-      email,
-      password: hashedPassword,
-      emailVerified: null
-    }
-  });
+  try {
+    await prisma.user.create({
+      data: {
+        name: name?.trim(),
+        email,
+        password: hashedPassword,
+        emailVerified: null
+      }
+    });
+  } catch (dbError: any) {
+    console.error('Database create error:', dbError);
+    return errorResponse(
+      res,
+      'Erro ao criar usuário. Tente novamente.',
+      500,
+      'DATABASE_ERROR'
+    );
+  }
 
   // Gerar token de verificação
   const token = crypto.randomBytes(32).toString('hex');
