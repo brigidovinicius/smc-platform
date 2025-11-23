@@ -1,24 +1,49 @@
 import ReactMarkdown from 'react-markdown';
 import MDXComponents from './MDXComponents';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 
 interface BlogPostProps {
   title: string;
   date: string;
   author?: string;
   content: string;
+  category?: string;
+  tags?: string[];
 }
 
-const BlogPost = ({ title, date, author, content }: BlogPostProps) => (
-  <article className="prose prose-invert max-w-3xl mx-auto">
-    <header className="mb-10">
-      <p className="text-xs uppercase tracking-[0.3em] text-blue-300">Post</p>
-      <h1 className="text-4xl font-bold text-white">{title}</h1>
-      <p className="text-slate-400 text-sm">
-        {author && <span>{author} · </span>}
-        {new Date(date).toLocaleDateString('pt-BR')}
-      </p>
+const BlogPost = ({ title, date, author, content, category, tags }: BlogPostProps) => (
+  <article className="max-w-3xl mx-auto">
+    <header className="mb-10 space-y-4">
+      {category && (
+        <Badge variant="outline" className="text-xs">
+          {category}
+        </Badge>
+      )}
+      <h1 className="text-4xl md:text-5xl font-bold text-foreground">{title}</h1>
+      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+        {author && <span>{author}</span>}
+        {author && <Separator orientation="vertical" className="h-4" />}
+        <time dateTime={date}>{new Date(date).toLocaleDateString('pt-BR', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        })}</time>
+      </div>
+      {tags && tags.length > 0 && (
+        <div className="flex flex-wrap gap-2 pt-2">
+          {tags.map((tag) => (
+            <Badge key={tag} variant="secondary" className="text-xs">
+              {tag}
+            </Badge>
+          ))}
+        </div>
+      )}
+      <Separator className="mt-6" />
     </header>
-    <ReactMarkdown components={MDXComponents as any}>{content}</ReactMarkdown>
+    <div className="prose prose-invert prose-lg max-w-none dark:prose-invert">
+      <ReactMarkdown components={MDXComponents as any}>{content}</ReactMarkdown>
+    </div>
   </article>
 );
 
