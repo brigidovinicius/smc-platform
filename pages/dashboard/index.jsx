@@ -16,9 +16,9 @@ const readinessTasks = [
 ];
 
 const badges = [
-  { label: 'Founder PRO', variant: 'info' },
-  { label: 'Pipeline consistente', variant: 'success' },
-  { label: 'Dados auditados', variant: 'warning' }
+  { label: 'Founder PRO', variant: 'default' },
+  { label: 'Pipeline consistente', variant: 'secondary' },
+  { label: 'Dados auditados', variant: 'outline' }
 ];
 
 export default function Dashboard({ assets, offers, stats }) {
