@@ -54,8 +54,8 @@ export default function BlogPostPage({ params }: Params) {
   }
 
   return (
-    <main className="px-4 py-16 md:px-12 lg:px-24">
-      <div className="max-w-4xl mx-auto space-y-8">
+    <main className="px-4 py-8 sm:py-12 md:py-16 md:px-8 lg:px-12 xl:px-24">
+      <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
         <Breadcrumbs
           items={[
             { label: 'Blog', href: '/blog' },

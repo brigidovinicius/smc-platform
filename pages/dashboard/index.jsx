@@ -37,7 +37,7 @@ export default function Dashboard({ assets, offers, stats }) {
           )
         }
       >
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <StatBlock label="Readiness score" value={`${stats.readinessScore}%`} sublabel="Pronto para due diligence" trend="+6% este mês" />
           <StatBlock label="Valuation sugerido" value={stats.valuation} sublabel="Com base em MRR e churn" />
           <StatBlock label="Ativos listados" value={stats.assetsCount} sublabel="Total em carteira" />
@@ -101,7 +101,7 @@ export default function Dashboard({ assets, offers, stats }) {
       </Card>
 
       <Card title="Valuations e métricas" description="Resumo das análises automáticas feitas com base em MRR, churn e CAC.">
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <StatBlock label="MRR auditado" value="R$ 28.400" sublabel="crescimento 9% nos últimos 30 dias" />
           <StatBlock label="Churn controlado" value="1.9%" sublabel="benchmark SaaS B2B" />
           <StatBlock label="CAC payback" value="5.2 meses" sublabel="ideal < 7 meses" />

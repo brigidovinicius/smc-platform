@@ -20,7 +20,7 @@ const BlogPost = ({ title, date, author, content, category, tags }: BlogPostProp
           {category}
         </Badge>
       )}
-      <h1 className="text-4xl md:text-5xl font-bold text-foreground">{title}</h1>
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight">{title}</h1>
       <div className="flex items-center gap-4 text-sm text-muted-foreground">
         {author && <span>{author}</span>}
         {author && <Separator orientation="vertical" className="h-4" />}

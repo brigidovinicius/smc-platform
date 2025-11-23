@@ -20,13 +20,13 @@ export const revalidate = 3600;
 export default function BlogPage() {
   const posts = getAllPosts();
   return (
-    <main className="px-4 py-16 md:px-12 lg:px-24 space-y-10">
+    <main className="px-4 py-8 sm:py-12 md:py-16 md:px-8 lg:px-12 xl:px-24 space-y-8 sm:space-y-10">
       <Breadcrumbs items={[{ label: 'Blog' }]} />
       <BlogHero
         title="Insights sobre valuation e ativos digitais"
         description="Guias, benchmarks e histórias de compra e venda no mercado secundário."
       />
-      <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <section className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {posts.length > 0 ? (
           posts.map((post) => (
             <BlogCard
