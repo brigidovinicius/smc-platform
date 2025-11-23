@@ -5,17 +5,23 @@ const statusColors = {
 };
 
 const ProgressList = ({ items }) => (
-  <ul className="space-y-3">
+  <ul className="space-y-3" role="list" aria-label="Lista de tarefas de progresso">
     {items.map((item) => (
       <li
         key={item.id}
         className={`border rounded-2xl px-4 py-3 flex items-center justify-between ${statusColors[item.status] || statusColors.pending}`}
+        role="listitem"
+        aria-label={`Tarefa: ${item.title}, Status: ${item.statusLabel}`}
       >
         <div>
           <p className="text-foreground font-semibold">{item.title}</p>
-          <p className="text-xs text-muted-foreground">{item.description}</p>
+          <p className="text-xs text-muted-foreground" aria-label={`Descrição: ${item.description}`}>
+            {item.description}
+          </p>
         </div>
-        <span className="text-xs uppercase tracking-wide">{item.statusLabel}</span>
+        <span className="text-xs uppercase tracking-wide" aria-label={`Status: ${item.statusLabel}`}>
+          {item.statusLabel}
+        </span>
       </li>
     ))}
   </ul>

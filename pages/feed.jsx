@@ -105,6 +105,7 @@ const OfferCard = ({ offer, isHighlighted, isAuthenticated }) => {
       <Link
         href={ctaHref}
         className="mt-4 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#6b5bff] to-[#8f74ff] px-5 py-2 text-sm font-semibold text-white transition hover:opacity-90"
+        aria-label={`${ctaLabel} - ${offer.title}`}
       >
         {ctaLabel}
       </Link>
@@ -245,11 +246,19 @@ const FeedPage = ({ offers }) => {
                 encontrar ativos alinhados ao seu perfil. Para dados completos, faça login.
               </p>
               <div className="flex flex-wrap gap-3">
-                <Link href="/auth/login?callbackUrl=/feed" className="inline-flex items-center gap-2 rounded-full bg-white text-[#050711] px-5 py-3 text-sm font-semibold hover:translate-y-[-1px] transition">
+                <Link 
+                  href="/auth/login?callbackUrl=/feed" 
+                  className="inline-flex items-center gap-2 rounded-full bg-white text-[#050711] px-5 py-3 text-sm font-semibold hover:translate-y-[-1px] transition"
+                  aria-label="Fazer login para receber memorando completo"
+                >
                   Receber memorando completo
-                  <ArrowRightCircle className="h-4 w-4" />
+                  <ArrowRightCircle className="h-4 w-4" aria-hidden="true" />
                 </Link>
-                <Link href="/wizard" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10 transition">
+                <Link 
+                  href="/wizard" 
+                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10 transition"
+                  aria-label="Cadastrar novo ativo no marketplace"
+                >
                   Listar meu ativo
                 </Link>
               </div>
@@ -318,6 +327,7 @@ const FeedPage = ({ offers }) => {
                 className="bg-[#050b1a] border border-white/10 rounded-2xl px-4 py-2"
                 value={classification}
                 onChange={(event) => setClassification(event.target.value)}
+                aria-label="Filtrar por classificação"
               >
                 {classifications.map((option) => (
                   <option key={option} value={option}>
@@ -332,6 +342,7 @@ const FeedPage = ({ offers }) => {
                 className="bg-[#050b1a] border border-white/10 rounded-2xl px-4 py-2"
                 value={investmentFilter}
                 onChange={(event) => setInvestmentFilter(event.target.value)}
+                aria-label="Filtrar por ticket de investimento"
               >
                 {investmentFilters.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -346,6 +357,7 @@ const FeedPage = ({ offers }) => {
                 className="bg-[#050b1a] border border-white/10 rounded-2xl px-4 py-2"
                 value={revenueFilter}
                 onChange={(event) => setRevenueFilter(event.target.value)}
+                aria-label="Filtrar por receita recorrente mensal (MRR)"
               >
                 {revenueFilters.map((option) => (
                   <option key={option} value={option}>
@@ -360,6 +372,7 @@ const FeedPage = ({ offers }) => {
                 className="bg-[#050b1a] border border-white/10 rounded-2xl px-4 py-2"
                 value={nicheFilter}
                 onChange={(event) => setNicheFilter(event.target.value)}
+                aria-label="Filtrar por nicho de mercado"
               >
                 {niches.map((option) => (
                   <option key={option} value={option}>
@@ -378,12 +391,18 @@ const FeedPage = ({ offers }) => {
                   type="button"
                   className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs text-white"
                   onClick={filter.onRemove}
+                  aria-label={`Remover filtro: ${filter.label}`}
                 >
                   {filter.label}
-                  <span aria-hidden>✕</span>
+                  <span aria-hidden="true">✕</span>
                 </button>
               ))}
-              <button type="button" className="text-xs text-blue-300 underline" onClick={clearAllFilters}>
+              <button 
+                type="button" 
+                className="text-xs text-blue-300 underline" 
+                onClick={clearAllFilters}
+                aria-label="Limpar todos os filtros"
+              >
                 Limpar todos
               </button>
             </div>
@@ -428,6 +447,7 @@ const FeedPage = ({ offers }) => {
                 type="button"
                 className="mt-4 inline-flex items-center justify-center rounded-full border border-white/30 px-5 py-2 text-sm text-white transition hover:bg-white/10"
                 onClick={clearAllFilters}
+                aria-label="Limpar todos os filtros para ver inventário completo"
               >
                 Limpar filtros
               </button>
@@ -450,6 +470,7 @@ const FeedPage = ({ offers }) => {
                     type="button"
                     className="rounded-full border border-white/20 px-6 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
                     onClick={() => setVisibleCount((prev) => prev + 6)}
+                    aria-label={`Mostrar mais ativos. Atualmente mostrando ${visibleCount} de ${filteredOffers.length}`}
                   >
                     Mostrar mais ativos
                   </button>
