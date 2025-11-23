@@ -21,11 +21,11 @@ export function Marquee({
 
   return (
     <div className={`relative w-full overflow-hidden ${className}`}>
-      <div className="absolute left-0 top-0 z-10 h-full w-32 bg-gradient-to-r from-background to-transparent" />
-      <div className="absolute right-0 top-0 z-10 h-full w-32 bg-gradient-to-l from-background to-transparent" />
+      <div className="absolute left-0 top-0 z-10 h-full w-16 sm:w-32 bg-gradient-to-r from-background to-transparent" />
+      <div className="absolute right-0 top-0 z-10 h-full w-16 sm:w-32 bg-gradient-to-l from-background to-transparent" />
       
       <motion.div
-        className="flex w-max gap-12"
+        className="flex w-max gap-6 sm:gap-8 md:gap-12"
         animate={{
           x: direction === 'left' ? ['0%', '-50%'] : ['-50%', '0%']
         }}
@@ -38,7 +38,7 @@ export function Marquee({
         {duplicatedItems.map((item, i) => (
           <span
             key={i}
-            className={`text-lg font-semibold text-white/40 whitespace-nowrap ${itemClassName}`}
+            className={`text-sm sm:text-base md:text-lg font-semibold text-white/40 whitespace-nowrap ${itemClassName}`}
           >
             {item}
           </span>

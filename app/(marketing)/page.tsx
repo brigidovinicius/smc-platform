@@ -1,7 +1,13 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { MarketingHomeContent } from './_components/marketing-home-content';
 import { StructuredData } from './_components/structured-data';
 import { SITE_CONFIG } from '@/lib/site-config';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
@@ -66,11 +72,6 @@ export const metadata: Metadata = {
       'Valuation automático, due diligence com IA e compradores verificados para negociar SaaS e ativos digitais.',
     images: ['/images/hero-dashboard.webp'],
     creator: '@saasmarketcap'
-  },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5
   },
   verification: {
     // TODO: Adicione seu código real do Google Search Console aqui
