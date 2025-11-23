@@ -13,7 +13,7 @@ const withMDX = mdx({
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
-    typedRoutes: true
+    // typedRoutes: true // Disabled - causing build errors
   },
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
   images: {

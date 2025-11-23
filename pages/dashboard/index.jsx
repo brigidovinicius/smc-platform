@@ -1,6 +1,6 @@
 import { getSession, useSession } from 'next-auth/react';
-import Card from '@/components/ui/Card';
-import Badge from '@/components/ui/Badge';
+import Card from '@/components/ui/CardWrapper';
+import { Badge } from '@/components/ui/badge';
 import StatBlock from '@/components/ui/StatBlock';
 import ProgressList from '@/components/ui/ProgressList';
 import OfferCard from '@/components/OfferCard';
@@ -31,7 +31,7 @@ export default function Dashboard({ assets, offers, stats }) {
         description="Acompanhe métricas, readiness score e prepare-se para negociações com investidores qualificados."
         actions={
           session && (
-            <Badge variant="info">
+            <Badge variant="default">
               {session.user?.name?.split(' ')[0] ?? 'Usuário'} · Nível Founder
             </Badge>
           )
@@ -60,7 +60,7 @@ export default function Dashboard({ assets, offers, stats }) {
                   }}
                 />
                 <div className="flex gap-4 text-sm text-slate-300">
-                  <Badge variant="success">Saudável</Badge>
+                  <Badge variant="default">Saudável</Badge>
                 </div>
               </div>
             )}

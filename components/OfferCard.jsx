@@ -1,4 +1,4 @@
-import Badge from './ui/Badge';
+import { Badge } from './ui/badge';
 
 const formatCurrency = (value, currency = 'BRL') =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency }).format(value);
@@ -7,7 +7,7 @@ const OfferCard = ({ offer }) => (
   <article className="bg-[#060c1a] border border-white/5 rounded-2xl p-4 flex flex-col gap-3">
     <div className="flex items-center justify-between">
       <h3 className="text-lg font-semibold text-white">{offer.title}</h3>
-      <Badge variant={offer.status === 'ACTIVE' ? 'success' : 'warning'}>{offer.status}</Badge>
+      <Badge variant={offer.status === 'ACTIVE' ? 'default' : 'secondary'}>{offer.status}</Badge>
     </div>
     <p className="text-slate-300 text-sm">{offer.summary}</p>
     <div className="flex flex-wrap gap-4 text-sm text-slate-200">
