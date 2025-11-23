@@ -1,8 +1,12 @@
 # 📚 DOCUMENTAÇÃO TÉCNICA COMPLETA - SaaS Market Cap (SMC)
 
-**Versão:** 1.0.0  
+**Versão:** 1.1.0  
 **Última Atualização:** Janeiro 2025  
 **Branch Ativa:** `codex-nightly`
+
+**Changelog:**
+- **v1.1.0 (Janeiro 2025):** Validação robusta de email, bloqueio de emails temporários, correções no login tradicional
+- **v1.0.0 (Janeiro 2025):** Documentação inicial completa
 
 ---
 
@@ -843,12 +847,21 @@ saas-market-cap/
    ```typescript
    CredentialsProvider({
      authorize: async (credentials) => {
+       // Valida credenciais
        // Busca usuário no Prisma
+       // Verifica se email foi verificado
        // Valida senha com bcrypt
-       // Retorna user object
+       // Retorna user object compatível com NextAuth
      }
    })
    ```
+   
+   **Validações Implementadas:**
+   - Validação de formato de email
+   - Verificação de email verificado (`emailVerified`)
+   - Validação de senha com bcrypt
+   - Tratamento de erros robusto
+   - Mensagens de erro traduzidas para português
 
 #### Callbacks
 
@@ -941,7 +954,88 @@ export default async function Page() {
 }
 ```
 
-### 7.4 Roles e Permissões
+### 7.4 Validação de Email no Registro
+
+**Arquivo:** `lib/api/validators.ts`
+
+#### Validação Robusta de Email
+
+A plataforma implementa validação rigorosa de email para prevenir cadastros com emails temporários ou fake:
+
+**Funcionalidades:**
+1. **Validação de Formato RFC 5322**
+   - Regex rigoroso para validação de formato
+   - Validação de comprimento (máximo 254 caracteres)
+   - Validação de estrutura (local part e domain)
+   - Verificação de caracteres inválidos
+
+2. **Bloqueio de Domínios Temporários**
+   - Lista com 70+ domínios temporários conhecidos
+   - Bloqueia serviços como:
+     - 10minutemail, GuerrillaMail, Mailinator
+     - TempMail, TrashMail, YopMail
+     - E outros serviços temporários populares
+   - Bloqueia domínios genéricos suspeitos (example.com, test.com, etc.)
+
+3. **Validação em Tempo Real (Frontend)**
+   - Feedback visual imediato ao digitar
+   - Mensagens de erro específicas
+   - Indicadores visuais (✓ para válido, ⚠ para erro)
+   - Validação no blur e onChange
+
+**Uso:**
+```typescript
+import { validateEmail, isValidEmail } from '@/lib/api/validators';
+
+// Validação com mensagens de erro
+const validation = validateEmail(email);
+if (!validation.valid) {
+  console.error(validation.error);
+}
+
+// Validação simples (boolean)
+if (isValidEmail(email)) {
+  // Email válido
+}
+```
+
+**Mensagens de Erro:**
+- "E-mails temporários não são permitidos. Use um e-mail pessoal ou corporativo."
+- "Formato de e-mail inválido"
+- "Domínio do e-mail inválido"
+- "E-mail muito longo (máximo 254 caracteres)"
+
+**Página de Registro:**
+- Validação em tempo real no campo de email
+- Feedback visual imediato
+- Prevenção de submissão com email inválido
+- Mensagens de erro claras e específicas
+
+### 7.5 Correções no Login Tradicional
+
+**Melhorias Implementadas (Janeiro 2025):**
+
+1. **Tratamento de Erros Robusto**
+   - Retorna `null` em vez de lançar erros genéricos
+   - Propaga apenas erros específicos (ex: email não verificado)
+   - Logs detalhados para debug
+
+2. **Validação de Email**
+   - Verifica se email é string válida antes de buscar no banco
+   - Verifica se usuário encontrado tem email (não pode ser null)
+   - Validação de estrutura antes da query
+
+3. **Mensagens de Erro Traduzidas**
+   - Mensagens em português na página de login
+   - Mapeamento de códigos de erro para mensagens amigáveis
+   - Feedback visual claro para o usuário
+
+4. **Compatibilidade com NextAuth**
+   - Objeto de retorno compatível com NextAuth
+   - Inclui `id`, `email`, `name` e `image`
+   - Funciona corretamente com JWT strategy
+
+### 7.6 Roles e Permissões
 
 **Enum Role (Prisma):**
 ```prisma

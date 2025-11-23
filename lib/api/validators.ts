@@ -4,11 +4,214 @@
  */
 
 /**
- * Validação de email
+ * Lista de domínios de email temporários/descartáveis conhecidos
+ * Fonte: https://github.com/disposable-email-domains/disposable-email-domains
  */
+const DISPOSABLE_EMAIL_DOMAINS = new Set([
+  // Serviços temporários populares
+  '10minutemail.com',
+  '10minutemail.de',
+  '10minutemail.net',
+  '20minutemail.com',
+  '33mail.com',
+  'guerrillamail.com',
+  'guerrillamailblock.com',
+  'guerrillamail.de',
+  'guerrillamail.info',
+  'guerrillamail.net',
+  'guerrillamail.org',
+  'mailinator.com',
+  'tempmail.com',
+  'tempmail.de',
+  'tempmail.org',
+  'throwaway.email',
+  'trashmail.com',
+  'yopmail.com',
+  'getnada.com',
+  'mohmal.com',
+  'maildrop.cc',
+  'sharklasers.com',
+  'grr.la',
+  'guerrillamail.biz',
+  'pokemail.net',
+  'spam4.me',
+  'bccto.me',
+  'chacuo.net',
+  'dispostable.com',
+  'emailondeck.com',
+  'fakeinbox.com',
+  'fakemailgenerator.com',
+  'mailcatch.com',
+  'mailmoat.com',
+  'meltmail.com',
+  'mintemail.com',
+  'mytrashmail.com',
+  'nada.email',
+  'nospam.ze.tc',
+  'nowmymail.com',
+  'quickinbox.com',
+  'rcpt.at',
+  'recode.me',
+  'safetymail.info',
+  'selfdestructingmail.com',
+  'sendspamhere.com',
+  'spamgourmet.com',
+  'spamhole.com',
+  'spamtraps.com',
+  'tempail.com',
+  'tempinbox.co.uk',
+  'tempmail.eu',
+  'tempmail.it',
+  'tempmailaddress.com',
+  'temp-mail.org',
+  'temp-mail.ru',
+  'tmail.ws',
+  'trash-amil.com',
+  'trashmail.at',
+  'trashmail.me',
+  'trashmailer.com',
+  'tyldd.com',
+  'wh4f.org',
+  'willselfdestruct.com',
+  'zippymail.info',
+  // Domínios genéricos suspeitos
+  'example.com',
+  'example.org',
+  'test.com',
+  'test.org',
+  'fake.com',
+  'invalid.com',
+  'noreply.com',
+  'no-reply.com'
+]);
+
+/**
+ * Validação de email robusta
+ * Verifica formato, estrutura e bloqueia domínios temporários
+ */
+export interface EmailValidation {
+  valid: boolean;
+  error?: string;
+}
+
 export function isValidEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+  // Regex mais rigoroso para validação de formato
+  // RFC 5322 compliant (simplificado)
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  
+  if (!email || typeof email !== 'string') {
+    return false;
+  }
+
+  const trimmedEmail = email.trim().toLowerCase();
+  
+  // Validação básica de formato
+  if (!emailRegex.test(trimmedEmail)) {
+    return false;
+  }
+
+  // Validação de comprimento
+  if (trimmedEmail.length > 254) { // RFC 5321
+    return false;
+  }
+
+  // Validação de estrutura
+  const parts = trimmedEmail.split('@');
+  if (parts.length !== 2) {
+    return false;
+  }
+
+  const [localPart, domain] = parts;
+
+  // Local part não pode ser vazio ou muito longo
+  if (!localPart || localPart.length > 64) {
+    return false;
+  }
+
+  // Domain não pode ser vazio
+  if (!domain || domain.length === 0) {
+    return false;
+  }
+
+  // Domain deve ter pelo menos um ponto (TLD)
+  if (!domain.includes('.')) {
+    return false;
+  }
+
+  // Domain não pode começar ou terminar com ponto ou hífen
+  if (domain.startsWith('.') || domain.endsWith('.') || 
+      domain.startsWith('-') || domain.endsWith('-')) {
+    return false;
+  }
+
+  // Verificar se é domínio temporário/descartável
+  if (DISPOSABLE_EMAIL_DOMAINS.has(domain)) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * Validação de email com mensagens de erro detalhadas
+ */
+export function validateEmail(email: string): EmailValidation {
+  if (!email || typeof email !== 'string') {
+    return { valid: false, error: 'E-mail é obrigatório' };
+  }
+
+  const trimmedEmail = email.trim().toLowerCase();
+
+  // Validação básica de formato
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  
+  if (!emailRegex.test(trimmedEmail)) {
+    return { valid: false, error: 'Formato de e-mail inválido' };
+  }
+
+  // Validação de comprimento
+  if (trimmedEmail.length > 254) {
+    return { valid: false, error: 'E-mail muito longo (máximo 254 caracteres)' };
+  }
+
+  // Validação de estrutura
+  const parts = trimmedEmail.split('@');
+  if (parts.length !== 2) {
+    return { valid: false, error: 'Formato de e-mail inválido' };
+  }
+
+  const [localPart, domain] = parts;
+
+  if (!localPart || localPart.length === 0) {
+    return { valid: false, error: 'E-mail deve ter uma parte local (antes do @)' };
+  }
+
+  if (localPart.length > 64) {
+    return { valid: false, error: 'Parte local do e-mail muito longa (máximo 64 caracteres)' };
+  }
+
+  if (!domain || domain.length === 0) {
+    return { valid: false, error: 'E-mail deve ter um domínio (depois do @)' };
+  }
+
+  if (!domain.includes('.')) {
+    return { valid: false, error: 'Domínio do e-mail inválido' };
+  }
+
+  if (domain.startsWith('.') || domain.endsWith('.') || 
+      domain.startsWith('-') || domain.endsWith('-')) {
+    return { valid: false, error: 'Domínio do e-mail inválido' };
+  }
+
+  // Verificar se é domínio temporário/descartável
+  if (DISPOSABLE_EMAIL_DOMAINS.has(domain)) {
+    return { 
+      valid: false, 
+      error: 'E-mails temporários ou descartáveis não são permitidos. Use um e-mail pessoal ou corporativo.' 
+    };
+  }
+
+  return { valid: true };
 }
 
 /**
@@ -135,8 +338,9 @@ export function validateRegisterBody(body: any): { valid: true; data: RegisterBo
     return { valid: false, error: 'E-mail é obrigatório' };
   }
 
-  if (!isValidEmail(email)) {
-    return { valid: false, error: 'E-mail inválido' };
+  const emailValidation = validateEmail(email);
+  if (!emailValidation.valid) {
+    return { valid: false, error: emailValidation.error || 'E-mail inválido' };
   }
 
   // Validar senha
@@ -166,4 +370,5 @@ export function validateRegisterBody(body: any): { valid: true; data: RegisterBo
     }
   };
 }
+
 

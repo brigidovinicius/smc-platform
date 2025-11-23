@@ -27,28 +27,54 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Senha', type: 'password' }
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) {
-          throw new Error('Credenciais inválidas');
-        }
+        try {
+          // Validar credenciais
+          if (!credentials?.email || !credentials.password || typeof credentials.email !== 'string') {
+            return null;
+          }
 
-        const user = await prisma.user.findUnique({ where: { email: credentials.email } });
-        if (!user || !user.password) {
-          throw new Error('Usuário não encontrado');
-        }
-        if (!user.emailVerified) {
-          throw new Error('E-mail não verificado');
-        }
+          const user = await prisma.user.findUnique({ 
+            where: { email: credentials.email } 
+          });
 
-        const isValid = await bcrypt.compare(credentials.password, user.password);
-        if (!isValid) {
-          throw new Error('Senha incorreta');
-        }
+          if (!user) {
+            return null;
+          }
 
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name
-        };
+          // Verificar se o usuário tem email (não pode ser null)
+          if (!user.email) {
+            console.error('User found but email is null:', user.id);
+            return null;
+          }
+
+          if (!user.password) {
+            return null;
+          }
+
+          if (!user.emailVerified) {
+            throw new Error('E-mail não verificado. Verifique sua caixa de entrada.');
+          }
+
+          const isValid = await bcrypt.compare(credentials.password, user.password);
+          if (!isValid) {
+            return null;
+          }
+
+          // Retornar objeto compatível com NextAuth
+          return {
+            id: user.id,
+            email: user.email || '',
+            name: user.name || null,
+            image: user.image || null
+          };
+        } catch (error) {
+          console.error('Auth error:', error);
+          // Se for erro de email não verificado, propagar
+          if (error instanceof Error && error.message.includes('E-mail não verificado')) {
+            throw error;
+          }
+          return null;
+        }
       }
     })
   ],

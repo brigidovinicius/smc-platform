@@ -12,11 +12,64 @@ const RegisterPage = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+
+  // Validação de email em tempo real
+  const validateEmailInput = (value: string) => {
+    setEmailError(null);
+    if (!value) {
+      return;
+    }
+    
+    // Importar validação dinamicamente (client-side)
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    
+    if (!emailRegex.test(value.trim().toLowerCase())) {
+      setEmailError('Formato de e-mail inválido');
+      return;
+    }
+
+    // Verificar domínios temporários comuns
+    const domain = value.split('@')[1]?.toLowerCase();
+    const disposableDomains = [
+      '10minutemail.com', 'guerrillamail.com', 'mailinator.com',
+      'tempmail.com', 'throwaway.email', 'trashmail.com', 'yopmail.com',
+      'getnada.com', 'mohmal.com', 'maildrop.cc', 'temp-mail.org'
+    ];
+    
+    if (domain && disposableDomains.some(d => domain.includes(d))) {
+      setEmailError('E-mails temporários não são permitidos. Use um e-mail pessoal ou corporativo.');
+    }
+  };
+
+  // Validação de senha em tempo real
+  const validatePasswordInput = (value: string) => {
+    setPasswordError(null);
+    if (!value) {
+      return;
+    }
+    
+    if (value.length < 8) {
+      setPasswordError('A senha deve ter pelo menos 8 caracteres');
+    } else if (value.length > 128) {
+      setPasswordError('A senha deve ter no máximo 128 caracteres');
+    }
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError(null);
     setSuccess(null);
+    setEmailError(null);
+    setPasswordError(null);
+    
+    // Validação final antes de enviar
+    if (emailError || passwordError) {
+      setError('Por favor, corrija os erros no formulário');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -36,6 +89,8 @@ const RegisterPage = () => {
       setName('');
       setEmail('');
       setPassword('');
+      setEmailError(null);
+      setPasswordError(null);
     } catch (err) {
       setError('Erro ao criar conta. Tente novamente.');
     } finally {
@@ -98,11 +153,31 @@ const RegisterPage = () => {
               id="email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                validateEmailInput(e.target.value);
+              }}
+              onBlur={(e) => validateEmailInput(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-lg border-2 border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
+              className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 outline-none transition-all ${
+                emailError
+                  ? 'border-red-300 focus:border-red-500 focus:ring-red-200'
+                  : 'border-slate-300 focus:border-indigo-500 focus:ring-indigo-200'
+              }`}
               placeholder="seu@email.com"
             />
+            {emailError && (
+              <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
+                <span>⚠</span>
+                {emailError}
+              </p>
+            )}
+            {!emailError && email && (
+              <p className="mt-1 text-xs text-emerald-600 flex items-center gap-1">
+                <span>✓</span>
+                E-mail válido
+              </p>
+            )}
           </div>
 
           <div>
@@ -113,12 +188,33 @@ const RegisterPage = () => {
               id="password"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                validatePasswordInput(e.target.value);
+              }}
+              onBlur={(e) => validatePasswordInput(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-lg border-2 border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
+              className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 outline-none transition-all ${
+                passwordError
+                  ? 'border-red-300 focus:border-red-500 focus:ring-red-200'
+                  : 'border-slate-300 focus:border-indigo-500 focus:ring-indigo-200'
+              }`}
               placeholder="••••••••"
             />
-            <p className="mt-1 text-xs text-slate-500">Mínimo de 8 caracteres</p>
+            {passwordError ? (
+              <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
+                <span>⚠</span>
+                {passwordError}
+              </p>
+            ) : (
+              <p className="mt-1 text-xs text-slate-500">Mínimo de 8 caracteres</p>
+            )}
+            {!passwordError && password && password.length >= 8 && (
+              <p className="mt-1 text-xs text-emerald-600 flex items-center gap-1">
+                <span>✓</span>
+                Senha válida
+              </p>
+            )}
           </div>
 
           <button

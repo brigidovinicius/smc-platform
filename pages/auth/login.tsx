@@ -32,8 +32,16 @@ const LoginPage = () => {
       });
 
       if (result?.error) {
-        setError(result.error);
-      } else {
+        // Traduzir mensagens de erro para português
+        const errorMessages: Record<string, string> = {
+          'CredentialsSignin': 'E-mail ou senha incorretos',
+          'E-mail não verificado': 'E-mail não verificado. Verifique sua caixa de entrada.',
+          'Usuário não encontrado': 'E-mail ou senha incorretos',
+          'Senha incorreta': 'E-mail ou senha incorretos',
+          'Credenciais inválidas': 'Por favor, preencha todos os campos'
+        };
+        setError(errorMessages[result.error] || result.error || 'Erro ao fazer login. Tente novamente.');
+      } else if (result?.ok) {
         const callbackUrl = router.query.callbackUrl as string || '/dashboard';
         router.push(callbackUrl);
       }
