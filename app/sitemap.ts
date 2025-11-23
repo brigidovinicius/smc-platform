@@ -6,8 +6,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = SITE_URL;
     const currentDate = new Date();
 
-    // Static pages
-    const staticPages: MetadataRoute.Sitemap = [
+    // Static pages - Main pages
+    const mainPages: MetadataRoute.Sitemap = [
         {
             url: baseUrl,
             lastModified: currentDate,
@@ -21,10 +21,34 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.9
         },
         {
-            url: `${baseUrl}/wizard`,
+            url: `${baseUrl}/pricing`,
             lastModified: currentDate,
             changeFrequency: 'weekly',
             priority: 0.8
+        },
+        {
+            url: `${baseUrl}/calculator`,
+            lastModified: currentDate,
+            changeFrequency: 'monthly',
+            priority: 0.7
+        },
+        {
+            url: `${baseUrl}/faq`,
+            lastModified: currentDate,
+            changeFrequency: 'monthly',
+            priority: 0.7
+        },
+        {
+            url: `${baseUrl}/recursos`,
+            lastModified: currentDate,
+            changeFrequency: 'monthly',
+            priority: 0.7
+        },
+        {
+            url: `${baseUrl}/suporte`,
+            lastModified: currentDate,
+            changeFrequency: 'monthly',
+            priority: 0.6
         },
         {
             url: `${baseUrl}/blog`,
@@ -43,20 +67,82 @@ export default function sitemap(): MetadataRoute.Sitemap {
             lastModified: currentDate,
             changeFrequency: 'weekly',
             priority: 0.6
+        }
+    ];
+
+    // Legal pages
+    const legalPages: MetadataRoute.Sitemap = [
+        {
+            url: `${baseUrl}/legal`,
+            lastModified: currentDate,
+            changeFrequency: 'monthly',
+            priority: 0.5
         },
+        {
+            url: `${baseUrl}/legal/terms`,
+            lastModified: currentDate,
+            changeFrequency: 'yearly',
+            priority: 0.4
+        },
+        {
+            url: `${baseUrl}/legal/termos-de-uso`,
+            lastModified: currentDate,
+            changeFrequency: 'yearly',
+            priority: 0.4
+        },
+        {
+            url: `${baseUrl}/legal/privacy`,
+            lastModified: currentDate,
+            changeFrequency: 'yearly',
+            priority: 0.4
+        },
+        {
+            url: `${baseUrl}/legal/privacidade`,
+            lastModified: currentDate,
+            changeFrequency: 'yearly',
+            priority: 0.4
+        },
+        {
+            url: `${baseUrl}/legal/cookies`,
+            lastModified: currentDate,
+            changeFrequency: 'yearly',
+            priority: 0.4
+        }
+    ];
+
+    // Auth pages (low priority, optional indexing)
+    const authPages: MetadataRoute.Sitemap = [
         {
             url: `${baseUrl}/auth/login`,
             lastModified: currentDate,
             changeFrequency: 'monthly',
-            priority: 0.4
+            priority: 0.3
         },
         {
             url: `${baseUrl}/auth/register`,
             lastModified: currentDate,
             changeFrequency: 'monthly',
-            priority: 0.4
+            priority: 0.3
+        },
+        {
+            url: `${baseUrl}/auth/forgot-password`,
+            lastModified: currentDate,
+            changeFrequency: 'monthly',
+            priority: 0.3
         }
     ];
+
+    // Protected pages (wizard is public but requires auth to use)
+    const protectedPages: MetadataRoute.Sitemap = [
+        {
+            url: `${baseUrl}/wizard`,
+            lastModified: currentDate,
+            changeFrequency: 'weekly',
+            priority: 0.8
+        }
+    ];
+
+    const staticPages = [...mainPages, ...legalPages, ...authPages, ...protectedPages];
 
     // Blog posts
     const posts = getAllPosts();

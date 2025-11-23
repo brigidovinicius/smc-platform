@@ -24,7 +24,49 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;"
-  }
+  },
+  async redirects() {
+    return [
+      // Redirects para rotas duplicadas (português → inglês)
+      {
+        source: '/precos',
+        destination: '/pricing',
+        permanent: true, // 301 redirect
+      },
+      {
+        source: '/planos',
+        destination: '/pricing',
+        permanent: true, // 301 redirect
+      },
+      {
+        source: '/calculadora-valuation',
+        destination: '/calculator',
+        permanent: true, // 301 redirect
+      },
+      {
+        source: '/vender-ativo',
+        destination: '/wizard',
+        permanent: true, // 301 redirect
+      },
+      {
+        source: '/marketplace',
+        destination: '/feed',
+        permanent: true, // 301 redirect
+      },
+      // Redirects para rotas legais (português → inglês ou vice-versa)
+      // Mantendo ambas funcionando, mas redirecionando para versão principal
+      {
+        source: '/legal/termos-de-uso',
+        destination: '/legal/terms',
+        permanent: false, // 302 redirect - manter ambas indexadas
+      },
+      {
+        source: '/legal/privacidade',
+        destination: '/legal/privacy',
+        permanent: false, // 302 redirect - manter ambas indexadas
+      },
+    ];
+  },
 };
 
 export default withMDX(nextConfig);

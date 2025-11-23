@@ -1,8 +1,5 @@
-export const slugify = (value: string) =>
-  value
-    .toLowerCase()
-    .replace(/\s+/g, '-')
-    .replace(/[^a-z0-9-]/g, '')
-    .replace(/--+/g, '-')
-    .replace(/^-+/, '')
-    .replace(/-+$/, '');
+/**
+ * @deprecated Use lib/utils/slugify.ts instead
+ * Mantido para compatibilidade durante migração
+ */
+export { slugify } from './utils/slugify';

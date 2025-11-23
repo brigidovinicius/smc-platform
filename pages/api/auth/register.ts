@@ -3,38 +3,42 @@ import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import prisma from '@/lib/prisma';
 import { sendVerificationEmail } from '@/lib/email';
+import { apiHandler, requireMethod, successResponse, errorResponse } from '@/lib/api';
+import { validateRegisterBody } from '@/lib/api/validators';
+import type { ApiResponse } from '@/lib/api';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiResponse>) => {
+  // Validar método HTTP
+  if (!requireMethod(req, res, ['POST'])) {
+    return;
   }
 
-  const { name, email, password } = req.body ?? {};
-
-  if (!email || !password) {
-    return res.status(400).json({ error: 'E-mail e senha são obrigatórios' });
+  // Validar body
+  const validation = validateRegisterBody(req.body);
+  if (!validation.valid) {
+    return errorResponse(res, validation.error, 400, 'VALIDATION_ERROR');
   }
 
-  if (password.length < 8) {
-    return res.status(400).json({ error: 'A senha deve ter pelo menos 8 caracteres.' });
-  }
+  const { name, email, password } = validation.data;
 
+  // Verificar se email já existe
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
-    return res.status(400).json({ error: 'E-mail já cadastrado' });
+    return errorResponse(res, 'E-mail já cadastrado', 400, 'EMAIL_EXISTS');
   }
 
+  // Criar usuário
   const hashedPassword = await bcrypt.hash(password, 10);
-
   await prisma.user.create({
     data: {
-      name,
+      name: name?.trim(),
       email,
       password: hashedPassword,
       emailVerified: null
     }
   });
 
+  // Gerar token de verificação
   const token = crypto.randomBytes(32).toString('hex');
   await prisma.verificationToken.create({
     data: {
@@ -44,12 +48,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   });
 
+  // Enviar email de verificação
   const emailSent = await sendVerificationEmail(email, token);
   if (!emailSent) {
-    return res
-      .status(500)
-      .json({ error: 'Não foi possível enviar o e-mail de verificação. Verifique configurações SMTP.' });
+    return errorResponse(
+      res,
+      'Não foi possível enviar o e-mail de verificação. Verifique configurações SMTP.',
+      500,
+      'EMAIL_SEND_ERROR'
+    );
   }
 
-  return res.status(201).json({ ok: true });
-}
+  return successResponse(res, { ok: true }, 201);
+});

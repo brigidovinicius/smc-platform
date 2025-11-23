@@ -127,21 +127,76 @@ const RegisterWizard = () => {
 
   return (
     <section className="card">
-      <header style={{ marginBottom: '1rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '0.5rem' }}>
-          <h1>Cadastro guiado ({wizardSteps.length} passos)</h1>
+      <header className="mb-6">
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900 mb-2">
+              Cadastro guiado ({wizardSteps.length} passos)
+            </h1>
+            <p className="text-slate-600">
+              Preencha o pitch padrão SMC: Problema → Validação → Produto → Mercado → Modelo → Métricas → Entrega → Preço.
+            </p>
+          </div>
           {lastSaved && (
-            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
-              {isSaving ? 'Salvando...' : `Salvo ${lastSaved.toLocaleTimeString()} `}
+            <div className="text-xs text-slate-500 flex items-center gap-2">
+              {isSaving ? (
+                <>
+                  <span className="inline-block w-3 h-3 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></span>
+                  <span>Salvando...</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-emerald-500">✓</span>
+                  <span>Salvo {lastSaved.toLocaleTimeString()}</span>
+                </>
+              )}
             </div>
           )}
         </div>
-        <p>Preencha o pitch padrão SMC: Problema → Validação → Produto → Mercado → Modelo → Métricas → Entrega → Preço.</p>
-        <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-          <div style={{ fontWeight: 600 }}>Conclusão: {completion}%</div>
-          <div style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
-            Passo {currentIndex + 1} de {wizardSteps.length}
+
+        {/* Progress Bar Visual */}
+        <div className="mb-4">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm font-semibold text-slate-700">
+              Progresso: {completion}%
+            </span>
+            <span className="text-sm text-slate-500">
+              Passo {currentIndex + 1} de {wizardSteps.length}
+            </span>
           </div>
+          <div className="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 transition-all duration-500 ease-out rounded-full relative"
+              style={{ width: `${completion}%` }}
+            >
+              <div className="absolute inset-0 bg-white/30 animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Step Indicators */}
+        <div className="flex gap-1 overflow-x-auto pb-2">
+          {wizardSteps.map((step, index) => {
+            const isCompleted = progress[step.id]?.trim() && !validateStep(step, progress[step.id] ?? '');
+            const isActive = index === currentIndex;
+            const isPast = index < currentIndex;
+
+            return (
+              <div
+                key={step.id}
+                className={`flex-1 min-w-[60px] h-2 rounded-full transition-all duration-300 ${
+                  isCompleted
+                    ? 'bg-emerald-500'
+                    : isActive
+                    ? 'bg-indigo-500 ring-2 ring-indigo-300 ring-offset-2'
+                    : isPast
+                    ? 'bg-indigo-300'
+                    : 'bg-slate-200'
+                }`}
+                title={`${index + 1}. ${step.title}${isCompleted ? ' ✓' : ''}`}
+              />
+            );
+          })}
         </div>
       </header>
 
@@ -162,48 +217,84 @@ const RegisterWizard = () => {
         ))}
       </div>
 
-      <div>
-        <label htmlFor={currentStep.id} style={{ fontWeight: 600 }}>
+      <div className="space-y-3">
+        <label htmlFor={currentStep.id} className="block text-lg font-semibold text-slate-900">
           {currentStep.title}
-          {currentStep.optional && <span style={{ color: 'var(--color-text-secondary)', fontWeight: 400 }}> (opcional)</span>}
+          {currentStep.optional && (
+            <span className="ml-2 text-sm font-normal text-slate-500">(opcional)</span>
+          )}
         </label>
+        <p className="text-sm text-slate-600 mb-3">{currentStep.description}</p>
         <textarea
           id={currentStep.id}
           placeholder={currentStep.description}
           value={currentValue}
           onChange={(event) => handleChange(currentStep, event.target.value)}
           onBlur={() => setTouchedSteps((prev) => ({ ...prev, [currentStep.id]: true }))}
-          style={{
-            width: '100%',
-            minHeight: '140px',
-            marginTop: '0.5rem',
-            padding: '0.75rem',
-            borderRadius: '0.75rem',
-            border: shouldShowError ? '1px solid #f87171' : '1px solid #cbd5f5'
-          }}
+          className={`w-full min-h-[160px] p-4 rounded-xl border-2 transition-all duration-200 resize-y focus:outline-none focus:ring-2 ${
+            shouldShowError
+              ? 'border-red-300 focus:border-red-500 focus:ring-red-200 bg-red-50'
+              : 'border-slate-300 focus:border-indigo-500 focus:ring-indigo-200 bg-white'
+          }`}
         />
-        {shouldShowError && <p className="input-error">{currentBlockingError}</p>}
-        <div style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
-          {currentValue.trim().length} / {MIN_CHARACTERS} caracteres mínimos
+        {shouldShowError && (
+          <p className="text-sm text-red-600 flex items-center gap-1">
+            <span>⚠</span>
+            {currentBlockingError}
+          </p>
+        )}
+        <div className="flex justify-between items-center text-sm">
+          <span
+            className={`font-medium ${
+              currentValue.trim().length >= MIN_CHARACTERS
+                ? 'text-emerald-600'
+                : 'text-slate-500'
+            }`}
+          >
+            {currentValue.trim().length} / {MIN_CHARACTERS} caracteres mínimos
+          </span>
+          {currentValue.trim().length >= MIN_CHARACTERS && (
+            <span className="text-emerald-600 font-semibold flex items-center gap-1">
+              ✓ Pronto para avançar
+            </span>
+          )}
         </div>
       </div>
 
-      <footer className="wizard-footer">
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <button className="button secondary" onClick={() => goToStep('back')} disabled={currentIndex === 0}>
-            Voltar
+      <footer className="flex justify-between items-center gap-4 mt-8 pt-6 border-t border-slate-200">
+        <div className="flex gap-2">
+          <button
+            className="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 font-medium hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => goToStep('back')}
+            disabled={currentIndex === 0}
+          >
+            ← Voltar
           </button>
-          <button className="button ghost" onClick={handleSaveDraft}>
+          <button
+            className="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 font-medium hover:bg-slate-50 transition-colors text-sm"
+            onClick={handleSaveDraft}
+          >
             💾 Salvar rascunho
           </button>
           {lastSaved && (
-            <button className="button ghost" onClick={clearDraft} style={{ fontSize: '0.875rem' }}>
+            <button
+              className="px-3 py-2 rounded-lg text-slate-500 hover:text-slate-700 text-sm transition-colors"
+              onClick={clearDraft}
+            >
               Limpar
             </button>
           )}
         </div>
-        <button className="button primary" onClick={handleNext} disabled={disableNext}>
-          {currentIndex === wizardSteps.length - 1 ? 'Finalizar' : 'Próximo'}
+        <button
+          className={`px-6 py-2.5 rounded-lg font-semibold transition-all ${
+            disableNext
+              ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
+              : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transform hover:scale-105'
+          }`}
+          onClick={handleNext}
+          disabled={disableNext}
+        >
+          {currentIndex === wizardSteps.length - 1 ? '✨ Finalizar' : 'Próximo →'}
         </button>
       </footer>
     </section>

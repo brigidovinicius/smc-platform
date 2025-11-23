@@ -50,3 +50,47 @@ Ainda não há suíte automatizada. Ao implementar recursos sensíveis (ex.: aut
 - Navbar fixa com CTA de login/logout e breadcrumbs coerentes nas páginas de conteúdo.
 - Os cards e páginas do blog precisam comunicar claramente: capa > meta info > título > resumo > tags > CTA.
 - Para artigos, priorize leitura fluída (`prose prose-invert` ou equivalente) e blocos relacionados no rodapé.
+
+## 📚 Documentação Técnica Completa
+
+Este projeto possui documentação técnica completa disponível em:
+
+- **`docs/TECHNICAL-DOCUMENTATION.md`** - Documentação técnica completa (1.653 linhas)
+  - Arquitetura completa do sistema
+  - Stack tecnológico detalhado
+  - Estrutura de pastas e componentes
+  - Fluxos de dados e interações
+  - Banco de dados (Prisma schema)
+  - APIs e rotas
+  - Design System
+  - Padrões de código
+  - Deploy e infraestrutura
+
+- **`docs/TECHNOLOGY-STACK.md`** ⭐ **VERSÕES EXATAS E REGRAS DE ATUALIZAÇÃO**
+  - Versões fixas de todas as tecnologias
+  - Regras de compatibilidade
+  - Processo de atualização
+  - Mapeamento por área do projeto
+  - **CONSULTE ANTES DE ATUALIZAR QUALQUER DEPENDÊNCIA**
+
+- **`docs/PROMPT-SYSTEM.md`** - Referência rápida para prompts
+  - Contexto rápido do projeto
+  - Arquitetura resumida
+  - Exemplos práticos
+  - Regras importantes
+
+**IMPORTANTE:** Sempre consulte estas documentações antes de fazer mudanças significativas no projeto. Elas contêm informações precisas sobre:
+- Estrutura híbrida (App Router + Pages Router)
+- Componentes e suas responsabilidades
+- Fluxos de autenticação e dados
+- Padrões de código estabelecidos
+- Convenções de nomenclatura
+- **Versões exatas das tecnologias (TECHNOLOGY-STACK.md)**
+
+## Referências Rápidas
+
+- **Arquitetura:** Ver `docs/TECHNICAL-DOCUMENTATION.md` seção 2
+- **Componentes:** Ver `docs/TECHNICAL-DOCUMENTATION.md` seção 5
+- **Autenticação:** Ver `docs/TECHNICAL-DOCUMENTATION.md` seção 7
+- **Banco de Dados:** Ver `docs/TECHNICAL-DOCUMENTATION.md` seção 8
+- **Design System:** Ver `docs/TECHNICAL-DOCUMENTATION.md` seção 10
