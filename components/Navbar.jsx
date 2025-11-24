@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
+import { Logo } from './Logo';
 
 export default function Navbar() {
   const { data: session, status } = useSession();
@@ -8,9 +9,7 @@ export default function Navbar() {
   return (
     <header className="navbar" role="banner">
       <div className="navbar-left">
-        <Link href="/" className="navbar-logo" aria-label="Go to homepage">
-          SMC
-        </Link>
+        <Logo variant="primary" href="/" className="navbar-logo" width={120} height={28} />
         <nav className="navbar-links" role="navigation" aria-label="Main navigation">
           <Link href="/feed" aria-label="View available listings">Listings</Link>
           <Link href="/dashboard" aria-label="Access dashboard">Dashboard</Link>

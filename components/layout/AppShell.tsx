@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { Logo } from '@/components/Logo';
 
 interface NavItem {
   title: string;
@@ -42,15 +43,13 @@ export function AppShell({ children }: AppShellProps) {
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#050711]">
-      {/* Sidebar - Desktop com gradiente e efeitos */}
-      <aside className="hidden w-72 flex-col border-r border-indigo-500/20 bg-gradient-to-b from-[#0b1230] via-[#0f1a3a] to-[#0b1230] lg:flex shadow-2xl shadow-indigo-900/20">
-        {/* Logo com gradiente */}
-        <div className="flex h-20 items-center border-b border-indigo-500/20 px-6 bg-gradient-to-r from-indigo-500/10 to-purple-500/10">
+      {/* Sidebar - Desktop */}
+      <aside className="hidden w-72 flex-col border-r border-[#9EA3B0]/20 bg-[#070708] lg:flex">
+        {/* Logo */}
+        <div className="flex h-20 items-center border-b border-[#9EA3B0]/20 px-6">
           <Link href="/dashboard" className="flex items-center gap-3 group">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/50 group-hover:scale-110 transition-transform">
-              <span className="text-white font-bold text-sm">SMC</span>
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent">
+            <Logo variant="icon-only" width={40} height={40} className="group-hover:opacity-90 transition-opacity" />
+            <span className="text-xl font-bold text-white">
               Dashboard
             </span>
           </Link>
@@ -67,43 +66,29 @@ export function AppShell({ children }: AppShellProps) {
                 href={item.href}
                 className={cn(
                   'group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium',
-                  'transition-all duration-300 relative overflow-hidden',
+                  'transition-all duration-200',
                   isActive
-                    ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/50 scale-105'
-                    : 'text-slate-300 hover:bg-white/10 hover:text-white hover:scale-105'
+                    ? 'bg-[#0044CC] text-white'
+                    : 'text-[#9EA3B0] hover:bg-white/5 hover:text-white'
                 )}
-                style={{ transitionDelay: `${index * 0.05}s` }}
               >
-                {/* Brilho no hover */}
-                {!isActive && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/0 via-indigo-500/20 to-indigo-500/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                )}
-                
-                <Icon className={cn(
-                  'h-5 w-5 relative z-10',
-                  isActive && 'drop-shadow-lg'
-                )} />
-                <span className="relative z-10">{item.title}</span>
+                <Icon className="h-5 w-5" />
+                <span>{item.title}</span>
                 
                 {item.badge && (
-                  <span className="ml-auto rounded-full bg-indigo-500/80 px-2 py-0.5 text-xs font-semibold shadow-md">
+                  <span className="ml-auto rounded-full bg-[#0044CC]/80 px-2 py-0.5 text-xs font-semibold">
                     {item.badge}
                   </span>
-                )}
-                
-                {/* Indicador ativo */}
-                {isActive && (
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-l-full shadow-lg" />
                 )}
               </Link>
             );
           })}
         </nav>
         
-        {/* User section com gradiente */}
-        <div className="border-t border-indigo-500/20 p-4 bg-gradient-to-t from-indigo-500/10 to-transparent">
-          <div className="flex items-center gap-3 rounded-xl px-4 py-3 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-500/30">
-            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/50">
+        {/* User section */}
+        <div className="border-t border-[#9EA3B0]/20 p-4">
+          <div className="flex items-center gap-3 rounded-xl px-4 py-3 bg-white/5 border border-[#9EA3B0]/20">
+            <div className="h-10 w-10 rounded-full bg-[#0044CC] flex items-center justify-center">
               <User className="h-5 w-5 text-white" />
             </div>
             <div className="flex-1 min-w-0">
@@ -125,13 +110,11 @@ export function AppShell({ children }: AppShellProps) {
             className="fixed inset-0 bg-black/50" 
             onClick={() => setSidebarOpen(false)}
           />
-          <aside className="fixed left-0 top-0 h-full w-72 bg-gradient-to-b from-[#0b1230] via-[#0f1a3a] to-[#0b1230] border-r border-indigo-500/20 shadow-2xl">
-            <div className="flex h-20 items-center justify-between border-b border-indigo-500/20 px-6 bg-gradient-to-r from-indigo-500/10 to-purple-500/10">
+          <aside className="fixed left-0 top-0 h-full w-72 bg-[#070708] border-r border-[#9EA3B0]/20">
+            <div className="flex h-20 items-center justify-between border-b border-[#9EA3B0]/20 px-6">
               <Link href="/dashboard" className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-sm">SMC</span>
-                </div>
-                <span className="text-xl font-bold bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent">
+                <Logo variant="icon-only" width={40} height={40} />
+                <span className="text-xl font-bold text-white">
                   Dashboard
                 </span>
               </Link>
@@ -153,10 +136,10 @@ export function AppShell({ children }: AppShellProps) {
                     href={item.href}
                     onClick={() => setSidebarOpen(false)}
                     className={cn(
-                      'flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300',
+                      'flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200',
                       isActive
-                        ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg scale-105'
-                        : 'text-slate-300 hover:bg-white/10 hover:text-white hover:scale-105'
+                        ? 'bg-[#0044CC] text-white'
+                        : 'text-[#9EA3B0] hover:bg-white/5 hover:text-white'
                     )}
                   >
                     <Icon className="h-5 w-5" />
@@ -171,8 +154,8 @@ export function AppShell({ children }: AppShellProps) {
 
       {/* Main content */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        {/* Header com gradiente */}
-        <header className="flex h-16 items-center justify-between border-b border-indigo-500/20 bg-gradient-to-r from-[#0b1230] via-[#0f1a3a] to-[#0b1230] px-4 lg:px-6 shadow-lg shadow-indigo-900/10">
+        {/* Header */}
+        <header className="flex h-16 items-center justify-between border-b border-[#9EA3B0]/20 bg-[#070708] px-4 lg:px-6">
           <button
             onClick={() => setSidebarOpen(true)}
             className="text-slate-400 hover:text-white lg:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
@@ -182,20 +165,20 @@ export function AppShell({ children }: AppShellProps) {
           
           <div className="flex items-center gap-4">
             {session && (
-              <div className="hidden items-center gap-3 sm:flex px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-500/30">
-                <div className="h-9 w-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-md">
+              <div className="hidden items-center gap-3 sm:flex px-4 py-2 rounded-lg bg-white/5 border border-[#9EA3B0]/20">
+                <div className="h-9 w-9 rounded-full bg-[#0044CC] flex items-center justify-center">
                   <User className="h-5 w-5 text-white" />
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-semibold text-white">
                     {session.user?.name?.split(' ')[0] || 'Usuário'}
                   </p>
-                  <p className="text-xs text-indigo-300 font-medium">Founder Level</p>
+                  <p className="text-xs text-[#9EA3B0] font-medium">Founder Level</p>
                 </div>
               </div>
             )}
             <Link href="/api/auth/signout">
-              <Button variant="ghost" size="sm" className="text-slate-300 hover:text-white hover:bg-white/10 border border-indigo-500/20">
+              <Button variant="ghost" size="sm" className="text-[#9EA3B0] hover:text-white hover:bg-white/5 border border-[#9EA3B0]/20">
                 <LogOut className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">Sign out</span>
               </Button>
@@ -204,7 +187,7 @@ export function AppShell({ children }: AppShellProps) {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto bg-[#050711]">
+        <main className="flex-1 overflow-y-auto bg-[#070708]">
           <div className="container mx-auto py-6 px-4 lg:px-6">
             {children}
           </div>

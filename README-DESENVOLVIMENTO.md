@@ -1,6 +1,6 @@
-# 🚀 Guia de Desenvolvimento - SMC Platform
+# 🚀 Guia de Desenvolvimento - CounterX
 
-**Bem-vindo ao SaaS Market Cap Platform!**
+**Bem-vindo ao CounterX Platform!**
 
 Este guia rápido te ajuda a começar a desenvolver no projeto.
 

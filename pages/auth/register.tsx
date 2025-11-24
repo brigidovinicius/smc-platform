@@ -126,7 +126,7 @@ const RegisterPage = () => {
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-slate-900 mb-2">Create account</h1>
-          <p className="text-slate-600">Start your journey on SMC Platform</p>
+          <p className="text-slate-600">Start your journey on CounterX</p>
         </div>
 
         {error && (

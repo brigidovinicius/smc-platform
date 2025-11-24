@@ -4,7 +4,7 @@ import BlogCategoryCard from '@/components/blog/BlogCategoryCard';
 import { getCategoriesWithCount } from '@/lib/blog';
 
 export const metadata: Metadata = {
-  title: 'Categories | SMC Blog',
+  title: 'Categories | CounterX Blog',
   description: 'Explore blog posts organized by categories',
 };
 

@@ -10,8 +10,8 @@ interface Params {
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return {
-    title: `${params.category.charAt(0).toUpperCase() + params.category.slice(1)} | Blog SMC`,
-    description: `Posts about ${params.category} on SMC Platform blog`,
+    title: `${params.category.charAt(0).toUpperCase() + params.category.slice(1)} | CounterX Blog`,
+    description: `Posts about ${params.category} on CounterX blog`,
   };
 }
 

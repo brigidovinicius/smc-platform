@@ -10,7 +10,7 @@ const docs = [
     {
         title: 'Privacy Policy',
         href: '/legal/privacidade',
-        summary: 'How we collect, store, and use your personal data within the SMC Platform.'
+        summary: 'How we collect, store, and use your personal data within the CounterX Platform.'
     },
     {
         title: 'Cookies',
@@ -25,11 +25,11 @@ export default function LegalHubPage() {
             <div className="container py-20">
                 <div className="max-w-3xl space-y-4">
                     <p className="text-sm uppercase tracking-[0.3em] text-slate-500">Legal</p>
-                    <h1 className="text-4xl font-bold text-slate-900">SMC Legal Center</h1>
+                    <h1 className="text-4xl font-bold text-slate-900">CounterX Legal Center</h1>
                     <p className="text-lg text-slate-600">
                         Review the policies governing marketplace use, data handling, and cookies. For specific cases, contact{' '}
-                        <a className="text-[var(--color-primary)] font-medium" href="mailto:legal@saasmarketcap.com">
-                            legal@saasmarketcap.com
+                        <a className="text-[var(--color-primary)] font-medium" href="mailto:legal@counterx.io">
+                            legal@counterx.io
                         </a>
                         .
                     </p>

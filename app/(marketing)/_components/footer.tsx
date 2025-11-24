@@ -1,14 +1,13 @@
 import Link from 'next/link';
+import { Logo } from '@/components/Logo';
 
 export function Footer() {
     return (
-        <footer className="border-t border-[var(--color-border)] bg-white pt-16 pb-8">
+        <footer className="border-t border-[#9EA3B0]/20 bg-white pt-16 pb-8">
             <div className="container">
                 <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
                     <div className="space-y-4">
-                        <Link href="/" className="font-heading text-xl font-semibold text-[var(--color-text)]">
-                            <span className="text-[var(--color-primary)]">SMC</span> Market Cap
-                        </Link>
+                        <Logo variant="black" href="/" width={140} height={32} />
                         <p className="max-w-xs text-sm text-[var(--color-text-secondary)]">
                             The definitive platform to evaluate, buy, and sell digital assets with audited data and legal security.
                         </p>
@@ -54,7 +53,7 @@ export function Footer() {
                 </div>
 
                 <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-[var(--color-border)] pt-8 text-sm text-[var(--color-text-secondary)] md:flex-row">
-                    <p>© {new Date().getFullYear()} SaaS Market Cap. All rights reserved.</p>
+                    <p>© {new Date().getFullYear()} CounterX.io. All rights reserved.</p>
                     <p>Made with 💜 for founders.</p>
                 </div>
             </div>

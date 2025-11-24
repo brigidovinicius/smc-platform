@@ -1,7 +1,8 @@
 import { getAllPosts, getAllCategories } from './blog';
+import { SITE_URL } from './config/site-config';
 
 export function generateBlogSitemap() {
-  const baseUrl = 'https://smc-platform.vercel.app';
+  const baseUrl = SITE_URL;
   const posts = getAllPosts();
   const categories = getAllCategories();
 

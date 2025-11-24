@@ -34,10 +34,10 @@ const HomeAliasPage = () => {
   return (
     <div className="min-h-screen bg-[#050711] text-white -mx-4 -my-8 px-4 py-8">
       <Head>
-        <title>Home · SMC Platform</title>
+        <title>Home · CounterX</title>
         <meta
           name="description"
-          content="Acompanhe seus ativos digitais, valuation automático e ofertas recebidas na SMC."
+          content="Acompanhe seus ativos digitais, valuation automático e ofertas recebidas na CounterX."
         />
       </Head>
 
@@ -51,7 +51,7 @@ const HomeAliasPage = () => {
             <div className="space-y-6">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs uppercase tracking-[0.3em]">
                 <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_0_4px_rgba(16,185,129,0.2)]" />
-                Área logada · SMC
+                Área logada · CounterX
               </div>
 
               <div className="space-y-3">

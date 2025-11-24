@@ -1,4 +1,4 @@
-# 📑 Índice Completo da Documentação - SMC Platform
+# 📑 Índice Completo da Documentação - CounterX
 
 **Última atualização:** Janeiro 2025
 

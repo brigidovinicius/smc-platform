@@ -2,21 +2,27 @@ import { Metadata } from 'next';
 import { MarketingPageLayout } from '@/app/(marketing)/_components/MarketingPageLayout';
 import { FeedContent } from './_components/FeedContent';
 import { listOffers } from '@/lib/services/offers';
-import { SITE_URL } from '@/lib/site-config';
+import { SITE_CONFIG, SITE_URL } from '@/lib/site-config';
 
 export const metadata: Metadata = {
-  title: 'Opportunities Feed – SMC Platform | SaaS & Digital Assets',
+  title: 'Opportunities Feed – CounterX | SaaS & Digital Assets',
   description:
-    'Explore SaaS, marketplace, and newsletter buying opportunities with MRR, churn, and investment range metrics. Public preview of SMC Platform.',
+    'Explore SaaS, marketplace, and newsletter buying opportunities with MRR, churn, and investment range metrics. Public preview of CounterX.',
   keywords: 'SaaS feed, digital opportunities, digital assets for sale, buy SaaS, invest in SaaS',
+  metadataBase: new URL(SITE_CONFIG.url),
+  alternates: {
+    canonical: `${SITE_CONFIG.url}/feed`,
+  },
   openGraph: {
-    title: 'Opportunities Feed – SMC Platform',
-    description: 'Public preview with the best digital assets opportunities from SMC Platform.',
-    url: `${SITE_URL}/feed`,
-    type: 'website'
+    title: 'Opportunities Feed – CounterX',
+    description: 'Public preview with the best digital assets opportunities from CounterX.',
+    url: `${SITE_CONFIG.url}/feed`,
+    type: 'website',
+    siteName: SITE_CONFIG.name,
   },
   twitter: {
-    card: 'summary_large_image'
+    card: 'summary_large_image',
+    creator: SITE_CONFIG.twitter.handle,
   }
 };
 
@@ -81,7 +87,7 @@ export default async function FeedPage() {
   const schemaData = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Opportunities Feed – SMC Platform',
+    name: 'Opportunities Feed – CounterX',
     description:
       'Curated list of digital assets, SaaS, and newsletters available for acquisition with MRR, churn, and investment ticket metrics.',
     mainEntity: offers.map((offer, index: number) => ({

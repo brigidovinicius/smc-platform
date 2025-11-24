@@ -1,4 +1,4 @@
-# 📚 DOCUMENTAÇÃO TÉCNICA COMPLETA - SaaS Market Cap (SMC)
+# 📚 DOCUMENTAÇÃO TÉCNICA COMPLETA - CounterX
 
 **Versão:** 1.1.0  
 **Última Atualização:** Janeiro 2025  
@@ -35,7 +35,7 @@
 ## 1. VISÃO GERAL DO PROJETO
 
 ### 1.1 Objetivo
-SaaS Market Cap (SMC) é uma plataforma Next.js voltada para aquisição e venda de ativos digitais (SaaS, marketplaces, newsletters). A plataforma conecta investidores e founders através de um marketplace público, ferramentas de valuation, blog editorial e áreas autenticadas para gestão de transações.
+CounterX é uma plataforma Next.js voltada para aquisição e venda de ativos digitais (SaaS, marketplaces, newsletters). A plataforma conecta investidores e founders através de um marketplace público, ferramentas de valuation, blog editorial e áreas autenticadas para gestão de transações.
 
 ### 1.2 Público-Alvo
 - **Investidores:** Buscam oportunidades de aquisição de ativos digitais

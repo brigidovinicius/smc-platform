@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     return { title: 'Author not found' };
   }
   return {
-    title: `${author.name} | Blog SMC`,
+    title: `${author.name} | CounterX Blog`,
     description: author.bio || `Posts written by ${author.name}`,
   };
 }

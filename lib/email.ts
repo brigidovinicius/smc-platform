@@ -51,12 +51,12 @@ export async function sendVerificationEmail(email: string, token: string): Promi
     }
 
     await transport.sendMail({
-      from: process.env.EMAIL_FROM || 'SaaS Market Cap <no-reply@smc-platform.com>',
+      from: process.env.EMAIL_FROM || 'CounterX <no-reply@counterx.io>',
       to: email,
-      subject: 'Confirme seu cadastro no SaaS Market Cap',
+      subject: 'Confirme seu cadastro no CounterX',
       text: `Bem-vindo(a)! Confirme seu e-mail acessando: ${verificationUrl}`,
       html: `
-        <p>Bem-vindo(a) ao SaaS Market Cap!</p>
+        <p>Bem-vindo(a) ao CounterX!</p>
         <p>Para ativar sua conta, clique no botão abaixo:</p>
         <p><a href="${verificationUrl}" style="display:inline-block;padding:12px 20px;border-radius:8px;background:#6c5ce7;color:#ffffff;text-decoration:none;">Verificar e-mail</a></p>
         <p>Ou copie e cole este link no navegador: <br />${verificationUrl}</p>
@@ -86,13 +86,13 @@ export async function sendWelcomeEmail(email: string, name?: string): Promise<bo
     const loginUrl = `${baseUrl.replace(/\/$/, '')}/auth/login`;
 
     await transport.sendMail({
-      from: process.env.EMAIL_FROM || 'SaaS Market Cap <no-reply@smc-platform.com>',
+      from: process.env.EMAIL_FROM || 'CounterX <no-reply@counterx.io>',
       to: email,
-      subject: 'Bem-vindo(a) ao SaaS Market Cap!',
-      text: `Olá${name ? ` ${name}` : ''}!\n\nBem-vindo(a) ao SaaS Market Cap! Sua conta foi criada com sucesso.\n\nVocê já pode fazer login e começar a usar a plataforma: ${loginUrl}\n\nAtenciosamente,\nEquipe SaaS Market Cap`,
+      subject: 'Bem-vindo(a) ao CounterX!',
+      text: `Olá${name ? ` ${name}` : ''}!\n\nBem-vindo(a) ao CounterX! Sua conta foi criada com sucesso.\n\nVocê já pode fazer login e começar a usar a plataforma: ${loginUrl}\n\nAtenciosamente,\nEquipe CounterX`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h1 style="color: #6c5ce7; margin-bottom: 20px;">Bem-vindo(a) ao SaaS Market Cap!</h1>
+          <h1 style="color: #6c5ce7; margin-bottom: 20px;">Bem-vindo(a) ao CounterX!</h1>
           <p>Olá${name ? ` <strong>${name}</strong>` : ''}!</p>
           <p>Sua conta foi criada com sucesso. Você já pode fazer login e começar a usar a plataforma.</p>
           <p style="margin: 30px 0;">
@@ -100,7 +100,7 @@ export async function sendWelcomeEmail(email: string, name?: string): Promise<bo
           </p>
           <p>Ou acesse: <a href="${loginUrl}">${loginUrl}</a></p>
           <hr style="border:none;border-top:1px solid #e0e0e0;margin:30px 0;" />
-          <p style="color:#666;font-size:12px;">Atenciosamente,<br />Equipe SaaS Market Cap</p>
+          <p style="color:#666;font-size:12px;">Atenciosamente,<br />Equipe CounterX</p>
         </div>
       `
     });
@@ -127,10 +127,10 @@ export async function sendPasswordResetEmail(email: string, token: string, name?
     }
 
     await transport.sendMail({
-      from: process.env.EMAIL_FROM || 'SaaS Market Cap <no-reply@smc-platform.com>',
+      from: process.env.EMAIL_FROM || 'CounterX <no-reply@counterx.io>',
       to: email,
-      subject: 'Redefinir sua senha - SaaS Market Cap',
-      text: `Olá${name ? ` ${name}` : ''}!\n\nVocê solicitou a redefinição de senha. Clique no link abaixo para criar uma nova senha:\n\n${resetUrl}\n\nEste link expira em 1 hora.\n\nSe você não solicitou esta redefinição, ignore este email.\n\nAtenciosamente,\nEquipe SaaS Market Cap`,
+      subject: 'Redefinir sua senha - CounterX',
+      text: `Olá${name ? ` ${name}` : ''}!\n\nVocê solicitou a redefinição de senha. Clique no link abaixo para criar uma nova senha:\n\n${resetUrl}\n\nEste link expira em 1 hora.\n\nSe você não solicitou esta redefinição, ignore este email.\n\nAtenciosamente,\nEquipe CounterX`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <h1 style="color: #6c5ce7; margin-bottom: 20px;">Redefinir senha</h1>
@@ -143,7 +143,7 @@ export async function sendPasswordResetEmail(email: string, token: string, name?
           <p style="color:#666;font-size:14px;margin-top:30px;">Este link expira em <strong>1 hora</strong>.</p>
           <p style="color:#999;font-size:12px;margin-top:20px;">Se você não solicitou esta redefinição, ignore este email.</p>
           <hr style="border:none;border-top:1px solid #e0e0e0;margin:30px 0;" />
-          <p style="color:#666;font-size:12px;">Atenciosamente,<br />Equipe SaaS Market Cap</p>
+          <p style="color:#666;font-size:12px;">Atenciosamente,<br />Equipe CounterX</p>
         </div>
       `
     });

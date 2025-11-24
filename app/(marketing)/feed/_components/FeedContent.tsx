@@ -129,12 +129,12 @@ export function FeedContent({ offers }: FeedContentProps) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className={`rounded-2xl border bg-white p-6 shadow-lg transition-all hover:shadow-xl hover:-translate-y-1 ${
-          isHighlighted ? 'border-indigo-500 shadow-indigo-500/20' : 'border-slate-200'
+          isHighlighted ? 'border-[#0044CC]' : 'border-slate-200'
         }`}
       >
-        <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-indigo-600 mb-3">
+        <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-[#0044CC] mb-3">
           {isHighlighted && (
-            <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] tracking-[0.2em] text-indigo-700">
+            <span className="rounded-full bg-[#0044CC]/10 px-2 py-0.5 text-[10px] tracking-[0.2em] text-[#0044CC]">
               New
             </span>
           )}
@@ -146,7 +146,7 @@ export function FeedContent({ offers }: FeedContentProps) {
           <div>
             <p className="text-slate-500 text-xs flex items-center gap-1 mb-1">
               Revenue
-              <span className="text-indigo-500 cursor-help" title="Approximate MRR reported by operator.">
+              <span className="text-[#0044CC] cursor-help" title="Approximate MRR reported by operator.">
                 ⓘ
               </span>
             </p>
@@ -155,7 +155,7 @@ export function FeedContent({ offers }: FeedContentProps) {
           <div>
             <p className="text-slate-500 text-xs flex items-center gap-1 mb-1">
               Investment
-              <span className="text-indigo-500 cursor-help" title="Expected range for equity/cash-out acquisition.">
+              <span className="text-[#0044CC] cursor-help" title="Expected range for equity/cash-out acquisition.">
                 ⓘ
               </span>
             </p>
@@ -172,7 +172,7 @@ export function FeedContent({ offers }: FeedContentProps) {
           <div>
             <p className="text-slate-500 text-xs flex items-center gap-1 mb-1">
               Multiple
-              <span className="text-indigo-500 cursor-help" title="Asking price / ARR.">
+              <span className="text-[#0044CC] cursor-help" title="Asking price / ARR.">
                 ⓘ
               </span>
             </p>
@@ -190,7 +190,7 @@ export function FeedContent({ offers }: FeedContentProps) {
         )}
         <Link
           href={ctaHref}
-          className="mt-4 inline-flex items-center justify-center w-full rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 hover:scale-[1.02]"
+          className="mt-4 inline-flex items-center justify-center w-full rounded-full bg-[#0044CC] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0033AA]"
           aria-label={`${ctaLabel} - ${offer.title}`}
         >
           {ctaLabel}
@@ -202,13 +202,13 @@ export function FeedContent({ offers }: FeedContentProps) {
   return (
     <div className="container py-16 space-y-12">
       {/* Hero Stats Section */}
-      <section className="relative overflow-hidden rounded-[3rem] border border-slate-200 bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-8 md:p-12 shadow-xl">
+      <section className="relative overflow-hidden rounded-[3rem] border border-slate-200 bg-white p-8 md:p-12 shadow-xl">
         <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0 bg-[url('/grid-pattern.svg')]" />
         </div>
         <div className="relative grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
           <div className="space-y-4">
-            <p className="tracking-[0.4em] uppercase text-xs text-indigo-600 font-semibold">SMC FEED · Public preview</p>
+            <p className="tracking-[0.4em] uppercase text-xs text-[#0044CC] font-semibold">CounterX FEED · Public preview</p>
             <h1 className="text-4xl md:text-5xl font-bold leading-[1.1] text-slate-900">
               SaaS, marketplace, and newsletter opportunities with audited metrics.
             </h1>
@@ -238,7 +238,7 @@ export function FeedContent({ offers }: FeedContentProps) {
                 <Shield className="h-3.5 w-3.5" />
                 Curated and audited inventory
               </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-indigo-300 bg-indigo-50 px-3 py-1 text-indigo-700">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#0044CC]/30 bg-[#0044CC]/10 px-3 py-1 text-[#0044CC]">
                 <Zap className="h-3.5 w-3.5" />
                 Daily updates
               </span>
@@ -247,7 +247,7 @@ export function FeedContent({ offers }: FeedContentProps) {
 
           <div className="grid gap-4">
             {[
-              { label: 'Published assets', value: totalOffers, hint: 'Curated by SMC team', icon: Layers },
+              { label: 'Published assets', value: totalOffers, hint: 'Curated by CounterX team', icon: Layers },
               { label: 'Average ticket', value: averageTicket, hint: 'Equity + cash-out', icon: Shield },
               { label: 'Niches', value: uniqueNiches || '—', hint: 'Distinct categories', icon: Filter }
             ].map((stat) => {
@@ -262,7 +262,7 @@ export function FeedContent({ offers }: FeedContentProps) {
                     <p className="text-2xl font-semibold text-slate-900">{stat.value}</p>
                     <p className="text-xs text-slate-500">{stat.hint}</p>
                   </div>
-                  <div className="h-11 w-11 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                  <div className="h-11 w-11 rounded-full bg-[#0044CC]/10 flex items-center justify-center text-[#0044CC]">
                     <Icon className="h-5 w-5" />
                   </div>
                 </div>
@@ -275,7 +275,7 @@ export function FeedContent({ offers }: FeedContentProps) {
       {/* Info Section */}
       <section className="bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-4">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-indigo-100 border border-indigo-200 flex items-center justify-center text-indigo-600">
+          <div className="h-10 w-10 rounded-xl bg-[#0044CC]/10 border border-[#0044CC]/20 flex items-center justify-center text-[#0044CC]">
             <Shield className="h-5 w-5" />
           </div>
           <div>
@@ -291,7 +291,7 @@ export function FeedContent({ offers }: FeedContentProps) {
       <section className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4" aria-label="Feed filters">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-slate-700">
-            <Filter className="h-4 w-4 text-indigo-600" />
+            <Filter className="h-4 w-4 text-[#0044CC]" />
             <span className="text-sm font-semibold">Refine by ticket, MRR, and niche</span>
           </div>
           <span className="text-xs text-slate-500">Public preview · Complete details require login</span>
@@ -300,7 +300,7 @@ export function FeedContent({ offers }: FeedContentProps) {
           <label className="flex flex-col gap-1 text-sm">
             <span className="text-slate-600 font-medium">Classification</span>
             <select
-              className="bg-white border border-slate-300 rounded-xl px-4 py-2.5 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all"
+              className="bg-white border border-slate-300 rounded-xl px-4 py-2.5 focus:border-[#0044CC] focus:ring-2 focus:ring-[#0044CC]/20 outline-none transition-all"
               value={classification}
               onChange={(event) => setClassification(event.target.value)}
               aria-label="Filter by classification"
@@ -315,7 +315,7 @@ export function FeedContent({ offers }: FeedContentProps) {
           <label className="flex flex-col gap-1 text-sm">
             <span className="text-slate-600 font-medium">Investment ticket</span>
             <select
-              className="bg-white border border-slate-300 rounded-xl px-4 py-2.5 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all"
+              className="bg-white border border-slate-300 rounded-xl px-4 py-2.5 focus:border-[#0044CC] focus:ring-2 focus:ring-[#0044CC]/20 outline-none transition-all"
               value={investmentFilter}
               onChange={(event) => setInvestmentFilter(event.target.value)}
               aria-label="Filter by investment ticket"
@@ -330,7 +330,7 @@ export function FeedContent({ offers }: FeedContentProps) {
           <label className="flex flex-col gap-1 text-sm">
             <span className="text-slate-600 font-medium">MRR</span>
             <select
-              className="bg-white border border-slate-300 rounded-xl px-4 py-2.5 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all"
+              className="bg-white border border-slate-300 rounded-xl px-4 py-2.5 focus:border-[#0044CC] focus:ring-2 focus:ring-[#0044CC]/20 outline-none transition-all"
               value={revenueFilter}
               onChange={(event) => setRevenueFilter(event.target.value)}
               aria-label="Filter by monthly recurring revenue (MRR)"
@@ -345,7 +345,7 @@ export function FeedContent({ offers }: FeedContentProps) {
           <label className="flex flex-col gap-1 text-sm">
             <span className="text-slate-600 font-medium">Niche</span>
             <select
-              className="bg-white border border-slate-300 rounded-xl px-4 py-2.5 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all"
+              className="bg-white border border-slate-300 rounded-xl px-4 py-2.5 focus:border-[#0044CC] focus:ring-2 focus:ring-[#0044CC]/20 outline-none transition-all"
               value={nicheFilter}
               onChange={(event) => setNicheFilter(event.target.value)}
               aria-label="Filter by market niche"
@@ -365,7 +365,7 @@ export function FeedContent({ offers }: FeedContentProps) {
               <button
                 key={filter.label}
                 type="button"
-                className="inline-flex items-center gap-2 rounded-full bg-indigo-100 px-3 py-1 text-xs text-indigo-700 hover:bg-indigo-200 transition"
+                className="inline-flex items-center gap-2 rounded-full bg-[#0044CC]/10 px-3 py-1 text-xs text-[#0044CC] hover:bg-[#0044CC]/20 transition"
                 onClick={filter.onRemove}
                 aria-label={`Remove filter: ${filter.label}`}
               >
@@ -375,7 +375,7 @@ export function FeedContent({ offers }: FeedContentProps) {
             ))}
             <button
               type="button"
-              className="text-xs text-indigo-600 underline hover:text-indigo-700"
+              className="text-xs text-[#0044CC] underline hover:text-[#0033AA]"
               onClick={clearAllFilters}
               aria-label="Clear all filters"
             >
@@ -395,11 +395,11 @@ export function FeedContent({ offers }: FeedContentProps) {
           const Icon = item.icon;
           return (
             <div key={item.title} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-md flex gap-3">
-              <div className="h-10 w-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600 flex-shrink-0">
+              <div className="h-10 w-10 rounded-xl bg-[#0044CC]/10 flex items-center justify-center text-[#0044CC] flex-shrink-0">
                 <Icon className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm text-indigo-600 uppercase tracking-[0.2em] font-semibold mb-1">{item.title}</p>
+                <p className="text-sm text-[#0044CC] uppercase tracking-[0.2em] font-semibold mb-1">{item.title}</p>
                 <p className="text-slate-600 text-sm">{item.desc}</p>
               </div>
             </div>

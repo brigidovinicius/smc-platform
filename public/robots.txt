@@ -32,5 +32,4 @@ Allow: /blog
 Crawl-delay: 1
 
 # Sitemap location
-Sitemap: https://smc-platform.vercel.app/sitemap.xml
-# When using custom domain, update to: https://saasmarketcap.com/sitemap.xml
+Sitemap: https://counterx.io/sitemap.xml

@@ -11,7 +11,8 @@
     "schedule:posts": "node scripts/scheduleGeneratePost.js",
     "postinstall": "node scripts/postinstall-safe.js",
     "prisma:generate": "prisma generate",
-    "vercel-build": "prisma generate && (prisma migrate deploy || echo 'Migrations skipped - DATABASE_URL not available') && next build"
+    "vercel-build": "prisma generate && (prisma migrate deploy || echo 'Migrations skipped - DATABASE_URL not available') && next build",
+    "verify:domain": "node scripts/verify-domain-config.js"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",

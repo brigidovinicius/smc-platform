@@ -20,6 +20,7 @@ import {
   LucideIcon
 } from 'lucide-react';
 import { GridBackground, Marquee, FeatureCards, HowItWorks } from '@/components/marketing';
+import { Logo } from '@/components/Logo';
 
 const iconMap: Record<string, LucideIcon> = {
   ChartLine,
@@ -116,11 +117,8 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
         {/* Grid Background */}
         <GridBackground />
         
-        {/* Background Effects - Mais visíveis */}
+        {/* Background Effects - Removed gradients per brand guidelines */}
         <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-30" />
-        <div className="absolute -top-[20%] -left-[10%] h-[800px] w-[800px] rounded-full bg-purple-500/30 blur-[120px] animate-pulse" />
-        <div className="absolute top-[10%] -right-[10%] h-[600px] w-[600px] rounded-full bg-blue-500/30 blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-[10%] left-1/2 -translate-x-1/2 h-[400px] w-[400px] rounded-full bg-indigo-500/20 blur-[80px]" />
 
         <div className="container relative z-10 grid gap-8 md:gap-16 py-16 md:py-24 lg:py-32 lg:grid-cols-[1.1fr_0.9fr] lg:items-center px-4 sm:px-6">
           <div className="space-y-6 md:space-y-8">
@@ -144,7 +142,7 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
                 transition={{ duration: 0.5, delay: 0.1 }}
               >
                 The marketplace for <br className="hidden sm:block" />
-                <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                <span className="text-[#0044CC]">
                   digital assets
                 </span>
               </motion.h1>
@@ -196,7 +194,7 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-slate-900">
                 <Image
                   src="/images/hero-dashboard.webp"
-                  alt="SaaS Market Cap dashboard showing valuation metrics, MRR, and real-time digital assets analysis"
+                  alt="CounterX dashboard showing valuation metrics, MRR, and real-time digital assets analysis"
                   fill
                   className="object-cover"
                   priority
@@ -370,7 +368,7 @@ function FloatingCTA() {
     >
       <Link
         href="/wizard"
-        className="flex items-center gap-2 sm:gap-3 rounded-full bg-indigo-600 px-4 sm:px-6 py-2.5 sm:py-3 text-white shadow-lg shadow-indigo-500/30 transition-transform hover:scale-105 hover:bg-indigo-700 text-sm sm:text-base"
+        className="flex items-center gap-2 sm:gap-3 rounded-full bg-[#0044CC] px-4 sm:px-6 py-2.5 sm:py-3 text-white transition-colors hover:bg-[#0033AA] text-sm sm:text-base"
       >
         <span className="font-medium hidden sm:inline">List my asset</span>
         <span className="font-medium sm:hidden">List</span>
@@ -398,9 +396,13 @@ function StickyNavbar() {
         }`}
     >
       <div className="container flex items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="text-xl font-bold">
-          <span className={scrolled ? 'text-slate-900' : 'text-white'}>SMC</span>
-        </Link>
+        <Logo 
+          variant={scrolled ? 'black' : 'white'} 
+          href="/" 
+          width={120} 
+          height={28}
+          className="transition-opacity"
+        />
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
@@ -408,7 +410,7 @@ function StickyNavbar() {
             <a
               key={item}
               href={`#${item.toLowerCase().replace(' ', '-')}`}
-              className={`text-sm font-medium transition-colors ${scrolled ? 'text-slate-600 hover:text-indigo-600' : 'text-white/80 hover:text-white'
+              className={`text-sm font-medium transition-colors ${scrolled ? 'text-[#9EA3B0] hover:text-[#0044CC]' : 'text-white/80 hover:text-white'
                 }`}
             >
               {item}
@@ -468,7 +470,7 @@ function StickyNavbar() {
                   key={item}
                   href={`#${item.toLowerCase().replace(' ', '-')}`}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block text-sm font-medium text-slate-900 hover:text-indigo-600 py-2"
+                  className="block text-sm font-medium text-slate-900 hover:text-[#0044CC] py-2"
                 >
                   {item}
                 </a>

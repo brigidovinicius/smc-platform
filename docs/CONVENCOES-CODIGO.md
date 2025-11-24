@@ -1,4 +1,4 @@
-# 📋 Convenções de Código - SaaS Market Cap (SMC)
+# 📋 Convenções de Código - CounterX
 
 **Versão:** 1.0.0  
 **Última Atualização:** Janeiro 2025  

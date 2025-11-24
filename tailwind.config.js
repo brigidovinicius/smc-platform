@@ -50,6 +50,11 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // CounterX Brand Colors
+        'counterx-primary': '#0044CC',
+        'counterx-black': '#070708',
+        'counterx-gray': '#9EA3B0',
+        'counterx-white': '#FFFFFF',
         // Brand colors (legacy - mantidos para compatibilidade)
         'smc-dark': '#050816',
         'smc-surface': '#0b1224',

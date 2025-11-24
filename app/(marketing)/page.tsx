@@ -11,9 +11,9 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
-  title: 'SMC – Evaluate, Buy and Sell Digital Assets with Real Data',
+  title: 'CounterX – Evaluate, Buy and Sell Digital Assets with Real Data',
   description:
-    'SaaS Market Cap combines automated valuation, AI-assisted due diligence, and verified buyers for founders, investors, and flippers.',
+    'CounterX é a plataforma moderna para compra, venda e valuation de ativos SaaS e digitais.',
   keywords: [
     'SaaS marketplace',
     'buy SaaS',
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
     'deal room',
     'verified buyers'
   ],
-  authors: [{ name: 'SaaS Market Cap' }],
-  creator: 'SaaS Market Cap',
-  publisher: 'SaaS Market Cap',
+  authors: [{ name: 'CounterX' }],
+  creator: 'CounterX',
+  publisher: 'CounterX',
   alternates: {
     canonical: SITE_CONFIG.url
   },
@@ -52,8 +52,8 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: SITE_CONFIG.url,
-    siteName: 'SaaS Market Cap',
-    title: 'SMC – Digital Assets Marketplace with Automated Valuation',
+    siteName: 'CounterX – The Digital Deal Desk',
+    title: 'CounterX – Digital Assets Marketplace with Automated Valuation',
     description:
       'Buy and sell SaaS, newsletters, and apps with verified data. Automated valuation, AI-powered due diligence, and qualified buyers. Over 2,400 active investors.',
     images: [
@@ -61,17 +61,17 @@ export const metadata: Metadata = {
         url: '/images/hero-dashboard.webp',
         width: 1024,
         height: 1024,
-        alt: 'SaaS Market Cap dashboard showing valuation metrics and digital assets analysis'
+        alt: 'CounterX dashboard showing valuation metrics and digital assets analysis'
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SMC – Digital Assets Marketplace',
+    title: 'CounterX – Digital Assets Marketplace',
     description:
       'Automated valuation, AI-powered due diligence, and verified buyers to trade SaaS and digital assets.',
     images: ['/images/hero-dashboard.webp'],
-    creator: '@saasmarketcap'
+    creator: SITE_CONFIG.twitter.handle
   },
   verification: {
     // TODO: Add your real Google Search Console code here
@@ -176,7 +176,7 @@ const features = [
 const useCases = [
   {
     title: 'SaaS and app founders',
-    description: 'Structure critical data, validate valuation, and choose when to open negotiations with the SMC network.',
+    description: 'Structure critical data, validate valuation, and choose when to open negotiations with the CounterX network.',
     highlight: 'Founders'
   },
   {
@@ -231,7 +231,7 @@ const faq = [
   {
     question: 'Is there a commission on the sale?',
     answer:
-      'We work with a tiered success fee based on transaction size. There&apos;s no cost to list assets; you only pay when you close a deal within SMC.'
+      'We work with a tiered success fee based on transaction size. There&apos;s no cost to list assets; you only pay when you close a deal within CounterX.'
   },
   {
     question: 'Can I negotiate in confidence?',
@@ -239,7 +239,7 @@ const faq = [
       'Yes. You control who accesses the data room, enable automatic blur, and can sign a digital NDA before revealing critical information.'
   },
   {
-    question: 'What markets and models does SMC cover?',
+    question: 'What markets and models does CounterX cover?',
     answer:
       'B2B/B2C SaaS, mobile apps, marketplaces, paid newsletters, APIs, and digital content platforms. We constantly expand our filters.'
   },
@@ -254,7 +254,7 @@ const faq = [
       'Yes. Each asset receives an independent dossier with its own indicators. We operate with limits only to ensure inventory quality.'
   },
   {
-    question: 'Does SMC provide legal or accounting support?',
+    question: 'Does CounterX provide legal or accounting support?',
     answer:
       'We have specialized partners and ready-made templates for purchase and sale contracts, corporate reorganization, and IP transfer.'
   },
@@ -268,7 +268,7 @@ const faq = [
 const galleryPlaceholders = Array.from({ length: 8 }).map((_, index) => index);
 
 const story = {
-  title: 'We built SMC because founders shouldn&apos;t depend on guesses to price a digital asset.',
+  title: 'We built CounterX because founders shouldn&apos;t depend on guesses to price a digital asset.',
   body: 'After seeing dozens of deals stall due to lack of data and standards, we built an infrastructure focused on metrics and governance. The result is clarity for sellers and conviction for buyers.',
   highlights: [
     'Proprietary methodology inspired by AngelList, Pitch.com, and Brazilian operators.',

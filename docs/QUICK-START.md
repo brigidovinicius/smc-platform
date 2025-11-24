@@ -1,4 +1,4 @@
-# ⚡ Quick Start - SMC Platform
+# ⚡ Quick Start - CounterX
 
 **Comece a desenvolver em 5 minutos!**
 

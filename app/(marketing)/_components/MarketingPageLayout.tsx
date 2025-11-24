@@ -6,6 +6,7 @@ import { Footer } from './footer';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { Logo } from '@/components/Logo';
 
 interface MarketingPageLayoutProps {
   children: ReactNode;
@@ -44,9 +45,13 @@ export function MarketingPageLayout({
         }`}
       >
         <div className="container flex items-center justify-between px-4 sm:px-6">
-          <Link href="/" className="text-xl font-bold">
-            <span className={scrolled ? 'text-slate-900' : 'text-white'}>SMC</span>
-          </Link>
+          <Logo 
+            variant={scrolled ? 'black' : 'white'} 
+            href="/" 
+            width={120} 
+            height={28}
+            className="transition-opacity"
+          />
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
@@ -55,7 +60,7 @@ export function MarketingPageLayout({
                 key={item.href}
                 href={item.href}
                 className={`text-sm font-medium transition-colors ${
-                  scrolled ? 'text-slate-600 hover:text-indigo-600' : 'text-white/80 hover:text-white'
+                  scrolled ? 'text-slate-600 hover:text-[#0044CC]' : 'text-white/80 hover:text-white'
                 }`}
               >
                 {item.label}
@@ -115,7 +120,7 @@ export function MarketingPageLayout({
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block text-sm font-medium text-slate-900 hover:text-indigo-600 py-2"
+                    className="block text-sm font-medium text-slate-900 hover:text-[#0044CC] py-2"
                   >
                     {item.label}
                   </Link>
@@ -147,7 +152,6 @@ export function MarketingPageLayout({
         <section className="relative min-h-[50vh] sm:min-h-[60vh] overflow-hidden bg-[#050611] text-white">
           <GridBackground />
           <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-30" />
-          <div className="absolute -top-[20%] -left-[10%] h-[400px] w-[400px] sm:h-[600px] sm:w-[600px] md:h-[800px] md:w-[800px] rounded-full bg-purple-500/30 blur-[120px] animate-pulse" />
           <div className="absolute top-[10%] -right-[10%] h-[300px] w-[300px] sm:h-[450px] sm:w-[450px] md:h-[600px] md:w-[600px] rounded-full bg-blue-500/30 blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
           
           <div className="container relative z-10 py-16 sm:py-24 md:py-32 px-4 sm:px-6">
@@ -157,7 +161,7 @@ export function MarketingPageLayout({
               className="max-w-3xl"
             >
               {title && (
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-white">
                   {title}
                 </h1>
               )}
@@ -184,8 +188,6 @@ export function MarketingPageLayout({
               <GridBackground />
             </div>
             <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-20" />
-            <div className="absolute -top-[50%] left-1/2 h-[400px] w-[400px] sm:h-[500px] sm:w-[500px] md:h-[600px] md:w-[600px] -translate-x-1/2 rounded-full bg-indigo-500/40 blur-[120px] animate-pulse" />
-            <div className="absolute bottom-0 right-0 h-[300px] w-[300px] sm:h-[350px] sm:w-[350px] md:h-[400px] md:w-[400px] rounded-full bg-purple-500/30 blur-[100px]" />
 
             <div className="relative z-10 max-w-3xl mx-auto space-y-6 md:space-y-8">
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">Ready for your next deal?</h2>

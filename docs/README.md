@@ -1,4 +1,4 @@
-# 📚 Documentação - SaaS Market Cap Platform
+# 📚 Documentação - CounterX Platform
 
 **Bem-vindo à documentação completa do projeto!**
 

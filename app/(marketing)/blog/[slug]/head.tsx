@@ -9,13 +9,13 @@ export default function Head({ params }: HeadProps) {
   if (!post) {
     return (
       <>
-        <title>Post not found – SMC</title>
+        <title>Post not found – CounterX</title>
       </>
     );
   }
   return (
     <>
-      <title>{`${post.title} | SMC Blog`}</title>
+      <title>{`${post.title} | CounterX Blog`}</title>
       <meta name="description" content={post.excerpt} />
       <meta property="og:title" content={post.title} />
       <meta property="og:description" content={post.excerpt} />

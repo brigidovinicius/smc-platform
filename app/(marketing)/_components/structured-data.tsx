@@ -11,8 +11,8 @@ export function StructuredData({ faq }: { faq?: Array<{ question: string; answer
         logo: `${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`,
         description: SITE_CONFIG.description,
         sameAs: [
-            `https://twitter.com/${SITE_CONFIG.twitter.replace('@', '')}`,
-            'https://linkedin.com/company/saasmarketcap'
+            SITE_CONFIG.twitter.baseUrl,
+            'https://linkedin.com/company/counterx'
         ],
         contactPoint: {
             '@type': 'ContactPoint',
@@ -37,7 +37,7 @@ export function StructuredData({ faq }: { faq?: Array<{ question: string; answer
     const serviceSchema = {
         '@context': 'https://schema.org',
         '@type': 'Service',
-        name: 'SaaS Market Cap - Digital Assets Marketplace',
+        name: 'CounterX - Digital Assets Marketplace',
         provider: {
             '@type': 'Organization',
             name: SITE_CONFIG.name

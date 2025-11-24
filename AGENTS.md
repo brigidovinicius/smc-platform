@@ -1,7 +1,7 @@
-# SMC Platform – Agent Guidelines (Frontend + Backend)
+# CounterX Platform – Agent Guidelines (Frontend + Backend)
 
 ## Project Overview
-SaaS Market Cap (SMC) is a **Next.js 14 full-stack** application (App Router + Pages Router) focused on autenticação via NextAuth (Google), um dashboard privado e um blog público. A base atual usa JavaScript/TypeScript, Tailwind CSS (via `@tailwindcss/postcss`), e alias `@/` apontando para a raiz.
+CounterX is a **Next.js 14 full-stack** application (App Router + Pages Router) focused on autenticação via NextAuth (Google), um dashboard privado e um blog público. A base atual usa JavaScript/TypeScript, Tailwind CSS (via `@tailwindcss/postcss`), e alias `@/` apontando para a raiz.
 
 ### Estrutura Principal
 

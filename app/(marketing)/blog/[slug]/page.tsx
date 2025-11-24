@@ -27,22 +27,31 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     };
   }
 
+  const postUrl = `${SITE_CONFIG.url}/blog/${params.slug}`;
+
   return {
-    title: `${post.title} | Blog SMC`,
+    title: `${post.title} | CounterX Blog`,
     description: post.excerpt,
     authors: post.author ? [{ name: post.author }] : undefined,
+    metadataBase: new URL(SITE_CONFIG.url),
+    alternates: {
+      canonical: postUrl,
+    },
     openGraph: {
       title: post.title,
       description: post.excerpt,
       type: 'article',
+      url: postUrl,
       publishedTime: post.date,
       authors: post.author ? [post.author] : undefined,
       tags: post.tags,
+      siteName: SITE_CONFIG.name,
     },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
       description: post.excerpt,
+      creator: SITE_CONFIG.twitter.handle,
     },
   };
 }

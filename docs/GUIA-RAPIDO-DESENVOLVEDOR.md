@@ -1,4 +1,4 @@
-# 🚀 Guia Rápido para Desenvolvedores - SMC Platform
+# 🚀 Guia Rápido para Desenvolvedores - CounterX
 
 **Versão:** 1.0.0  
 **Última Atualização:** Janeiro 2025

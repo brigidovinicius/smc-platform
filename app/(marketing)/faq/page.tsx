@@ -21,7 +21,7 @@ const faqItems = [
   },
   {
     question: 'Is there a commission on the sale?',
-    answer: 'We work with a tiered success fee based on transaction size. There&apos;s no cost to list assets; you only pay when you close a deal within the SMC platform.'
+    answer: 'We work with a tiered success fee based on transaction size. There&apos;s no cost to list assets; you only pay when you close a deal within the CounterX platform.'
   },
   {
     question: 'Can I negotiate in confidence?',
@@ -36,7 +36,7 @@ const faqItems = [
     answer: 'We work with escrow instruments and legal partners to custody the value until asset transfers are confirmed. The process is secure and auditable.'
   },
   {
-    question: 'Does SMC provide legal or accounting support?',
+    question: 'Does CounterX provide legal or accounting support?',
     answer: 'We have specialized partners and ready-made templates for purchase and sale contracts, corporate reorganization, and IP transfer. We provide guidance, but recommend specific legal consultation for each transaction.'
   },
   {
@@ -89,7 +89,7 @@ export default function FAQPage() {
   return (
     <MarketingPageLayout
       title="Frequently Asked Questions"
-      description="Get answers about SaaS Market Cap and how our platform works"
+      description="Get answers about CounterX and how our platform works"
       showHero={true}
     >
       <section className="py-24 bg-white relative overflow-hidden">

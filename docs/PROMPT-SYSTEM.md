@@ -1,4 +1,4 @@
-# 🤖 PROMPT SYSTEM - SaaS Market Cap (SMC)
+# 🤖 PROMPT SYSTEM - CounterX
 
 **Versão:** 1.0.0  
 **Uso:** Referência rápida para instruções precisas sobre o projeto
@@ -7,7 +7,7 @@
 
 ## 📋 CONTEXTO RÁPIDO
 
-**Projeto:** SaaS Market Cap (SMC) - Plataforma de M&A digital  
+**Projeto:** CounterX - Plataforma de M&A digital  
 **Stack:** Next.js 14.2 (App Router + Pages Router), React 18, NextAuth, Prisma, PostgreSQL, Tailwind CSS  
 **Branch:** `codex-nightly`  
 **Deploy:** Vercel + Supabase PostgreSQL

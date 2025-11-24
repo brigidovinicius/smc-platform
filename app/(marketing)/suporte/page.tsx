@@ -32,20 +32,20 @@ export default function SupportPage() {
               <ul className="space-y-3">
                 <li>
                   <a
-                    href="mailto:support@saasmarketcap.com"
+                    href="mailto:support@counterx.io"
                     className="text-indigo-600 font-medium hover:text-indigo-700 transition-colors flex items-center gap-2"
                   >
                     <Mail size={16} />
-                    support@saasmarketcap.com
+                    support@counterx.io
                   </a>
                 </li>
                 <li>
                   <a
-                    href="mailto:legal@saasmarketcap.com"
+                    href="mailto:legal@counterx.io"
                     className="text-indigo-600 font-medium hover:text-indigo-700 transition-colors flex items-center gap-2"
                   >
                     <Mail size={16} />
-                    legal@saasmarketcap.com
+                    legal@counterx.io
                   </a>
                 </li>
               </ul>

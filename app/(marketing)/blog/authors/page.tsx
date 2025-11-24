@@ -4,8 +4,8 @@ import BlogAuthorCard from '@/components/blog/BlogAuthorCard';
 import { getAllAuthors } from '@/lib/blog';
 
 export const metadata: Metadata = {
-  title: 'Authors | SMC Blog',
-  description: 'Meet the authors of SMC Platform blog',
+  title: 'Authors | CounterX Blog',
+  description: 'Meet the authors of CounterX blog',
 };
 
 export const revalidate = 3600;

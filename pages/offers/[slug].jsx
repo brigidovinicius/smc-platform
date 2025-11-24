@@ -1,8 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { getAllOffers, getOfferBySlug } from '@/lib/offers';
-
-const SITE_URL = 'https://smc-platform.vercel.app';
+import { SITE_URL } from '@/lib/site-config';
 
 const metricsList = [
   { key: 'mrr', label: 'MRR' },
@@ -49,13 +48,13 @@ const OfferDetailsPage = ({ offer }) => {
   return (
     <main className="min-h-screen bg-[#050711] py-16 px-4 text-white">
       <Head>
-        <title>{`${offer.title} | SaaS Opportunity - SMC Platform`}</title>
+        <title>{`${offer.title} | SaaS Opportunity - CounterX`}</title>
         <meta name="description" content={offer.summary} />
         <meta
           name="keywords"
           content={`buy SaaS, digital assets, ${offer.niche}, ${offer.classification}, SaaS multiples`}
         />
-        <meta property="og:title" content={`${offer.title} | SMC Platform`} />
+        <meta property="og:title" content={`${offer.title} | CounterX`} />
         <meta property="og:description" content={offer.summary} />
         <meta property="og:url" content={canonical} />
         <meta property="og:type" content="website" />

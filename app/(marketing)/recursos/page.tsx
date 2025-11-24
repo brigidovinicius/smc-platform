@@ -44,7 +44,7 @@ const resources = [
   },
   {
     title: 'Support',
-    description: 'Talk to the SMC team about due diligence, onboarding, and platform questions.',
+    description: 'Talk to the CounterX team about due diligence, onboarding, and platform questions.',
     href: '/suporte',
     icon: Headphones,
     color: 'from-slate-500 to-slate-700'
@@ -55,7 +55,7 @@ export default function ResourcesPage() {
   return (
     <MarketingPageLayout
       title="Recursos"
-      description="Explore todas as ferramentas e conteúdos disponíveis na plataforma SMC"
+      description="Explore todas as ferramentas e conteúdos disponíveis na plataforma CounterX"
       showHero={true}
     >
       <section className="py-24 bg-white relative overflow-hidden">
@@ -77,16 +77,16 @@ export default function ResourcesPage() {
                 >
                   <Link
                     href={resource.href}
-                    className="group block h-full rounded-2xl border border-slate-200 bg-white p-6 shadow-lg transition-all hover:shadow-xl hover:border-indigo-300"
+                    className="group block h-full rounded-2xl border border-slate-200 bg-white p-6 shadow-lg transition-all hover:shadow-xl hover:border-[#0044CC]"
                   >
-                    <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${resource.color} text-white mb-4 shadow-lg`}>
+                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#0044CC] text-white mb-4">
                       <Icon size={24} />
                     </div>
-                    <h2 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">
+                    <h2 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-[#0044CC] transition-colors">
                       {resource.title}
                     </h2>
                     <p className="text-slate-600 mb-4 leading-relaxed">{resource.description}</p>
-                    <div className="flex items-center gap-2 text-indigo-600 font-medium text-sm">
+                    <div className="flex items-center gap-2 text-[#0044CC] font-medium text-sm">
                       <span>Acessar</span>
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </div>
