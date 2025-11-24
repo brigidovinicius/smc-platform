@@ -8,7 +8,7 @@ export default function Navbar() {
   return (
     <header className="navbar" role="banner">
       <div className="navbar-left">
-        <Link href="/" className="navbar-logo" aria-label="Ir para página inicial">
+        <Link href="/" className="navbar-logo" aria-label="Go to homepage">
           SMC
         </Link>
         <nav className="navbar-links" role="navigation" aria-label="Main navigation">

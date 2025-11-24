@@ -105,6 +105,10 @@
 - ✅ `components/LayoutShell.jsx` - Not imported anywhere, removed
 - ✅ `components/ui/Badge.jsx` - Empty file, removed
 - ✅ `components/ui/Card.jsx` - Empty file, removed
+- ✅ Removed unused exports from `components/ui/index.js`:
+  - `Avatar`, `AvatarImage`, `AvatarFallback` (files don't exist)
+  - `Dialog`, `DialogTrigger`, `DialogContent`, etc. (files don't exist)
+  - `Table`, `TableHeader`, `TableBody`, etc. (files don't exist)
 - ✅ Debug `console.log` statements removed from API routes (kept error logging)
   - `pages/api/auth/forgot-password.ts` - Removed 3 debug logs
   - `pages/api/auth/register.ts` - Removed 2 debug logs
@@ -121,6 +125,7 @@
 - ✅ Removed debug console.logs while keeping error logging
 - ✅ Updated `components/ui/index.js` comments to English
 - ✅ Fixed `components/EmptyState.jsx` default props to English
+- ✅ Removed unused exports from `components/ui/index.js` (Avatar, Dialog, Table components that don't exist)
 
 ### Components Status
 - ✅ `components/ui/Button.jsx` - Kept (deprecated but re-exports shadcn button for compatibility)
@@ -143,7 +148,10 @@
 
 ### Files Modified
 - **Deleted**: 3 files (LayoutShell.jsx, Badge.jsx, Card.jsx)
-- **Modified**: ~20 files (import normalization, console.log cleanup, minor fixes)
+- **Modified**: ~25 files (import normalization, console.log cleanup, accessibility fixes, dead code removal)
+  - `components/ui/index.js` - Removed unused exports
+  - `components/EmptyState.jsx` - Fixed aria-label language
+  - `components/Navbar.jsx` - Fixed aria-label language
 
 ### Known Limitations / TODOs for Human Review
 1. **Duplicate Route Files**: Files like `app/(marketing)/precos/page.tsx` and `app/(marketing)/planos/page.tsx` exist but just re-export from main routes. These are handled by redirects in `next.config.mjs`, so they're safe to keep for backward compatibility.
@@ -154,7 +162,9 @@
 
 4. **Portuguese Text in Dashboard**: `pages/dashboard/index.jsx` still has some Portuguese text, but this is internal dashboard content, not public-facing.
 
-### Accessibility Status
+### Accessibility Improvements
+- ✅ Fixed Portuguese aria-label in `components/Navbar.jsx` ("Ir para página inicial" → "Go to homepage")
+- ✅ Fixed Portuguese aria-label in `components/EmptyState.jsx` ("Estado vazio" → "Empty state")
 - ✅ Components already have good accessibility (aria-labels, roles, semantic HTML)
 - ✅ Buttons are properly implemented as `<button>` elements
 - ✅ Images have alt text or explicit `alt=""` for decorative images
@@ -186,4 +196,34 @@
 
 ### Conclusion
 The codebase cleanup has been completed successfully. All changes were made without breaking functionality, routes, or build processes. The codebase is now more consistent, cleaner, and easier to maintain.
+
+---
+
+## Latest Cleanup Session (2025-01-23)
+
+### Additional Changes Made
+1. **Removed Dead Exports**: Cleaned up `components/ui/index.js` by removing exports for non-existent components (Avatar, Dialog, Table)
+2. **Accessibility Improvements**: 
+   - Fixed Portuguese aria-labels to English in `components/Navbar.jsx` and `components/EmptyState.jsx`
+   - Ensured all accessibility attributes are in English for consistency
+3. **Code Quality**: 
+   - Verified all imports are using `@/` alias consistently
+   - Confirmed all buttons are properly implemented as `<button>` elements
+   - Verified images have proper alt text
+
+### Validation Results
+- ✅ **Lint**: Passes with no errors
+- ✅ **Build**: Compiles successfully
+- ✅ **Type Checking**: No TypeScript errors
+- ✅ **All Routes**: Working correctly
+- ✅ **Static Generation**: All pages generated successfully
+
+### Summary of This Session
+- **Files Modified**: 3 files
+  - `components/ui/index.js` - Removed dead exports
+  - `components/EmptyState.jsx` - Fixed aria-label
+  - `components/Navbar.jsx` - Fixed aria-label
+- **Dead Code Removed**: 3 unused exports from index.js
+- **Accessibility**: 2 aria-labels fixed (Portuguese → English)
+- **Build Status**: ✅ All checks passing
 
