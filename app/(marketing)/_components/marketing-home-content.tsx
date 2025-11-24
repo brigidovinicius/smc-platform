@@ -225,7 +225,7 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
       </section>
 
       {/* HOW IT WORKS - TIMELINE */}
-      <section id="como-funciona" className="py-12 md:py-16 lg:py-24 bg-white relative overflow-hidden">
+      <section id="how-it-works" className="py-12 md:py-16 lg:py-24 bg-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-5">
           <GridBackground />
         </div>
@@ -242,7 +242,7 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
       </section>
 
       {/* FEATURES - BENTO GRID */}
-      <section id="recursos" className="py-12 md:py-16 lg:py-24 bg-slate-50 relative overflow-hidden">
+      <section id="features" className="py-12 md:py-16 lg:py-24 bg-slate-50 relative overflow-hidden">
         <div className="absolute inset-0 opacity-5">
           <GridBackground />
         </div>
@@ -285,7 +285,7 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
       </section>
 
       {/* TESTIMONIALS */}
-      <section id="depoimentos" className="py-12 md:py-16 lg:py-24 bg-white overflow-hidden">
+      <section id="testimonials" className="py-12 md:py-16 lg:py-24 bg-white overflow-hidden">
         <div className="container mb-8 md:mb-12 text-center px-4 sm:px-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Who&apos;s already traded</h2>
         </div>

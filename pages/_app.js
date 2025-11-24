@@ -17,12 +17,13 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export default function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+  const defaultGetLayout = (page) => <Layout>{page}</Layout>;
+  const getLayout = Component.getLayout || defaultGetLayout;
+
   return (
     <SessionProvider session={session}>
       <div className={`${inter.variable} ${spaceGrotesk.variable}`}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        {getLayout(<Component {...pageProps} />)}
         <SpeedInsights />
       </div>
     </SessionProvider>

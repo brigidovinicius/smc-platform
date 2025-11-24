@@ -8,6 +8,7 @@ import AssetCard from '@/components/AssetCard';
 import MarketGrid from '@/components/MarketGrid';
 import EmptyState from '@/components/EmptyState';
 import { getUserAssets, getUserOffers, getDashboardStats } from '@/lib/services/dashboard';
+import { AppShell } from '@/components/layout/AppShell';
 
 const readinessTasks = [
   { id: 'task-1', title: 'Atualizar MRR dos últimos 6 meses', description: 'Suba os indicadores na aba Métricas', status: 'inProgress', statusLabel: 'Em andamento' },
@@ -110,6 +111,10 @@ export default function Dashboard({ assets, offers, stats }) {
     </div>
   );
 }
+
+Dashboard.getLayout = function getLayout(page) {
+  return <AppShell>{page}</AppShell>;
+};
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
