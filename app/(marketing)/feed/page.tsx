@@ -5,13 +5,13 @@ import { listOffers } from '@/lib/services/offers';
 import { SITE_URL } from '@/lib/site-config';
 
 export const metadata: Metadata = {
-  title: 'Feed de oportunidades – SMC Platform | SaaS & ativos digitais',
+  title: 'Opportunities Feed – SMC Platform | SaaS & Digital Assets',
   description:
-    'Explore oportunidades de compra de SaaS, marketplaces e newsletters com métricas de MRR, churn e faixa de investimento. Prévia pública da SMC Platform.',
-  keywords: 'feed de SaaS, oportunidades digitais, ativos digitais à venda, comprar SaaS, investir em SaaS',
+    'Explore SaaS, marketplace, and newsletter buying opportunities with MRR, churn, and investment range metrics. Public preview of SMC Platform.',
+  keywords: 'SaaS feed, digital opportunities, digital assets for sale, buy SaaS, invest in SaaS',
   openGraph: {
-    title: 'Feed de oportunidades – SMC Platform',
-    description: 'Prévia pública com as melhores oportunidades de ativos digitais da SMC Platform.',
+    title: 'Opportunities Feed – SMC Platform',
+    description: 'Public preview with the best digital assets opportunities from SMC Platform.',
     url: `${SITE_URL}/feed`,
     type: 'website'
   },
@@ -43,24 +43,24 @@ const normalizeOffer = (offer: any): NormalizedOffer => {
   const asset = offer.asset ?? null;
   const mrrValue = asset?.mrr ?? null;
   const arrValue = asset?.arr ?? null;
-  const formattedMRR = typeof mrrValue === 'number' ? `R$ ${mrrValue.toLocaleString('pt-BR')}` : undefined;
+  const formattedMRR = typeof mrrValue === 'number' ? `$${mrrValue.toLocaleString('en-US')}` : undefined;
 
   return {
     id: offer.id,
     slug: asset?.slug ?? offer.id,
-    title: asset?.name ?? offer.asset?.slug ?? 'Ativo digital',
-    summary: asset?.description ?? 'Ativo cadastrado no marketplace.',
-    classification: asset?.category ?? 'Ativo',
-    niche: asset?.category ?? 'Ativos digitais',
+    title: asset?.name ?? offer.asset?.slug ?? 'Digital asset',
+    summary: asset?.description ?? 'Asset listed on the marketplace.',
+    classification: asset?.category ?? 'Asset',
+    niche: asset?.category ?? 'Digital assets',
     investmentRange: {
       min: offer.price,
       max: offer.price
     },
-    revenueRange: formattedMRR ? `MRR ${formattedMRR}` : 'Sob consulta',
+    revenueRange: formattedMRR ? `MRR ${formattedMRR}` : 'Custom',
     valuationMultiple:
       typeof arrValue === 'number' && arrValue > 0
         ? `${(offer.price / arrValue).toFixed(1)}x ARR`
-        : 'Sob consulta',
+        : 'Custom',
     badges: [],
     metrics: {
       mrr: formattedMRR
@@ -75,15 +75,15 @@ export default async function FeedPage() {
     const offerResult = await listOffers({ pageSize: 50 });
     offers = offerResult.items.map(normalizeOffer);
   } catch (error) {
-    console.error('[feed] Falha ao carregar ofertas', error);
+    console.error('[feed] Failed to load offers', error);
   }
 
   const schemaData = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Feed de oportunidades – SMC Platform',
+    name: 'Opportunities Feed – SMC Platform',
     description:
-      'Lista curada de ativos digitais, SaaS e newsletters disponíveis para aquisição com métricas de MRR, churn e ticket de investimento.',
+      'Curated list of digital assets, SaaS, and newsletters available for acquisition with MRR, churn, and investment ticket metrics.',
     mainEntity: offers.map((offer, index: number) => ({
       '@type': 'Offer',
       position: index + 1,
@@ -96,7 +96,7 @@ export default async function FeedPage() {
       },
       priceSpecification: {
         '@type': 'PriceSpecification',
-        priceCurrency: 'BRL',
+        priceCurrency: 'USD',
         minPrice: offer.investmentRange?.min ?? undefined,
         maxPrice: offer.investmentRange?.max ?? undefined
       }
@@ -110,8 +110,8 @@ export default async function FeedPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
       />
       <MarketingPageLayout
-        title="Feed de Oportunidades"
-        description="Explore oportunidades de compra de SaaS, marketplaces e newsletters com métricas auditadas"
+        title="Opportunities Feed"
+        description="Explore SaaS, marketplace, and newsletter buying opportunities with audited metrics"
         showHero={true}
       >
         <FeedContent offers={offers} />

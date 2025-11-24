@@ -4,8 +4,8 @@ import BlogCategoryCard from '@/components/blog/BlogCategoryCard';
 import { getCategoriesWithCount } from '@/lib/blog';
 
 export const metadata: Metadata = {
-  title: 'Categorias | Blog SMC',
-  description: 'Explore posts do blog organizados por categorias',
+  title: 'Categories | SMC Blog',
+  description: 'Explore blog posts organized by categories',
 };
 
 export const revalidate = 3600;
@@ -14,8 +14,8 @@ export default function CategoriesPage() {
   const categories = getCategoriesWithCount();
   return (
     <MarketingPageLayout
-      title="Categorias do Blog"
-      description="Explore posts organizados por temas e categorias"
+      title="Blog Categories"
+      description="Explore posts organized by topics and categories"
       showHero={true}
     >
       <section className="py-16 bg-background">

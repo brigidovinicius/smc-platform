@@ -4,8 +4,8 @@ import BlogAuthorCard from '@/components/blog/BlogAuthorCard';
 import { getAllAuthors } from '@/lib/blog';
 
 export const metadata: Metadata = {
-  title: 'Autores | Blog SMC',
-  description: 'Conheça os autores do blog SMC Platform',
+  title: 'Authors | SMC Blog',
+  description: 'Meet the authors of SMC Platform blog',
 };
 
 export const revalidate = 3600;
@@ -14,8 +14,8 @@ export default function AuthorsPage() {
   const authors = getAllAuthors();
   return (
     <MarketingPageLayout
-      title="Autores do Blog"
-      description="Conheça quem escreve sobre valuation e ativos digitais"
+      title="Blog Authors"
+      description="Meet the authors writing about valuation and digital assets"
       showHero={true}
     >
       <section className="py-16 bg-background">

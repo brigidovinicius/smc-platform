@@ -13,14 +13,14 @@ interface BlogCardProps {
 const BlogCard = ({ slug, title, excerpt, date, category }: BlogCardProps) => (
   <Card 
     className="bg-card border-border hover:border-primary/50 transition-colors h-full flex flex-col"
-    aria-label={`Post do blog: ${title}`}
+    aria-label={`Blog post: ${title}`}
   >
     <CardHeader className="pb-3">
       {category && (
         <Badge 
           variant="outline" 
           className="w-fit mb-2 text-xs"
-          aria-label={`Categoria: ${category}`}
+          aria-label={`Category: ${category}`}
         >
           {category}
         </Badge>
@@ -29,7 +29,7 @@ const BlogCard = ({ slug, title, excerpt, date, category }: BlogCardProps) => (
         <Link 
           href={`/blog/${slug}`} 
           className="hover:text-primary transition-colors line-clamp-2"
-          aria-label={`Ler post: ${title}`}
+          aria-label={`Read post: ${title}`}
         >
           {title}
         </Link>
@@ -44,9 +44,9 @@ const BlogCard = ({ slug, title, excerpt, date, category }: BlogCardProps) => (
       </CardDescription>
       <p 
         className="text-xs text-muted-foreground mt-auto"
-        aria-label={`Data de publicação: ${new Date(date).toLocaleDateString('pt-BR')}`}
+        aria-label={`Publication date: ${new Date(date).toLocaleDateString('en-US')}`}
       >
-        {new Date(date).toLocaleDateString('pt-BR')}
+        {new Date(date).toLocaleDateString('en-US')}
       </p>
     </CardContent>
   </Card>

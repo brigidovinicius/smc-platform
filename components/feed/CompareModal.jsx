@@ -25,9 +25,9 @@ export default function CompareModal({ offers, isOpen, onClose, onRemove, onExpo
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-2xl font-bold text-white">Comparar Ofertas</h2>
+              <h2 className="text-2xl font-bold text-white">Compare Offers</h2>
               <p className="text-slate-400 text-sm mt-1">
-                {offers.length} {offers.length === 1 ? 'oferta selecionada' : 'ofertas selecionadas'}
+                {offers.length} {offers.length === 1 ? 'offer selected' : 'offers selected'}
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -39,7 +39,7 @@ export default function CompareModal({ offers, isOpen, onClose, onRemove, onExpo
                   className="border-white/20 text-white hover:bg-white/10"
                 >
                   <Download className="h-4 w-4 mr-2" />
-                  Exportar
+                  Export
                 </Button>
               )}
               <button
@@ -53,20 +53,20 @@ export default function CompareModal({ offers, isOpen, onClose, onRemove, onExpo
 
           {offers.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-slate-400">Nenhuma oferta selecionada para comparar.</p>
-              <p className="text-slate-500 text-sm mt-2">Selecione ofertas usando o botão de comparação nos cards.</p>
+              <p className="text-slate-400">No offers selected for comparison.</p>
+              <p className="text-slate-500 text-sm mt-2">Select offers using the compare button on the cards.</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="border-b border-white/10">
-                    <th className="text-left p-4 text-slate-400 text-sm font-semibold">Oferta</th>
-                    <th className="text-left p-4 text-slate-400 text-sm font-semibold">Investimento</th>
+                    <th className="text-left p-4 text-slate-400 text-sm font-semibold">Offer</th>
+                    <th className="text-left p-4 text-slate-400 text-sm font-semibold">Investment</th>
                     <th className="text-left p-4 text-slate-400 text-sm font-semibold">MRR</th>
-                    <th className="text-left p-4 text-slate-400 text-sm font-semibold">Múltiplo</th>
-                    <th className="text-left p-4 text-slate-400 text-sm font-semibold">Nicho</th>
-                    <th className="text-left p-4 text-slate-400 text-sm font-semibold">Ações</th>
+                    <th className="text-left p-4 text-slate-400 text-sm font-semibold">Multiple</th>
+                    <th className="text-left p-4 text-slate-400 text-sm font-semibold">Niche</th>
+                    <th className="text-left p-4 text-slate-400 text-sm font-semibold">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -83,8 +83,8 @@ export default function CompareModal({ offers, isOpen, onClose, onRemove, onExpo
                       </td>
                       <td className="p-4 text-white">
                         {offer.investmentRange
-                          ? `R$ ${(offer.investmentRange.min / 1000).toFixed(0)}k – R$ ${(offer.investmentRange.max / 1000).toFixed(0)}k`
-                          : 'Sob consulta'}
+                          ? `$${(offer.investmentRange.min / 1000).toFixed(0)}k – $${(offer.investmentRange.max / 1000).toFixed(0)}k`
+                          : 'Custom'}
                       </td>
                       <td className="p-4 text-white">{offer.revenueRange}</td>
                       <td className="p-4 text-white">{offer.valuationMultiple}</td>
@@ -93,7 +93,7 @@ export default function CompareModal({ offers, isOpen, onClose, onRemove, onExpo
                         <button
                           onClick={() => onRemove(offer.id)}
                           className="text-red-400 hover:text-red-300 transition-colors"
-                          title="Remover da comparação"
+                          title="Remove from comparison"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>

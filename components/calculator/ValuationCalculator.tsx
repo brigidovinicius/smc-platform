@@ -149,14 +149,14 @@ export default function ValuationCalculator() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <DollarSign className="h-5 w-5 text-primary" />
-                Receita
+                Revenue
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="mrr">MRR (Receita Recorrente Mensal)</Label>
-                  <HelpTooltip content="MRR é a receita recorrente mensal do seu SaaS. É a soma de todas as assinaturas mensais ativas. Se você tem receita anual, divida por 12 para obter o MRR." />
+                  <Label htmlFor="mrr">MRR (Monthly Recurring Revenue)</Label>
+                  <HelpTooltip content="MRR is your SaaS&apos;s monthly recurring revenue. It&apos;s the sum of all active monthly subscriptions. If you have annual revenue, divide by 12 to get MRR." />
                 </div>
                 <div className="relative mt-2">
                   <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -171,15 +171,15 @@ export default function ValuationCalculator() {
                 </div>
                 {arr > 0 && (
                   <p className="text-xs text-muted-foreground mt-1">
-                    ARR calculado: {arr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 })}
+                    Calculated ARR: {arr.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 })}
                   </p>
                 )}
               </div>
 
               <div>
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="ttmRevenue">Receita TTM (Últimos 12 meses)</Label>
-                  <HelpTooltip content="TTM (Trailing Twelve Months) é a receita total dos últimos 12 meses. Use esta métrica se não tiver MRR mensal constante ou se quiser usar receita anual." />
+                  <Label htmlFor="ttmRevenue">TTM Revenue (Last 12 months)</Label>
+                  <HelpTooltip content="TTM (Trailing Twelve Months) is the total revenue from the last 12 months. Use this metric if you don&apos;t have constant monthly MRR or want to use annual revenue." />
                 </div>
                 <div className="relative mt-2">
                   <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -196,8 +196,8 @@ export default function ValuationCalculator() {
 
               <div>
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="lastMonthRevenue">Receita do Último Mês</Label>
-                  <HelpTooltip content="Receita total do mês mais recente. Útil para entender a tendência de crescimento recente." />
+                  <Label htmlFor="lastMonthRevenue">Last Month Revenue</Label>
+                  <HelpTooltip content="Total revenue from the most recent month. Useful for understanding recent growth trends." />
                 </div>
                 <div className="relative mt-2">
                   <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -219,14 +219,14 @@ export default function ValuationCalculator() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Target className="h-5 w-5 text-primary" />
-                Lucratividade
+                Profitability
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="ttmProfit">Lucro TTM (Últimos 12 meses)</Label>
-                  <HelpTooltip content="Lucro líquido dos últimos 12 meses (receita menos todos os custos). Uma margem de lucro alta aumenta o valuation." />
+                  <Label htmlFor="ttmProfit">TTM Profit (Last 12 months)</Label>
+                  <HelpTooltip content="Net profit from the last 12 months (revenue minus all costs). A high profit margin increases valuation." />
                 </div>
                 <div className="relative mt-2">
                   <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -243,8 +243,8 @@ export default function ValuationCalculator() {
 
               <div>
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="lastMonthProfit">Lucro do Último Mês</Label>
-                  <HelpTooltip content="Lucro líquido do mês mais recente. Mostra a tendência de lucratividade atual." />
+                  <Label htmlFor="lastMonthProfit">Last Month Profit</Label>
+                  <HelpTooltip content="Net profit from the most recent month. Shows current profitability trends." />
                 </div>
                 <div className="relative mt-2">
                   <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -266,14 +266,14 @@ export default function ValuationCalculator() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <TrendingUp className="h-5 w-5 text-primary" />
-                Crescimento e Métricas
+                Growth & Metrics
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="growth">Taxa de Crescimento Anual (%)</Label>
-                  <HelpTooltip content="Percentual de crescimento anual da receita. SaaS com crescimento acima de 50% ao ano recebem múltiplos maiores no valuation." />
+                  <Label htmlFor="growth">Annual Growth Rate (%)</Label>
+                  <HelpTooltip content="Annual revenue growth percentage. SaaS with growth above 50% per year receive higher multiples in valuation." />
                 </div>
                 <div className="relative mt-2">
                   <TrendingUp className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -290,8 +290,8 @@ export default function ValuationCalculator() {
 
               <div>
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="churn">Taxa de Churn Mensal (%)</Label>
-                  <HelpTooltip content="Percentual de clientes que cancelam a assinatura por mês. Churn baixo (menos de 5%) aumenta o valuation, enquanto churn alto (acima de 10%) reduz." />
+                  <Label htmlFor="churn">Monthly Churn Rate (%)</Label>
+                  <HelpTooltip content="Percentage of customers who cancel their subscription per month. Low churn (less than 5%) increases valuation, while high churn (above 10%) reduces it." />
                 </div>
                 <div className="relative mt-2">
                   <AlertCircle className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -308,8 +308,8 @@ export default function ValuationCalculator() {
 
               <div>
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="customers">Número de Clientes</Label>
-                  <HelpTooltip content="Total de clientes ativos pagantes. Útil para calcular métricas como receita média por cliente (ARPU)." />
+                  <Label htmlFor="customers">Number of Customers</Label>
+                  <HelpTooltip content="Total active paying customers. Useful for calculating metrics like average revenue per user (ARPU)." />
                 </div>
                 <div className="relative mt-2">
                   <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -326,8 +326,8 @@ export default function ValuationCalculator() {
 
               <div>
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="cac">CAC (Custo de Aquisição de Cliente)</Label>
-                  <HelpTooltip content="Custo total de marketing e vendas dividido pelo número de novos clientes adquiridos. Idealmente, o LTV deve ser pelo menos 3x maior que o CAC." />
+                  <Label htmlFor="cac">CAC (Customer Acquisition Cost)</Label>
+                  <HelpTooltip content="Total marketing and sales costs divided by the number of new customers acquired. Ideally, LTV should be at least 3x higher than CAC." />
                 </div>
                 <div className="relative mt-2">
                   <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -344,8 +344,8 @@ export default function ValuationCalculator() {
 
               <div>
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="ltv">LTV (Valor do Cliente ao Longo da Vida)</Label>
-                  <HelpTooltip content="Receita total esperada de um cliente durante todo o tempo que permanece ativo. Calculado como receita média mensal dividida pela taxa de churn. Um LTV/CAC acima de 3x é considerado saudável." />
+                  <Label htmlFor="ltv">LTV (Lifetime Value)</Label>
+                  <HelpTooltip content="Total expected revenue from a customer during their entire active period. Calculated as average monthly revenue divided by churn rate. An LTV/CAC above 3x is considered healthy." />
                 </div>
                 <div className="relative mt-2">
                   <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -367,8 +367,8 @@ export default function ValuationCalculator() {
 
               <div>
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="traffic">Tráfego Web Mensal (opcional)</Label>
-                  <HelpTooltip content="Número de visitantes únicos por mês no seu site. Útil para entender o potencial de crescimento e marketing orgânico." />
+                  <Label htmlFor="traffic">Monthly Web Traffic (optional)</Label>
+                  <HelpTooltip content="Number of unique visitors per month on your site. Useful for understanding growth potential and organic marketing." />
                 </div>
                 <div className="relative mt-2">
                   <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -396,7 +396,7 @@ export default function ValuationCalculator() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Calculator className="h-5 w-5 text-primary" />
-                Valuation Estimado
+                Estimated Valuation
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -404,11 +404,11 @@ export default function ValuationCalculator() {
                 <div className="space-y-6">
                   {/* Main Valuation */}
                   <div className="bg-gradient-to-br from-primary/10 to-purple-500/10 rounded-xl p-6 border border-primary/20">
-                    <p className="text-sm text-muted-foreground mb-2">Valuation Estimado</p>
+                    <p className="text-sm text-muted-foreground mb-2">Estimated Valuation</p>
                     <p className="text-4xl font-bold text-foreground">
-                      {result.valuation.toLocaleString('pt-BR', {
+                      {result.valuation.toLocaleString('en-US', {
                         style: 'currency',
-                        currency: 'BRL',
+                        currency: 'USD',
                         minimumFractionDigits: 0,
                       })}
                     </p>
@@ -418,9 +418,9 @@ export default function ValuationCalculator() {
                   <div className="bg-muted/50 rounded-xl p-4 border">
                     <p className="text-sm text-muted-foreground mb-1">ARR</p>
                     <p className="text-2xl font-semibold text-foreground">
-                      {result.arr.toLocaleString('pt-BR', {
+                      {result.arr.toLocaleString('en-US', {
                         style: 'currency',
-                        currency: 'BRL',
+                        currency: 'USD',
                         minimumFractionDigits: 0,
                       })}
                     </p>
@@ -428,7 +428,7 @@ export default function ValuationCalculator() {
 
                   {/* Multiple */}
                   <div className="bg-muted/50 rounded-xl p-4 border">
-                    <p className="text-sm text-muted-foreground mb-1">Múltiplo Aplicado</p>
+                    <p className="text-sm text-muted-foreground mb-1">Applied Multiple</p>
                     <p className="text-2xl font-semibold text-primary">
                       {result.multiple.toFixed(1)}x ARR
                     </p>
@@ -436,17 +436,17 @@ export default function ValuationCalculator() {
 
                   {/* Breakdown */}
                   <div className="space-y-3 pt-4 border-t">
-                    <p className="text-sm font-semibold text-foreground">Fatores de Ajuste:</p>
+                    <p className="text-sm font-semibold text-foreground">Adjustment Factors:</p>
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       <div className="flex items-center justify-between p-2 bg-muted/50 rounded">
-                        <span className="text-muted-foreground">Receita</span>
+                        <span className="text-muted-foreground">Revenue</span>
                         <Badge variant={result.breakdown.revenueScore > 0 ? 'default' : 'outline'}>
                           {result.breakdown.revenueScore > 0 ? '+' : ''}
                           {(result.breakdown.revenueScore * 0.5).toFixed(1)}x
                         </Badge>
                       </div>
                       <div className="flex items-center justify-between p-2 bg-muted/50 rounded">
-                        <span className="text-muted-foreground">Crescimento</span>
+                        <span className="text-muted-foreground">Growth</span>
                         <Badge variant={result.breakdown.growthScore > 0 ? 'default' : 'outline'}>
                           {result.breakdown.growthScore > 0 ? '+' : ''}
                           {(result.breakdown.growthScore * 0.5).toFixed(1)}x
@@ -460,14 +460,14 @@ export default function ValuationCalculator() {
                         </Badge>
                       </div>
                       <div className="flex items-center justify-between p-2 bg-muted/50 rounded">
-                        <span className="text-muted-foreground">Lucratividade</span>
+                        <span className="text-muted-foreground">Profitability</span>
                         <Badge variant={result.breakdown.profitabilityScore > 0 ? 'default' : 'outline'}>
                           {result.breakdown.profitabilityScore > 0 ? '+' : ''}
                           {(result.breakdown.profitabilityScore * 0.5).toFixed(1)}x
                         </Badge>
                       </div>
                       <div className="flex items-center justify-between p-2 bg-muted/50 rounded col-span-2">
-                        <span className="text-muted-foreground">Eficiência (LTV/CAC)</span>
+                        <span className="text-muted-foreground">Efficiency (LTV/CAC)</span>
                         <Badge variant={result.breakdown.efficiencyScore > 0 ? 'default' : 'outline'}>
                           {result.breakdown.efficiencyScore > 0 ? '+' : ''}
                           {(result.breakdown.efficiencyScore * 0.5).toFixed(1)}x
@@ -477,14 +477,14 @@ export default function ValuationCalculator() {
                   </div>
 
                   <p className="text-xs text-muted-foreground text-center pt-4 border-t">
-                    * Esta é uma estimativa baseada em múltiplos de mercado. Para uma avaliação completa e precisa, cadastre seu ativo na plataforma.
+                    * This is an estimate based on market multiples. For a complete and accurate assessment, list your asset on the platform.
                   </p>
                 </div>
               ) : (
                 <div className="text-center py-12">
                   <Calculator className="h-12 w-12 text-muted-foreground mx-auto mb-4 opacity-50" />
                   <p className="text-muted-foreground">
-                    Preencha pelo menos o MRR ou Receita TTM para calcular
+                    Fill in at least MRR or TTM Revenue to calculate
                   </p>
                 </div>
               )}

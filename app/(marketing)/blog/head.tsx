@@ -1,8 +1,8 @@
 export default function Head() {
   return (
     <>
-      <title>Blog SMC – Valuation e ativos digitais</title>
-      <meta name="description" content="Artigos sobre compra e venda de SaaS, sites e ativos digitais." />
+      <title>SMC Blog – Valuation and digital assets</title>
+      <meta name="description" content="Articles about buying and selling SaaS, sites, and digital assets." />
     </>
   );
 }

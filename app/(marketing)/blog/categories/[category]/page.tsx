@@ -11,7 +11,7 @@ interface Params {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return {
     title: `${params.category.charAt(0).toUpperCase() + params.category.slice(1)} | Blog SMC`,
-    description: `Posts sobre ${params.category} no blog SMC Platform`,
+    description: `Posts about ${params.category} on SMC Platform blog`,
   };
 }
 
@@ -27,15 +27,15 @@ export default function CategoryPage({ params }: Params) {
 
   return (
     <MarketingPageLayout
-      title={`Categoria: ${categoryName}`}
-      description={`Explore todos os posts sobre ${categoryName.toLowerCase()}`}
+      title={`Category: ${categoryName}`}
+      description={`Explore all posts about ${categoryName.toLowerCase()}`}
       showHero={true}
     >
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="mb-8">
             <p className="text-sm text-muted-foreground mb-2">
-              {posts.length} {posts.length === 1 ? 'post encontrado' : 'posts encontrados'}
+              {posts.length} {posts.length === 1 ? 'post found' : 'posts found'}
             </p>
           </div>
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">

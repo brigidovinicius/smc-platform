@@ -24,10 +24,10 @@ interface HeroProps {
 }
 
 export function Hero({
-  title = 'Compre e venda ativos digitais com confiança',
-  description = 'Marketplace profissional para SaaS, newsletters e ativos digitais. Valuation automático, due diligence assistida e transações seguras.',
-  ctaPrimary = { label: 'Começar Grátis', href: '/auth/register' },
-  ctaSecondary = { label: 'Ver Oportunidades', href: '/feed' },
+  title = 'Buy and sell digital assets with confidence',
+  description = 'Professional marketplace for SaaS, newsletters, and digital assets. Automated valuation, AI-assisted due diligence, and secure transactions.',
+  ctaPrimary = { label: 'Get Started Free', href: '/auth/register' },
+  ctaSecondary = { label: 'View Opportunities', href: '/feed' },
   stats,
   image,
   imageAlt = 'Hero image',
@@ -80,7 +80,7 @@ export function Hero({
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-4 py-1.5 text-sm font-medium text-indigo-700">
               <Sparkles className="h-4 w-4" />
-              Marketplace profissional de ativos digitais
+              Professional digital assets marketplace
             </span>
           </motion.div>
 

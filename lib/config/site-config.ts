@@ -9,11 +9,11 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://smc-platfor
 export const SITE_CONFIG = {
     name: 'SaaS Market Cap',
     shortName: 'SMC',
-    description: 'Marketplace de ativos digitais com valuation automático, due diligence assistida por IA e compradores verificados.',
+    description: 'Digital assets marketplace with automated valuation, AI-assisted due diligence, and verified buyers.',
     url: SITE_URL,
     ogImage: '/images/hero-dashboard.webp',
     twitter: '@saasmarketcap',
-    locale: 'pt_BR'
+    locale: 'en_US'
 } as const;
 
 

@@ -26,7 +26,7 @@ export default function BlogPage() {
       description="Insights on valuation, digital assets, guides, and secondary market benchmarks."
       showHero={true}
     >
-      <section className="py-16 bg-background">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <BlogPageClient posts={posts} categories={categories} />
         </div>

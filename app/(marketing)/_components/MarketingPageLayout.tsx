@@ -30,9 +30,9 @@ export function MarketingPageLayout({
   }, []);
 
   const navItems = [
-    { label: 'Como funciona', href: '/#como-funciona' },
-    { label: 'Recursos', href: '/#recursos' },
-    { label: 'Depoimentos', href: '/#depoimentos' }
+    { label: 'How it works', href: '/#como-funciona' },
+    { label: 'Features', href: '/#recursos' },
+    { label: 'Testimonials', href: '/#depoimentos' }
   ];
 
   return (
@@ -69,7 +69,7 @@ export function MarketingPageLayout({
               href="/auth/login"
               className={`text-sm font-medium ${scrolled ? 'text-slate-900' : 'text-white'}`}
             >
-              Entrar
+              Sign in
             </Link>
             <Link
               href="/auth/register?callbackUrl=/feed"
@@ -79,7 +79,7 @@ export function MarketingPageLayout({
                   : 'bg-white text-slate-900 hover:bg-slate-100'
               }`}
             >
-              Começar
+              Get Started
             </Link>
           </div>
 
@@ -126,14 +126,14 @@ export function MarketingPageLayout({
                     onClick={() => setMobileMenuOpen(false)}
                     className="block text-sm font-medium text-slate-900 py-2"
                   >
-                    Entrar
+                    Sign in
                   </Link>
                   <Link
                     href="/auth/register?callbackUrl=/feed"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block w-full text-center rounded-full bg-slate-900 text-white px-5 py-2 text-sm font-medium transition-all hover:bg-slate-800"
                   >
-                    Começar
+                    Get Started
                   </Link>
                 </div>
               </nav>
@@ -188,22 +188,22 @@ export function MarketingPageLayout({
             <div className="absolute bottom-0 right-0 h-[300px] w-[300px] sm:h-[350px] sm:w-[350px] md:h-[400px] md:w-[400px] rounded-full bg-purple-500/30 blur-[100px]" />
 
             <div className="relative z-10 max-w-3xl mx-auto space-y-6 md:space-y-8">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">Pronto para o próximo deal?</h2>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">Ready for your next deal?</h2>
               <p className="text-base sm:text-lg md:text-xl text-slate-400 px-2">
-                Junte-se a mais de 2.400 investidores e founders negociando ativos digitais com segurança.
+                Join over 2,400 investors and founders trading digital assets securely.
               </p>
               <div className="flex flex-col items-center justify-center gap-3 sm:gap-4 sm:flex-row">
                 <Link
                   href="/feed"
                   className="inline-flex h-12 sm:h-14 items-center justify-center rounded-full bg-white px-6 sm:px-8 text-base sm:text-lg font-medium text-slate-900 transition-all hover:bg-slate-100 hover:scale-105 w-full sm:w-auto"
                 >
-                  Ver oportunidades
+                  View opportunities
                 </Link>
                 <Link
                   href="/wizard"
                   className="inline-flex h-12 sm:h-14 items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 sm:px-8 text-base sm:text-lg font-medium text-white backdrop-blur-sm transition-all hover:bg-white/10 w-full sm:w-auto"
                 >
-                  Vender ativo
+                  List asset
                 </Link>
               </div>
             </div>

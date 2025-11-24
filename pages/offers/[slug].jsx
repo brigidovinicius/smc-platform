@@ -15,7 +15,7 @@ const OfferDetailsPage = ({ offer }) => {
   if (!offer) {
     return (
       <main className="min-h-screen bg-[#050711] flex items-center justify-center text-white">
-        <p>Oferta não encontrada.</p>
+        <p>Offer not found.</p>
       </main>
     );
   }
@@ -25,7 +25,7 @@ const OfferDetailsPage = ({ offer }) => {
     '@context': 'https://schema.org',
     '@type': 'Offer',
     url: canonical,
-    priceCurrency: 'BRL',
+    priceCurrency: 'USD',
     itemOffered: {
       '@type': 'Product',
       name: offer.title,
@@ -34,7 +34,7 @@ const OfferDetailsPage = ({ offer }) => {
     },
     priceSpecification: {
       '@type': 'PriceSpecification',
-      priceCurrency: 'BRL',
+      priceCurrency: 'USD',
       minPrice: offer.investmentRange?.min ?? undefined,
       maxPrice: offer.investmentRange?.max ?? undefined
     },
@@ -49,11 +49,11 @@ const OfferDetailsPage = ({ offer }) => {
   return (
     <main className="min-h-screen bg-[#050711] py-16 px-4 text-white">
       <Head>
-        <title>{`${offer.title} | Oportunidade SaaS - SMC Platform`}</title>
+        <title>{`${offer.title} | SaaS Opportunity - SMC Platform`}</title>
         <meta name="description" content={offer.summary} />
         <meta
           name="keywords"
-          content={`comprar SaaS, ativos digitais, ${offer.niche}, ${offer.classification}, múltiplos SaaS`}
+          content={`buy SaaS, digital assets, ${offer.niche}, ${offer.classification}, SaaS multiples`}
         />
         <meta property="og:title" content={`${offer.title} | SMC Platform`} />
         <meta property="og:description" content={offer.summary} />
@@ -66,7 +66,7 @@ const OfferDetailsPage = ({ offer }) => {
         <nav className="text-sm text-blue-300 flex items-center gap-2" aria-label="breadcrumb">
           <Link href="/">Home</Link>
           <span>›</span>
-          <Link href="/feed">Oportunidades</Link>
+          <Link href="/feed">Opportunities</Link>
           <span>›</span>
           <span className="text-slate-300">{offer.title}</span>
         </nav>
@@ -86,15 +86,15 @@ const OfferDetailsPage = ({ offer }) => {
 
         <section className="grid md:grid-cols-2 gap-4 bg-[#0b1230] border border-white/5 rounded-3xl p-6">
           <div>
-            <p className="text-slate-400 text-xs uppercase mb-1">Investimento estimado</p>
+            <p className="text-slate-400 text-xs uppercase mb-1">Estimated investment</p>
             <h2 className="text-2xl font-semibold text-white">
               {offer.investmentRange
-                ? `R$ ${(offer.investmentRange.min / 1000).toFixed(0)}k – R$ ${(offer.investmentRange.max / 1000).toFixed(0)}k`
-                : 'Sob consulta'}
+                ? `$${(offer.investmentRange.min / 1000).toFixed(0)}k – $${(offer.investmentRange.max / 1000).toFixed(0)}k`
+                : 'Custom'}
             </h2>
           </div>
           <div>
-            <p className="text-slate-400 text-xs uppercase mb-1">MRR atual</p>
+            <p className="text-slate-400 text-xs uppercase mb-1">Current MRR</p>
             <h2 className="text-2xl font-semibold text-white">{offer.metrics?.mrr}</h2>
           </div>
           {metricsList.map(({ key, label }) => (
@@ -106,7 +106,7 @@ const OfferDetailsPage = ({ offer }) => {
         </section>
 
         <section className="space-y-4 bg-[#0b1230] border border-white/5 rounded-3xl p-6">
-          <h2 className="text-xl font-semibold">Diferenciais</h2>
+          <h2 className="text-xl font-semibold">Highlights</h2>
           <div className="flex flex-wrap gap-2">
             {offer.badges?.map((badge) => (
               <span key={badge} className="px-3 py-1 rounded-full text-xs bg-white/5 text-slate-200">
@@ -117,17 +117,17 @@ const OfferDetailsPage = ({ offer }) => {
         </section>
 
         <section className="bg-[#0b1230] border border-white/5 rounded-3xl p-6 space-y-4">
-          <h2 className="text-xl font-semibold">Próximos passos</h2>
+          <h2 className="text-xl font-semibold">Next steps</h2>
           <p className="text-slate-300">
-            Esta área é exclusiva para membros logados. Ao prosseguir você recebe o memorando completo, dados financeiros e
-            checkpoints técnicos para due diligence.
+            This area is exclusive for logged-in members. By proceeding, you&apos;ll receive the complete memorandum, financial data, and
+            technical checkpoints for due diligence.
           </p>
           <div className="flex gap-4 flex-wrap">
             <Link href="/profile" className="button primary">
-              Falar com um advisor
+              Talk to an advisor
             </Link>
             <Link href="/wizard" className="button secondary">
-              Quero listar meu ativo
+              I want to list my asset
             </Link>
           </div>
         </section>

@@ -11,7 +11,7 @@ const BlogHero = ({ title, description }: BlogHeroProps) => (
   >
     <p className="text-xs uppercase tracking-[0.4em] text-primary" aria-label="SMC Blog">SMC Blog</p>
     <h1 className="text-4xl font-bold text-foreground">{title}</h1>
-    <p className="text-muted-foreground max-w-2xl mx-auto" aria-label={`Descrição: ${description}`}>
+    <p className="text-muted-foreground max-w-2xl mx-auto" aria-label={`Description: ${description}`}>
       {description}
     </p>
   </section>

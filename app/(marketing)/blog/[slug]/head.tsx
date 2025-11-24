@@ -9,7 +9,7 @@ export default function Head({ params }: HeadProps) {
   if (!post) {
     return (
       <>
-        <title>Post não encontrado – SMC</title>
+        <title>Post not found – SMC</title>
       </>
     );
   }

@@ -36,7 +36,7 @@ export default function BlogFilters({
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         <Input
           type="text"
-          placeholder="Buscar posts..."
+          placeholder="Search posts..."
           value={searchQuery}
           onChange={(e) => onSearchChange?.(e.target.value)}
           className="pl-12 pr-4 py-6 text-base bg-background border-input"
@@ -47,7 +47,7 @@ export default function BlogFilters({
       <div className="flex flex-col sm:flex-row sm:items-center gap-4">
         <div className="flex items-center gap-2">
           <Filter className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-medium text-foreground">Categorias:</span>
+          <span className="text-sm font-medium text-foreground">Categories:</span>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button
@@ -56,7 +56,7 @@ export default function BlogFilters({
             onClick={() => onCategoryChange?.(null)}
             className="text-sm"
           >
-            Todas
+            All
           </Button>
           {categories.map((category) => (
             <Button
@@ -75,14 +75,14 @@ export default function BlogFilters({
       {/* Active Filters Display */}
       {hasActiveFilters && (
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-sm text-muted-foreground">Filtros ativos:</span>
+          <span className="text-sm text-muted-foreground">Active filters:</span>
           {searchQuery && (
             <Badge variant="secondary" className="gap-2">
-              Busca: &ldquo;{searchQuery}&rdquo;
+              Search: &ldquo;{searchQuery}&rdquo;
               <button
                 onClick={() => onSearchChange?.('')}
                 className="ml-1 hover:text-destructive"
-                aria-label="Remover filtro de busca"
+                aria-label="Remove search filter"
               >
                 <X className="h-3 w-3" />
               </button>
@@ -90,11 +90,11 @@ export default function BlogFilters({
           )}
           {selectedCategory && (
             <Badge variant="secondary" className="gap-2 capitalize">
-              Categoria: {selectedCategory}
+              Category: {selectedCategory}
               <button
                 onClick={() => onCategoryChange?.(null)}
                 className="ml-1 hover:text-destructive"
-                aria-label="Remover filtro de categoria"
+                aria-label="Remove category filter"
               >
                 <X className="h-3 w-3" />
               </button>
@@ -106,14 +106,14 @@ export default function BlogFilters({
             onClick={clearFilters}
             className="text-sm text-muted-foreground hover:text-foreground"
           >
-            Limpar todos
+            Clear all
           </Button>
         </div>
       )}
 
       {/* Results Count */}
       <div className="text-sm text-muted-foreground">
-        {totalPosts === 1 ? '1 post encontrado' : `${totalPosts} posts encontrados`}
+        {totalPosts === 1 ? '1 post found' : `${totalPosts} posts found`}
       </div>
     </div>
   );

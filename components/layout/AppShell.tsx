@@ -26,9 +26,9 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { title: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { title: 'Meus Ativos', href: '/dashboard/assets', icon: Package },
-  { title: 'Ofertas', href: '/dashboard/offers', icon: FileText },
-  { title: 'Configurações', href: '/dashboard/settings', icon: Settings }
+  { title: 'My Assets', href: '/dashboard/assets', icon: Package },
+  { title: 'Offers', href: '/dashboard/offers', icon: FileText },
+  { title: 'Settings', href: '/dashboard/settings', icon: Settings }
 ];
 
 interface AppShellProps {
@@ -108,7 +108,7 @@ export function AppShell({ children }: AppShellProps) {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-white truncate">
-                {session?.user?.name || 'Usuário'}
+                {session?.user?.name || 'User'}
               </p>
               <p className="text-xs text-indigo-200 truncate">
                 {session?.user?.email}
@@ -190,14 +190,14 @@ export function AppShell({ children }: AppShellProps) {
                   <p className="text-sm font-semibold text-white">
                     {session.user?.name?.split(' ')[0] || 'Usuário'}
                   </p>
-                  <p className="text-xs text-indigo-300 font-medium">Nível Founder</p>
+                  <p className="text-xs text-indigo-300 font-medium">Founder Level</p>
                 </div>
               </div>
             )}
             <Link href="/api/auth/signout">
               <Button variant="ghost" size="sm" className="text-slate-300 hover:text-white hover:bg-white/10 border border-indigo-500/20">
                 <LogOut className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Sair</span>
+                <span className="hidden sm:inline">Sign out</span>
               </Button>
             </Link>
           </div>

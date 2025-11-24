@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   
   if (!post) {
     return {
-      title: 'Post não encontrado',
+      title: 'Post not found',
     };
   }
 
@@ -59,7 +59,7 @@ export default function BlogPostPage({ params }: Params) {
 
   return (
     <MarketingPageLayout showHero={false}>
-      <section className="py-16 bg-background">
+      <section className="py-16 bg-white min-h-screen">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto space-y-8">
             <Breadcrumbs

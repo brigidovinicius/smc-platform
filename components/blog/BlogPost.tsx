@@ -13,7 +13,7 @@ interface BlogPostProps {
 }
 
 const BlogPost = ({ title, date, author, content, category, tags }: BlogPostProps) => (
-  <article className="max-w-3xl mx-auto">
+  <article className="max-w-3xl mx-auto bg-card rounded-lg p-8 md:p-12 shadow-sm border border-border">
     <header className="mb-10 space-y-4">
       {category && (
         <Badge variant="outline" className="text-xs">
@@ -24,7 +24,7 @@ const BlogPost = ({ title, date, author, content, category, tags }: BlogPostProp
       <div className="flex items-center gap-4 text-sm text-muted-foreground">
         {author && <span>{author}</span>}
         {author && <Separator orientation="vertical" className="h-4" />}
-        <time dateTime={date}>{new Date(date).toLocaleDateString('pt-BR', { 
+        <time dateTime={date}>{new Date(date).toLocaleDateString('en-US', { 
           year: 'numeric', 
           month: 'long', 
           day: 'numeric' 
@@ -41,7 +41,7 @@ const BlogPost = ({ title, date, author, content, category, tags }: BlogPostProp
       )}
       <Separator className="mt-6" />
     </header>
-    <div className="prose prose-invert prose-lg max-w-none dark:prose-invert">
+    <div className="blog-content max-w-none">
       <ReactMarkdown components={MDXComponents as any}>{content}</ReactMarkdown>
     </div>
   </article>

@@ -12,11 +12,11 @@ interface Params {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const author = getAuthorBySlug(params.author);
   if (!author) {
-    return { title: 'Autor não encontrado' };
+    return { title: 'Author not found' };
   }
   return {
     title: `${author.name} | Blog SMC`,
-    description: author.bio || `Posts escritos por ${author.name}`,
+    description: author.bio || `Posts written by ${author.name}`,
   };
 }
 
@@ -38,8 +38,8 @@ export default function AuthorPage({ params }: Params) {
 
   return (
     <MarketingPageLayout
-      title={`Autor: ${author.name}`}
-      description={author.bio || `Explore todos os posts escritos por ${author.name}`}
+      title={`Author: ${author.name}`}
+      description={author.bio || `Explore all posts written by ${author.name}`}
       showHero={true}
     >
       <section className="py-16 bg-background">
@@ -54,7 +54,7 @@ export default function AuthorPage({ params }: Params) {
           </div>
           <div className="mb-8">
             <p className="text-sm text-muted-foreground mb-2">
-              {posts.length} {posts.length === 1 ? 'post encontrado' : 'posts encontrados'}
+              {posts.length} {posts.length === 1 ? 'post found' : 'posts found'}
             </p>
           </div>
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">

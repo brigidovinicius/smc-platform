@@ -16,7 +16,7 @@ const spaceGrotesk = Space_Grotesk({
 
 export default function MarketingLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="pt-BR">
+    <html lang="en">
       <body
         className={`${inter.className} ${spaceGrotesk.variable} bg-[var(--color-bg)] text-[var(--color-text)] antialiased`}
       >
