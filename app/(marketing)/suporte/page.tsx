@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { MarketingPageLayout } from '../_components/MarketingPageLayout';
+import { MarketingPageLayout } from '@/app/(marketing)/_components/MarketingPageLayout';
 import { GridBackground } from '@/components/marketing';
 import { motion } from 'framer-motion';
 import { Mail, FileText, BookOpen, HelpCircle } from 'lucide-react';

@@ -1,6 +1,6 @@
 'use client';
 
-import { MarketingPageLayout } from '../_components/MarketingPageLayout';
+import { MarketingPageLayout } from '@/app/(marketing)/_components/MarketingPageLayout';
 import ValuationCalculator from '@/components/calculator/ValuationCalculator';
 
 export default function CalculatorPage() {

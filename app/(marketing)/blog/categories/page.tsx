@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { MarketingPageLayout } from '../../_components/MarketingPageLayout';
+import { MarketingPageLayout } from '@/app/(marketing)/_components/MarketingPageLayout';
 import BlogCategoryCard from '@/components/blog/BlogCategoryCard';
 import { getCategoriesWithCount } from '@/lib/blog';
 

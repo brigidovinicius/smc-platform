@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Footer } from '../_components/footer';
+import { Footer } from '@/app/(marketing)/_components/footer';
 
 const docs = [
     {

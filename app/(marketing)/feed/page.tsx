@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { MarketingPageLayout } from '../_components/MarketingPageLayout';
+import { MarketingPageLayout } from '@/app/(marketing)/_components/MarketingPageLayout';
 import { FeedContent } from './_components/FeedContent';
 import { listOffers } from '@/lib/services/offers';
 import { SITE_URL } from '@/lib/site-config';
@@ -75,7 +75,7 @@ export default async function FeedPage() {
     const offerResult = await listOffers({ pageSize: 50 });
     offers = offerResult.items.map(normalizeOffer);
   } catch (error) {
-    console.error('[feed] Failed to load offers', error);
+    // Silently handle errors - offers will be empty array
   }
 
   const schemaData = {

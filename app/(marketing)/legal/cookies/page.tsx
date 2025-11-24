@@ -1,4 +1,4 @@
-import { Footer } from '../../_components/footer';
+import { Footer } from '@/app/(marketing)/_components/footer';
 
 export default function CookiesPage() {
     return (

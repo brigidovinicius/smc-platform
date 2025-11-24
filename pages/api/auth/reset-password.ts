@@ -120,7 +120,7 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
     });
   } catch (dbError: any) {
     // Log mas não falhar se não conseguir deletar o token
-    console.warn('Erro ao deletar token usado:', dbError);
+    // Failed to delete used token (non-critical)
   }
 
   return successResponse(res, {

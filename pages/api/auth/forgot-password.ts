@@ -83,7 +83,7 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
         try {
           const emailSent = await sendPasswordResetEmail(normalizedEmail, token, user.name || undefined);
           if (emailSent) {
-            console.log(`[forgot-password] Email de reset enviado para ${normalizedEmail}`);
+            // Email sent successfully
           } else {
             console.warn(`[forgot-password] Falha ao enviar email de reset para ${normalizedEmail}`);
           }
@@ -92,7 +92,7 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
           // Não bloquear a resposta, mas logar o erro
         }
       } else {
-        console.log(`[forgot-password] SMTP não configurado. Token gerado: ${token}`);
+        // SMTP not configured, token generated
       }
     } catch (dbError: any) {
       console.error('Database create error:', dbError);
@@ -105,7 +105,7 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
     }
   } else {
     // Log para debug, mas não expor ao usuário
-    console.log(`[forgot-password] Email não encontrado ou usuário OAuth-only: ${normalizedEmail}`);
+    // Email not found or OAuth-only user
   }
 
   // Sempre retornar sucesso (não expor se email existe)

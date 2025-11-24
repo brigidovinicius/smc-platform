@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getPostBySlug, getAllPosts, getRelatedPosts } from '@/lib/blog';
-import { MarketingPageLayout } from '../../_components/MarketingPageLayout';
+import { MarketingPageLayout } from '@/app/(marketing)/_components/MarketingPageLayout';
 import BlogPost from '@/components/blog/BlogPost';
 import RelatedPosts from '@/components/blog/RelatedPosts';
 import { Breadcrumbs } from '@/components/blog/Breadcrumbs';

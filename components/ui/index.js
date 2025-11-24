@@ -1,9 +1,9 @@
 /**
- * Barrel export para componentes de UI
- * Facilita imports: import { Button, Card, Badge } from '@/components/ui'
+ * Barrel export for UI components
+ * Simplifies imports: import { Button, Card, Badge } from '@/components/ui'
  * 
- * NOTA: Componentes shadcn (button.tsx, card.tsx, badge.tsx) usam named exports
- * Componentes legados (Button.jsx, Card.jsx, Badge.jsx) usam default exports
+ * NOTE: shadcn components (button.tsx, card.tsx, badge.tsx) use named exports
+ * Legacy components use default exports
  */
 
 // shadcn/ui components (para uso direto quando necessário)

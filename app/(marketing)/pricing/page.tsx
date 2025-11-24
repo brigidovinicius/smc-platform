@@ -1,6 +1,6 @@
 'use client';
 
-import { MarketingPageLayout } from '../_components/MarketingPageLayout';
+import { MarketingPageLayout } from '@/app/(marketing)/_components/MarketingPageLayout';
 import { GridBackground } from '@/components/marketing';
 import { motion } from 'framer-motion';
 import Link from 'next/link';

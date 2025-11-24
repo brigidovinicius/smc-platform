@@ -1,7 +1,7 @@
 import { SessionProvider } from 'next-auth/react';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import Layout from '../components/Layout';
+import Layout from '@/components/Layout';
 import '../styles/globals.css';
 
 const inter = Inter({

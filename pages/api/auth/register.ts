@@ -116,7 +116,7 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
       // Enviar email de boas-vindas (email já está verificado automaticamente)
       const emailSent = await sendWelcomeEmail(email, name?.trim());
       if (emailSent) {
-        console.log(`[register] Email de boas-vindas enviado para ${email}`);
+        // Welcome email sent successfully
       } else {
         console.warn(`[register] Falha ao enviar email de boas-vindas para ${email}`);
       }
@@ -125,7 +125,7 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
       // Não bloquear cadastro se falhar ao enviar email
     }
   } else {
-    console.log(`[register] SMTP não configurado. Email ${email} marcado como verificado automaticamente.`);
+    // SMTP not configured, email marked as verified automatically
   }
 
   return successResponse(res, { 

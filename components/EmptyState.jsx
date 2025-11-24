@@ -1,4 +1,4 @@
-const EmptyState = ({ title = 'Nada por aqui', description = 'Cadastre um ativo ou atualize filtros.' }) => (
+const EmptyState = ({ title = 'Nothing here', description = 'Add an asset or update filters.' }) => (
   <div 
     className="border border-dashed border-border rounded-2xl p-6 text-center text-muted-foreground"
     role="status"
