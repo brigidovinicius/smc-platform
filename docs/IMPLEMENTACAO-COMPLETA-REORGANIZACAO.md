@@ -253,3 +253,5 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
 
 Todas as melhorias foram implementadas sem quebrar código existente. O projeto está mais organizado, padronizado e pronto para crescimento futuro.
 
+
+

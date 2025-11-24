@@ -9,48 +9,48 @@ import { Check } from 'lucide-react';
 const plans = [
   {
     name: 'Starter',
-    price: 'Grátis',
-    description: 'Para quem está começando',
+    price: 'Free',
+    description: 'For those getting started',
     features: [
-      'Acesso ao marketplace',
-      'Visualização de ofertas públicas',
-      'Calculadora de valuation',
-      'Suporte por email'
+      'Marketplace access',
+      'Public listings view',
+      'Valuation calculator',
+      'Email support'
     ],
-    cta: 'Começar grátis',
+    cta: 'Get started free',
     href: '/auth/register',
     popular: false
   },
   {
     name: 'Professional',
-    price: 'R$ 299',
-    period: '/mês',
-    description: 'Para operadores e investidores',
+    price: '$299',
+    period: '/month',
+    description: 'For operators and investors',
     features: [
-      'Tudo do Starter',
-      'Acesso a deal rooms',
-      'Due diligence completa',
-      'Base de compradores verificados',
-      'Suporte prioritário',
-      'Relatórios exportáveis'
+      'Everything in Starter',
+      'Deal room access',
+      'Complete due diligence',
+      'Verified buyer network',
+      'Priority support',
+      'Exportable reports'
     ],
-    cta: 'Assinar agora',
+    cta: 'Subscribe now',
     href: '/auth/register?plan=professional',
     popular: true
   },
   {
     name: 'Enterprise',
-    price: 'Sob consulta',
-    description: 'Para funds e agregadores',
+    price: 'Custom',
+    description: 'For funds and aggregators',
     features: [
-      'Tudo do Professional',
-      'API de integração',
-      'White-label disponível',
-      'Suporte dedicado 24/7',
-      'Customizações sob medida',
-      'SLA garantido'
+      'Everything in Professional',
+      'Integration API',
+      'White-label available',
+      'Dedicated 24/7 support',
+      'Custom solutions',
+      'Guaranteed SLA'
     ],
-    cta: 'Falar com vendas',
+    cta: 'Talk to sales',
     href: '/suporte',
     popular: false
   }
@@ -59,8 +59,8 @@ const plans = [
 export default function PricingPage() {
   return (
     <MarketingPageLayout
-      title="Planos e Preços"
-      description="Escolha o plano ideal para suas necessidades de M&A digital"
+      title="Plans & Pricing"
+      description="Choose the ideal plan for your digital M&A needs"
       showHero={true}
     >
       <section className="py-24 bg-white relative overflow-hidden">
@@ -84,7 +84,7 @@ export default function PricingPage() {
               >
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-indigo-500 text-white text-xs font-semibold">
-                    Mais Popular
+                    Most Popular
                   </div>
                 )}
                 

@@ -39,16 +39,16 @@ const ForgotPasswordPage = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">Email enviado!</h1>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">Email sent!</h1>
             <p className="text-slate-600">
-              Se existe uma conta com o email <strong className="text-slate-900">{email}</strong>, você receberá instruções para redefinir sua senha.
+              If an account exists with the email <strong className="text-slate-900">{email}</strong>, you will receive instructions to reset your password.
             </p>
           </div>
 
           <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
             <p className="text-emerald-700 text-sm flex items-center gap-2">
               <span className="text-emerald-500">✓</span>
-              Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.
+              Check your inbox and follow the instructions to reset your password.
             </p>
           </div>
 
@@ -56,7 +56,7 @@ const ForgotPasswordPage = () => {
             href="/auth/login"
             className="w-full py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all text-center block"
           >
-            Voltar para login
+            Back to login
           </Link>
         </div>
       </div>
@@ -67,8 +67,8 @@ const ForgotPasswordPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Recuperar senha</h1>
-          <p className="text-slate-600">Digite seu email para receber instruções de recuperação de senha.</p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Reset password</h1>
+          <p className="text-slate-600">Enter your email to receive password reset instructions.</p>
         </div>
 
         {error && (
@@ -83,7 +83,7 @@ const ForgotPasswordPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4 mb-6">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
-              E-mail
+              Email
             </label>
             <input
               id="email"
@@ -108,19 +108,19 @@ const ForgotPasswordPage = () => {
             {loading ? (
               <span className="flex items-center justify-center gap-2">
                 <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                Enviando...
+                Sending...
               </span>
             ) : (
-              'Enviar email de recuperação'
+              'Send reset email'
             )}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-600">
-          <Link href="/auth/login" className="text-indigo-600 hover:text-indigo-700 font-medium">
-            Voltar para login
-          </Link>
-        </p>
+          <p className="mt-6 text-center text-sm text-slate-600">
+            <Link href="/auth/login" className="text-indigo-600 hover:text-indigo-700 font-medium">
+              Back to login
+            </Link>
+          </p>
       </div>
     </div>
   );

@@ -208,3 +208,4 @@ Após configurar o banco:
 - [Documentação do Supabase](https://supabase.com/docs)
 - [Documentação do PostgreSQL](https://www.postgresql.org/docs/)
 
+

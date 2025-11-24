@@ -8,44 +8,44 @@ import { ChevronDown } from 'lucide-react';
 
 const faqItems = [
   {
-    question: 'Como funciona a avaliação automática?',
-    answer: 'Nossa metodologia utiliza múltiplos de mercado baseados em receita recorrente (MRR/ARR), churn rate, CAC, LTV, crescimento e riscos setoriais. O algoritmo cruza seus dados com transações recentes do mercado secundário para recomendar uma faixa de valuation justa.'
+    question: 'How does automated valuation work?',
+    answer: 'Our methodology uses market multiples based on recurring revenue (MRR/ARR), churn rate, CAC, LTV, growth, and sector risks. The algorithm cross-references your data with recent secondary market transactions to recommend a fair valuation range.'
   },
   {
-    question: 'É seguro conectar minhas métricas?',
-    answer: 'Sim, utilizamos criptografia de ponta a ponta e acesso apenas de leitura às suas contas Stripe, Paddle ou outras plataformas de pagamento. Você mantém controle total sobre quais dados compartilhar e com quem.'
+    question: 'Is it safe to connect my metrics?',
+    answer: 'Yes, we use end-to-end encryption and read-only access to your Stripe, Paddle, or other payment platform accounts. You maintain full control over which data to share and with whom.'
   },
   {
-    question: 'Quanto tempo leva para fechar uma venda?',
-    answer: 'A média atual é de 34 dias, desde a publicação da oferta até o closing. O tempo varia conforme o ticket, qualidade dos dados apresentados e velocidade de resposta entre as partes envolvidas.'
+    question: 'How long does it take to close a sale?',
+    answer: 'The current average is 34 days, from listing publication to closing. Time varies based on ticket size, data quality presented, and response speed between involved parties.'
   },
   {
-    question: 'Existe comissão sobre a venda?',
-    answer: 'Trabalhamos com success fee escalonado conforme o tamanho da transação. Não há custo para listar ativos; você só paga quando fecha negócio dentro da plataforma SMC.'
+    question: 'Is there a commission on the sale?',
+    answer: 'We work with a tiered success fee based on transaction size. There&apos;s no cost to list assets; you only pay when you close a deal within the SMC platform.'
   },
   {
-    question: 'Posso negociar em sigilo?',
-    answer: 'Sim. Você controla quem acessa o data-room, habilita blur automático em documentos sensíveis e pode assinar NDA digital antes de revelar informações críticas sobre receitas e operações.'
+    question: 'Can I negotiate in confidence?',
+    answer: 'Yes. You control who accesses the data room, enable automatic blur on sensitive documents, and can sign a digital NDA before revealing critical information about revenue and operations.'
   },
   {
-    question: 'Quais tipos de ativos posso listar?',
-    answer: 'Aceitamos SaaS B2B/B2C, apps mobile, marketplaces, newsletters pagas, APIs e plataformas de conteúdo digital. Expandimos os filtros constantemente conforme o mercado evolui.'
+    question: 'What types of assets can I list?',
+    answer: 'We accept B2B/B2C SaaS, mobile apps, marketplaces, paid newsletters, APIs, and digital content platforms. We constantly expand our filters as the market evolves.'
   },
   {
-    question: 'Como funciona o pagamento após o closing?',
-    answer: 'Trabalhamos com instrumentos de escrow e parceiros jurídicos para custodiar o valor até que as transferências de ativos sejam confirmadas. O processo é seguro e auditável.'
+    question: 'How does payment work after closing?',
+    answer: 'We work with escrow instruments and legal partners to custody the value until asset transfers are confirmed. The process is secure and auditable.'
   },
   {
-    question: 'O SMC fornece suporte jurídico ou contábil?',
-    answer: 'Temos parceiros especializados e templates prontos para contratos de compra e venda, reorganização societária e transferência de IP. Oferecemos orientação, mas recomendamos consulta jurídica específica para cada transação.'
+    question: 'Does SMC provide legal or accounting support?',
+    answer: 'We have specialized partners and ready-made templates for purchase and sale contracts, corporate reorganization, and IP transfer. We provide guidance, but recommend specific legal consultation for each transaction.'
   },
   {
-    question: 'Posso listar vários ativos ao mesmo tempo?',
-    answer: 'Sim. Cada ativo recebe um dossiê independente e tem indicadores próprios. Operamos com limites apenas para garantir qualidade do inventário e experiência dos compradores.'
+    question: 'Can I list multiple assets at the same time?',
+    answer: 'Yes. Each asset receives an independent dossier with its own indicators. We operate with limits only to ensure inventory quality and buyer experience.'
   },
   {
-    question: 'Como os compradores são verificados?',
-    answer: 'Aplicamos KYC, pedimos prova de fundos e histórico de operações. Só liberamos acesso completo aos dados após acordo de confidencialidade e aceite dos termos da plataforma.'
+    question: 'How are buyers verified?',
+    answer: 'We apply KYC, request proof of funds, and transaction history. We only grant full data access after a confidentiality agreement and platform terms acceptance.'
   }
 ];
 
@@ -88,8 +88,8 @@ function FAQItem({ item, index }: { item: typeof faqItems[0]; index: number }) {
 export default function FAQPage() {
   return (
     <MarketingPageLayout
-      title="Perguntas Frequentes"
-      description="Tire suas dúvidas sobre o SaaS Market Cap e como funciona nossa plataforma"
+      title="Frequently Asked Questions"
+      description="Get answers about SaaS Market Cap and how our platform works"
       showHero={true}
     >
       <section className="py-24 bg-white relative overflow-hidden">

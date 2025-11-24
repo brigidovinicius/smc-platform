@@ -200,3 +200,5 @@ http://localhost:3000/blog/authors/vinicius-brigido
 **Build:** ✅ Compilando sem erros  
 **Lint:** ✅ Sem erros de lint
 
+
+

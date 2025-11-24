@@ -313,3 +313,5 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
 
 **Use este exemplo como referência ao criar novas APIs!**
 
+
+

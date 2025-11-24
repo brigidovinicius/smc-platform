@@ -133,7 +133,7 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
               </span>
-              <span className="text-xs font-medium tracking-wide text-white/90 uppercase">Beta Público · Dados auditados</span>
+              <span className="text-xs font-medium tracking-wide text-white/90 uppercase">Public Beta · Audited Data</span>
             </motion.div>
 
             <div className="space-y-4 md:space-y-6">
@@ -143,9 +143,9 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
               >
-                O marketplace de <br className="hidden sm:block" />
+                The marketplace for <br className="hidden sm:block" />
                 <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  ativos digitais
+                  digital assets
                 </span>
               </motion.h1>
               <motion.p
@@ -154,8 +154,8 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
-                Compre e venda SaaS, newsletters e comunidades com dados verificados.
-                Valuation automático, due diligence integrada e deal-room seguro.
+                Buy and sell SaaS, newsletters, and communities with verified data.
+                Automated valuation, integrated due diligence, and secure deal room.
               </motion.p>
             </div>
 
@@ -169,19 +169,19 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
                 className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full bg-white px-6 sm:px-8 font-medium text-black transition-all hover:bg-slate-200 hover:scale-105 text-sm sm:text-base"
                 href="/feed"
               >
-                <span className="mr-2">Explorar ativos</span>
+                <span className="mr-2">Explore assets</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
                 className="inline-flex h-12 items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 sm:px-8 font-medium text-white backdrop-blur-sm transition-all hover:bg-white/10 text-sm sm:text-base"
                 href="/wizard"
               >
-                Vender meu ativo
+                List my asset
               </Link>
             </motion.div>
 
             <div className="pt-8">
-              <p className="mb-4 text-xs font-medium uppercase tracking-widest text-slate-400">Confiança de players como</p>
+              <p className="mb-4 text-xs font-medium uppercase tracking-widest text-slate-400">Trusted by players like</p>
               <Marquee items={proofLogos} speed={30} className="relative z-10" />
             </div>
           </div>
@@ -196,7 +196,7 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-slate-900">
                 <Image
                   src="/images/hero-dashboard.webp"
-                  alt="Painel de controle do SaaS Market Cap mostrando métricas de valuation, MRR e análise de ativos digitais em tempo real"
+                  alt="SaaS Market Cap dashboard showing valuation metrics, MRR, and real-time digital assets analysis"
                   fill
                   className="object-cover"
                   priority
@@ -215,8 +215,8 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
                   💰
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400">Oferta Recebida</p>
-                  <p className="font-semibold text-white">R$ 450.000</p>
+                  <p className="text-xs text-slate-400">Offer Received</p>
+                  <p className="font-semibold text-white">$450,000</p>
                 </div>
               </div>
             </motion.div>
@@ -231,9 +231,9 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
         </div>
         <div className="container relative z-10 px-4 sm:px-6">
           <div className="mb-8 md:mb-12 lg:mb-16 text-center">
-            <h2 className="mb-3 md:mb-4 text-2xl font-bold text-slate-900 sm:text-3xl md:text-4xl">Como funciona</h2>
+            <h2 className="mb-3 md:mb-4 text-2xl font-bold text-slate-900 sm:text-3xl md:text-4xl">How it works</h2>
             <p className="mx-auto max-w-2xl text-sm sm:text-base text-slate-600 px-4">
-              Do cadastro ao exit, simplificamos cada etapa da jornada de M&A para ativos digitais.
+              From signup to exit, we simplify every step of the M&A journey for digital assets.
             </p>
           </div>
 
@@ -248,9 +248,9 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
         </div>
         <div className="container relative z-10 px-4 sm:px-6">
           <div className="mb-8 md:mb-12 lg:mb-16 max-w-2xl">
-            <h2 className="mb-3 md:mb-4 text-2xl font-bold text-slate-900 sm:text-3xl md:text-4xl">Tudo o que você precisa para negociar</h2>
+            <h2 className="mb-3 md:mb-4 text-2xl font-bold text-slate-900 sm:text-3xl md:text-4xl">Everything you need to negotiate</h2>
             <p className="text-sm sm:text-base text-slate-600">
-              Ferramentas profissionais de M&A democratizadas para o mercado de micro-SaaS e ativos digitais.
+              Professional M&A tools democratized for the micro-SaaS and digital assets market.
             </p>
           </div>
 
@@ -287,7 +287,7 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
       {/* TESTIMONIALS */}
       <section id="depoimentos" className="py-12 md:py-16 lg:py-24 bg-white overflow-hidden">
         <div className="container mb-8 md:mb-12 text-center px-4 sm:px-6">
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Quem já negociou</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Who&apos;s already traded</h2>
         </div>
         <div className="relative">
           <div className="absolute left-0 top-0 z-10 h-full w-16 sm:w-32 bg-gradient-to-r from-white to-transparent" />
@@ -328,16 +328,16 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
             <div className="absolute bottom-0 right-0 h-[300px] w-[300px] sm:h-[350px] sm:w-[350px] md:h-[400px] md:w-[400px] rounded-full bg-purple-500/30 blur-[100px]" />
 
             <div className="relative z-10 max-w-3xl mx-auto space-y-6 md:space-y-8">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">Pronto para o próximo deal?</h2>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">Ready for your next deal?</h2>
               <p className="text-base sm:text-lg md:text-xl text-slate-400 px-2">
-                Junte-se a mais de 2.400 investidores e founders negociando ativos digitais com segurança.
+                Join over 2,400 investors and founders trading digital assets securely.
               </p>
               <div className="flex flex-col items-center justify-center gap-3 sm:gap-4 sm:flex-row">
                 <Link className="inline-flex h-12 sm:h-14 items-center justify-center rounded-full bg-white px-6 sm:px-8 text-base sm:text-lg font-medium text-slate-900 transition-all hover:bg-slate-100 hover:scale-105 w-full sm:w-auto" href="/feed">
-                  Ver oportunidades
+                  View opportunities
                 </Link>
                 <Link className="inline-flex h-12 sm:h-14 items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 sm:px-8 text-base sm:text-lg font-medium text-white backdrop-blur-sm transition-all hover:bg-white/10 w-full sm:w-auto" href="/wizard">
-                  Vender ativo
+                  List asset
                 </Link>
               </div>
             </div>
@@ -372,8 +372,8 @@ function FloatingCTA() {
         href="/wizard"
         className="flex items-center gap-2 sm:gap-3 rounded-full bg-indigo-600 px-4 sm:px-6 py-2.5 sm:py-3 text-white shadow-lg shadow-indigo-500/30 transition-transform hover:scale-105 hover:bg-indigo-700 text-sm sm:text-base"
       >
-        <span className="font-medium hidden sm:inline">Vender meu ativo</span>
-        <span className="font-medium sm:hidden">Vender</span>
+        <span className="font-medium hidden sm:inline">List my asset</span>
+        <span className="font-medium sm:hidden">List</span>
         <span className="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-white/20 flex-shrink-0">→</span>
       </Link>
     </motion.div>
@@ -390,7 +390,7 @@ function StickyNavbar() {
     return () => window.removeEventListener('scroll', handler);
   }, []);
 
-  const navItems = ['Como funciona', 'Recursos', 'Depoimentos'];
+  const navItems = ['How it works', 'Features', 'Testimonials'];
 
   return (
     <header
@@ -423,7 +423,7 @@ function StickyNavbar() {
             className={`text-sm font-medium ${scrolled ? 'text-slate-900' : 'text-white'
               }`}
           >
-            Entrar
+            Sign in
           </Link>
           <Link
             href="/auth/register?callbackUrl=/feed"
@@ -432,7 +432,7 @@ function StickyNavbar() {
               : 'bg-white text-slate-900 hover:bg-slate-100'
               }`}
           >
-            Começar
+            Get started
           </Link>
         </div>
 
@@ -479,14 +479,14 @@ function StickyNavbar() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="block text-sm font-medium text-slate-900 py-2"
                 >
-                  Entrar
+                  Sign in
                 </Link>
                 <Link
                   href="/auth/register?callbackUrl=/feed"
                   onClick={() => setMobileMenuOpen(false)}
                   className="block w-full text-center rounded-full bg-slate-900 text-white px-5 py-2 text-sm font-medium transition-all hover:bg-slate-800"
                 >
-                  Começar
+                  Get started
                 </Link>
               </div>
             </nav>

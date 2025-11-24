@@ -9,42 +9,42 @@ import { ArrowRight, BookOpen, ShoppingBag, Calculator, HelpCircle, Upload, Head
 const resources = [
   {
     title: 'Blog',
-    description: 'Artigos editoriais sobre valuation, aquisição de SaaS e operações de M&A digital.',
+    description: 'Editorial articles about valuation, SaaS acquisition, and digital M&A operations.',
     href: '/blog',
     icon: BookOpen,
     color: 'from-blue-500 to-cyan-500'
   },
   {
     title: 'Marketplace',
-    description: 'Prévia das oportunidades públicas com filtros por ticket, nicho e múltiplo.',
+    description: 'Preview of public opportunities with filters by ticket size, niche, and multiple.',
     href: '/marketplace',
     icon: ShoppingBag,
     color: 'from-purple-500 to-pink-500'
   },
   {
-    title: 'Calculadora de Valuation',
-    description: 'Projete o valor do seu SaaS rapidamente com parâmetros de MRR e crescimento.',
+    title: 'Valuation Calculator',
+    description: 'Quickly project your SaaS value with MRR and growth parameters.',
     href: '/calculator',
     icon: Calculator,
     color: 'from-indigo-500 to-purple-500'
   },
   {
     title: 'FAQ',
-    description: 'Perguntas frequentes sobre como comprar, vender e avaliar ativos digitais.',
+    description: 'Frequently asked questions about buying, selling, and evaluating digital assets.',
     href: '/faq',
     icon: HelpCircle,
     color: 'from-green-500 to-emerald-500'
   },
   {
-    title: 'Vender ativo',
-    description: 'Cadastre seu SaaS, marketplace ou newsletter para captação de compradores qualificados.',
+    title: 'List asset',
+    description: 'Register your SaaS, marketplace, or newsletter to attract qualified buyers.',
     href: '/wizard',
     icon: Upload,
     color: 'from-orange-500 to-red-500'
   },
   {
-    title: 'Suporte',
-    description: 'Fale com o time SMC sobre due diligence, onboarding e questões da plataforma.',
+    title: 'Support',
+    description: 'Talk to the SMC team about due diligence, onboarding, and platform questions.',
     href: '/suporte',
     icon: Headphones,
     color: 'from-slate-500 to-slate-700'

@@ -26,11 +26,11 @@ const RegisterPage = () => {
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     
     if (!emailRegex.test(value.trim().toLowerCase())) {
-      setEmailError('Formato de e-mail inválido');
+      setEmailError('Invalid email format');
       return;
     }
 
-    // Verificar domínios temporários comuns
+    // Check common temporary domains
     const domain = value.split('@')[1]?.toLowerCase();
     const disposableDomains = [
       '10minutemail.com', 'guerrillamail.com', 'mailinator.com',
@@ -39,7 +39,7 @@ const RegisterPage = () => {
     ];
     
     if (domain && disposableDomains.some(d => domain.includes(d))) {
-      setEmailError('E-mails temporários não são permitidos. Use um e-mail pessoal ou corporativo.');
+      setEmailError('Temporary emails are not allowed. Use a personal or corporate email.');
     }
   };
 
@@ -51,9 +51,9 @@ const RegisterPage = () => {
     }
     
     if (value.length < 8) {
-      setPasswordError('A senha deve ter pelo menos 8 caracteres');
+      setPasswordError('Password must be at least 8 characters');
     } else if (value.length > 128) {
-      setPasswordError('A senha deve ter no máximo 128 caracteres');
+      setPasswordError('Password must be at most 128 characters');
     }
   };
 
@@ -64,9 +64,9 @@ const RegisterPage = () => {
     setEmailError(null);
     setPasswordError(null);
     
-    // Validação final antes de enviar
+    // Final validation before submitting
     if (emailError || passwordError) {
-      setError('Por favor, corrija os erros no formulário');
+      setError('Please fix the errors in the form');
       return;
     }
 
@@ -81,27 +81,27 @@ const RegisterPage = () => {
 
       if (!response.ok) {
         const data = await response.json();
-        // Traduzir mensagens de erro do servidor
+        // Translate server error messages
         const errorMessages: Record<string, string> = {
-          'DATABASE_CONNECTION_ERROR': 'Serviço temporariamente indisponível. Por favor, verifique a configuração do banco de dados.',
-          'DATABASE_ERROR': 'Erro ao conectar com o banco de dados. Verifique a configuração.',
-          'EMAIL_EXISTS': 'E-mail já cadastrado. Tente fazer login ou use outro e-mail.',
-          'VALIDATION_ERROR': data.error || 'Dados inválidos. Verifique os campos e tente novamente.'
+          'DATABASE_CONNECTION_ERROR': 'Service temporarily unavailable. Please check database configuration.',
+          'DATABASE_ERROR': 'Error connecting to database. Check configuration.',
+          'EMAIL_EXISTS': 'Email already registered. Try signing in or use another email.',
+          'VALIDATION_ERROR': data.error || 'Invalid data. Check the fields and try again.'
         };
-        setError(errorMessages[data.code] || data.error || 'Erro ao criar conta. Tente novamente.');
+        setError(errorMessages[data.code] || data.error || 'Error creating account. Please try again.');
         return;
       }
 
       const data = await response.json();
-      // Mensagem de sucesso baseada se email foi verificado automaticamente
+      // Success message based on whether email was automatically verified
       if (data.data?.emailVerified) {
-        setSuccess('Conta criada com sucesso! Redirecionando para login...');
-        // Redirecionar para login após 2 segundos se email já estiver verificado
+        setSuccess('Account created successfully! Redirecting to login...');
+        // Redirect to login after 2 seconds if email is already verified
         setTimeout(() => {
           router.push('/auth/login?registered=1');
         }, 2000);
       } else {
-        setSuccess('Conta criada com sucesso! Verifique seu e-mail para ativar a conta.');
+        setSuccess('Account created successfully! Check your email to activate your account.');
         setName('');
         setEmail('');
         setPassword('');
@@ -109,7 +109,7 @@ const RegisterPage = () => {
         setPasswordError(null);
       }
     } catch (err) {
-      setError('Erro ao criar conta. Tente novamente.');
+      setError('Error creating account. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -125,8 +125,8 @@ const RegisterPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Criar conta</h1>
-          <p className="text-slate-600">Comece sua jornada na SMC Platform</p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Create account</h1>
+          <p className="text-slate-600">Start your journey on SMC Platform</p>
         </div>
 
         {error && (
@@ -150,7 +150,7 @@ const RegisterPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4 mb-6">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
-              Nome <span className="text-slate-400 font-normal">(opcional)</span>
+              Name <span className="text-slate-400 font-normal">(optional)</span>
             </label>
             <input
               id="name"
@@ -158,13 +158,13 @@ const RegisterPage = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full px-4 py-3 rounded-lg border-2 border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
-              placeholder="Seu nome"
+              placeholder="Your name"
             />
           </div>
 
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
-              E-mail
+              Email
             </label>
             <input
               id="email"
@@ -192,14 +192,14 @@ const RegisterPage = () => {
             {!emailError && email && (
               <p className="mt-1 text-xs text-emerald-600 flex items-center gap-1">
                 <span>✓</span>
-                E-mail válido
+                Valid email
               </p>
             )}
           </div>
 
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
-              Senha
+              Password
             </label>
             <input
               id="password"
@@ -224,12 +224,12 @@ const RegisterPage = () => {
                 {passwordError}
               </p>
             ) : (
-              <p className="mt-1 text-xs text-slate-500">Mínimo de 8 caracteres</p>
+              <p className="mt-1 text-xs text-slate-500">Minimum 8 characters</p>
             )}
             {!passwordError && password && password.length >= 8 && (
               <p className="mt-1 text-xs text-emerald-600 flex items-center gap-1">
                 <span>✓</span>
-                Senha válida
+                Valid password
               </p>
             )}
           </div>
@@ -246,10 +246,10 @@ const RegisterPage = () => {
             {isLoading ? (
               <span className="flex items-center justify-center gap-2">
                 <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                Criando conta...
+                Creating account...
               </span>
             ) : (
-              'Criar conta'
+              'Create account'
             )}
           </button>
         </form>
@@ -259,7 +259,7 @@ const RegisterPage = () => {
             <div className="w-full border-t border-slate-300"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-slate-500">ou</span>
+            <span className="px-2 bg-white text-slate-500">or</span>
           </div>
         </div>
 
@@ -275,7 +275,7 @@ const RegisterPage = () => {
           {isGoogleLoading ? (
             <span className="flex items-center justify-center gap-2">
               <span className="w-4 h-4 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></span>
-              Conectando...
+              Connecting...
             </span>
           ) : (
             <span className="flex items-center justify-center gap-2">
@@ -297,15 +297,15 @@ const RegisterPage = () => {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              Criar conta com Google
+              Sign up with Google
             </span>
           )}
         </button>
 
         <p className="mt-6 text-center text-sm text-slate-600">
-          Já tem conta?{' '}
+          Already have an account?{' '}
           <Link href="/auth/login" className="text-indigo-600 hover:text-indigo-700 font-medium">
-            Entrar
+            Sign in
           </Link>
         </p>
       </div>

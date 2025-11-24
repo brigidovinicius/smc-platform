@@ -294,3 +294,5 @@ Todos os componentes foram criados, testados e documentados. O projeto agora tem
 **Build status:** ✅ Passando  
 **Lint status:** ✅ Zero erros
 
+
+

@@ -1,14 +1,23 @@
-# SMC Frontend – Agent Guidelines
+# SMC Platform – Agent Guidelines (Frontend + Backend)
 
 ## Project Overview
-SaaS Market Cap (SMC) is a Next.js 14 (pages router) app focused on autenticação via NextAuth (Google), um dashboard privado e um blog público. A base atual usa JavaScript, Tailwind CSS (via `@tailwindcss/postcss`), e alias `@/` apontando para a raiz. As pastas mais relevantes:
+SaaS Market Cap (SMC) is a **Next.js 14 full-stack** application (App Router + Pages Router) focused on autenticação via NextAuth (Google), um dashboard privado e um blog público. A base atual usa JavaScript/TypeScript, Tailwind CSS (via `@tailwindcss/postcss`), e alias `@/` apontando para a raiz.
+
+### Estrutura Principal
 
 ```
-components/      # Layout, Navbar e demais shells reutilizáveis
-lib/             # utilitários client-side (ex.: blogPosts)
-pages/           # rotas do Next (auth, dashboard, blog, wizard, etc.)
-styles/          # Tailwind + tokens globais
-docs/            # documentação adicional
+app/              # App Router (marketing, blog) - TypeScript
+pages/            # Pages Router (auth, dashboard, APIs) - JavaScript/TypeScript
+  ├── api/        # API Routes (backend)
+  └── auth/       # Páginas de autenticação
+components/       # Componentes reutilizáveis (UI, layout, marketing)
+lib/              # Utilitários compartilhados (client + server)
+  ├── api/        # Helpers de API (validators, handlers)
+  ├── email.ts    # Serviço de email (SMTP)
+  └── prisma.ts   # Cliente Prisma (banco de dados)
+prisma/           # Schema e migrations do banco de dados
+docs/             # Documentação técnica completa
+scripts/          # Scripts de automação (geração de posts, etc.)
 ```
 
 Privacidade das rotas é controlada por `middleware.js` (protege apenas `/dashboard/**`). O blog (`/blog` e `/blog/[slug]`) precisa permanecer público.
@@ -87,10 +96,71 @@ Este projeto possui documentação técnica completa disponível em:
 - Convenções de nomenclatura
 - **Versões exatas das tecnologias (TECHNOLOGY-STACK.md)**
 
+## Backend / API Routes
+
+### Estrutura de APIs
+Todas as APIs estão em `pages/api/` seguindo o padrão Next.js Pages Router:
+
+```
+pages/api/
+├── auth/
+│   ├── [...nextauth].ts      # NextAuth handler (Google OAuth + Credentials)
+│   ├── register.ts            # Registro de usuário
+│   ├── forgot-password.ts     # Recuperação de senha
+│   ├── reset-password.ts      # Reset de senha
+│   └── verify.ts              # Verificação de email
+└── favorites/
+    ├── index.ts               # Listar favoritos
+    └── [offerId].ts           # Adicionar/remover favorito
+```
+
+### Padrões de API
+
+1. **Validação:** Use `lib/api/validators.ts` para validar inputs
+2. **Error Handling:** Use `lib/api/helpers.ts` (apiHandler, errorResponse, successResponse)
+3. **Autenticação:** Use `requireAuth` de `lib/api/helpers.ts` para rotas protegidas
+4. **Respostas:** Sempre retorne `ApiResponse<T>` padronizado
+
+### Exemplo de API Route
+
+```typescript
+import { apiHandler, requireAuth, successResponse, errorResponse } from '@/lib/api';
+import { validateRegisterBody } from '@/lib/api/validators';
+
+export default apiHandler(async (req, res) => {
+  const session = await requireAuth(req, res);
+  if (!session) return; // Já retornou erro 401
+
+  const validation = validateRegisterBody(req.body);
+  if (!validation.valid) {
+    return errorResponse(res, validation.error, 400, 'VALIDATION_ERROR');
+  }
+
+  // Lógica aqui...
+
+  return successResponse(res, { data: result }, 200);
+});
+```
+
+### Banco de Dados
+
+- **ORM:** Prisma (`lib/prisma.ts`)
+- **Schema:** `prisma/schema.prisma`
+- **Migrations:** `prisma/migrations/`
+- **Sempre use:** `import prisma from '@/lib/prisma'` (singleton pattern)
+
+### Email Service
+
+- **Arquivo:** `lib/email.ts`
+- **Funções:** `sendWelcomeEmail()`, `sendPasswordResetEmail()`, `sendVerificationEmail()`
+- **Configuração:** Variáveis SMTP_* no `.env.local`
+
 ## Referências Rápidas
 
 - **Arquitetura:** Ver `docs/TECHNICAL-DOCUMENTATION.md` seção 2
+- **APIs e Rotas:** Ver `docs/TECHNICAL-DOCUMENTATION.md` seção 9
 - **Componentes:** Ver `docs/TECHNICAL-DOCUMENTATION.md` seção 5
 - **Autenticação:** Ver `docs/TECHNICAL-DOCUMENTATION.md` seção 7
 - **Banco de Dados:** Ver `docs/TECHNICAL-DOCUMENTATION.md` seção 8
 - **Design System:** Ver `docs/TECHNICAL-DOCUMENTATION.md` seção 10
+- **Frontend/Backend:** Ver `docs/ARQUITETURA-FRONTEND-BACKEND.md`

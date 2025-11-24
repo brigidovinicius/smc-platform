@@ -58,3 +58,5 @@ Tipos de mudanças:
 - `📚 Documentação` - Mudanças na documentação
 - `🔧 Técnico` - Mudanças técnicas/infraestrutura
 
+
+

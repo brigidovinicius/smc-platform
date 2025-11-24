@@ -9,8 +9,8 @@ import { Mail, FileText, BookOpen, HelpCircle } from 'lucide-react';
 export default function SupportPage() {
   return (
     <MarketingPageLayout
-      title="Suporte"
-      description="Estamos aqui para ajudar você em cada etapa do processo de M&A digital"
+      title="Support"
+      description="We&apos;re here to help you at every step of the digital M&A process"
       showHero={true}
     >
       <section className="py-24 bg-white relative overflow-hidden">
@@ -27,8 +27,8 @@ export default function SupportPage() {
               <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-500 text-white mb-4">
                 <Mail size={24} />
               </div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-2">Canais oficiais</h2>
-              <p className="text-slate-600 mb-6">Entraremos em contato em até 1 dia útil.</p>
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">Official channels</h2>
+              <p className="text-slate-600 mb-6">We&apos;ll get back to you within 1 business day.</p>
               <ul className="space-y-3">
                 <li>
                   <a
@@ -60,8 +60,8 @@ export default function SupportPage() {
               <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500 text-white mb-4">
                 <BookOpen size={24} />
               </div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-2">Autoatendimento</h2>
-              <p className="text-slate-600 mb-6">Documentação e respostas rápidas.</p>
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">Self-service</h2>
+              <p className="text-slate-600 mb-6">Documentation and quick answers.</p>
               <ul className="space-y-3">
                 <li>
                   <Link
@@ -78,7 +78,7 @@ export default function SupportPage() {
                     className="text-indigo-600 font-medium hover:text-indigo-700 transition-colors flex items-center gap-2"
                   >
                     <FileText size={16} />
-                    Central legal
+                    Legal center
                   </Link>
                 </li>
                 <li>
@@ -87,7 +87,7 @@ export default function SupportPage() {
                     className="text-indigo-600 font-medium hover:text-indigo-700 transition-colors flex items-center gap-2"
                   >
                     <BookOpen size={16} />
-                    Recursos
+                    Resources
                   </Link>
                 </li>
               </ul>

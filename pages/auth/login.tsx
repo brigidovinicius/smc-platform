@@ -15,13 +15,13 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (router.query.verified === '1') {
-      setVerifiedMessage('E-mail verificado com sucesso. Faça login para continuar.');
+      setVerifiedMessage('Email verified successfully. Sign in to continue.');
     }
     if (router.query.registered === '1') {
-      setVerifiedMessage('Conta criada com sucesso! Faça login para continuar.');
+      setVerifiedMessage('Account created successfully! Sign in to continue.');
     }
     if (router.query.passwordReset === '1') {
-      setVerifiedMessage('Senha redefinida com sucesso! Faça login com sua nova senha.');
+      setVerifiedMessage('Password reset successfully! Sign in with your new password.');
     }
   }, [router.query]);
 
@@ -38,23 +38,23 @@ const LoginPage = () => {
       });
 
       if (result?.error) {
-        // Traduzir mensagens de erro para português
+        // Translate error messages to English
         const errorMessages: Record<string, string> = {
-          'CredentialsSignin': 'E-mail ou senha incorretos',
-          'E-mail não verificado': 'E-mail não verificado. Verifique sua caixa de entrada.',
-          'Usuário não encontrado': 'E-mail ou senha incorretos',
-          'Senha incorreta': 'E-mail ou senha incorretos',
-          'Credenciais inválidas': 'Por favor, preencha todos os campos',
-          'Serviço temporariamente indisponível': 'Serviço temporariamente indisponível. Por favor, tente novamente em alguns instantes.',
-          'Erro ao acessar o banco de dados': 'Erro ao acessar o banco de dados. Verifique a configuração do servidor.'
+          'CredentialsSignin': 'Incorrect email or password',
+          'E-mail não verificado': 'Email not verified. Check your inbox.',
+          'Usuário não encontrado': 'Incorrect email or password',
+          'Senha incorreta': 'Incorrect email or password',
+          'Credenciais inválidas': 'Please fill in all fields',
+          'Serviço temporariamente indisponível': 'Service temporarily unavailable. Please try again in a few moments.',
+          'Erro ao acessar o banco de dados': 'Error accessing database. Check server configuration.'
         };
-        setError(errorMessages[result.error] || result.error || 'Erro ao fazer login. Tente novamente.');
+        setError(errorMessages[result.error] || result.error || 'Error signing in. Please try again.');
       } else if (result?.ok) {
         const callbackUrl = router.query.callbackUrl as string || '/dashboard';
         router.push(callbackUrl);
       }
     } catch (err) {
-      setError('Erro ao fazer login. Tente novamente.');
+      setError('Error signing in. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -70,8 +70,8 @@ const LoginPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Entrar</h1>
-          <p className="text-slate-600">Acesse sua conta para continuar</p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Sign in</h1>
+          <p className="text-slate-600">Access your account to continue</p>
         </div>
 
         {verifiedMessage && (
@@ -95,7 +95,7 @@ const LoginPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4 mb-6">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
-              E-mail
+              Email
             </label>
             <input
               id="email"
@@ -110,7 +110,7 @@ const LoginPage = () => {
 
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
-              Senha
+              Password
             </label>
             <input
               id="password"
@@ -135,10 +135,10 @@ const LoginPage = () => {
             {isLoading ? (
               <span className="flex items-center justify-center gap-2">
                 <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                Entrando...
+                Signing in...
               </span>
             ) : (
-              'Entrar'
+              'Sign in'
             )}
           </button>
         </form>
@@ -148,7 +148,7 @@ const LoginPage = () => {
             <div className="w-full border-t border-slate-300"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-slate-500">ou</span>
+            <span className="px-2 bg-white text-slate-500">or</span>
           </div>
         </div>
 
@@ -164,7 +164,7 @@ const LoginPage = () => {
           {isGoogleLoading ? (
             <span className="flex items-center justify-center gap-2">
               <span className="w-4 h-4 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></span>
-              Conectando...
+              Connecting...
             </span>
           ) : (
             <span className="flex items-center justify-center gap-2">
@@ -186,16 +186,16 @@ const LoginPage = () => {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              Entrar com Google
+              Sign in with Google
             </span>
           )}
         </button>
 
         <div className="mt-6 text-center space-y-2">
           <p className="text-sm text-slate-600">
-            Não tem conta?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/auth/register" className="text-indigo-600 hover:text-indigo-700 font-medium">
-              Cadastre-se
+              Sign up
             </Link>
           </p>
           <p>
@@ -203,7 +203,7 @@ const LoginPage = () => {
               href="/auth/forgot-password"
               className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
             >
-              Esqueci minha senha
+              Forgot password
             </Link>
           </p>
         </div>

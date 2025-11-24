@@ -185,3 +185,5 @@ Se necessário:
 
 Todas as melhorias foram implementadas sem quebrar código existente. A estrutura está mais organizada e pronta para crescimento futuro.
 
+
+

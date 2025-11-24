@@ -17,7 +17,7 @@ export function StructuredData({ faq }: { faq?: Array<{ question: string; answer
         contactPoint: {
             '@type': 'ContactPoint',
             contactType: 'Customer Service',
-            availableLanguage: ['Portuguese', 'English']
+            availableLanguage: ['English']
         }
     };
 
@@ -37,7 +37,7 @@ export function StructuredData({ faq }: { faq?: Array<{ question: string; answer
     const serviceSchema = {
         '@context': 'https://schema.org',
         '@type': 'Service',
-        name: 'SaaS Market Cap - Marketplace de Ativos Digitais',
+        name: 'SaaS Market Cap - Digital Assets Marketplace',
         provider: {
             '@type': 'Organization',
             name: SITE_CONFIG.name
@@ -46,37 +46,37 @@ export function StructuredData({ faq }: { faq?: Array<{ question: string; answer
         description: SITE_CONFIG.description,
         areaServed: {
             '@type': 'Country',
-            name: 'Brazil'
+            name: 'Global'
         },
         hasOfferCatalog: {
             '@type': 'OfferCatalog',
-            name: 'Ativos Digitais',
+            name: 'Digital Assets',
             itemListElement: [
                 {
                     '@type': 'Offer',
                     itemOffered: {
                         '@type': 'Service',
-                        name: 'Valuation Automático',
+                        name: 'Automated Valuation',
                         description:
-                            'Modelo proprietário que cruza MRR, churn, CAC, LTV e crescimento para recomendar múltiplos de valuation.'
+                            'Proprietary model that cross-references MRR, churn, CAC, LTV, and growth to recommend valuation multiples.'
                     }
                 },
                 {
                     '@type': 'Offer',
                     itemOffered: {
                         '@type': 'Service',
-                        name: 'Due Diligence com IA',
+                        name: 'AI-Powered Due Diligence',
                         description:
-                            'Checklist inteligente que sinaliza anomalias em receitas, cohort e dependências com histórico completo de métricas.'
+                            'Intelligent checklist that flags anomalies in revenue, cohorts, and dependencies with complete metrics history.'
                     }
                 },
                 {
                     '@type': 'Offer',
                     itemOffered: {
                         '@type': 'Service',
-                        name: 'Deal-Room Seguro',
+                        name: 'Secure Deal Room',
                         description:
-                            'Uploads criptografados, blur automático e logs de acesso para compartilhar dados sensíveis com segurança.'
+                            'Encrypted uploads, automatic blur, and access logs to share sensitive data securely.'
                     }
                 }
             ]

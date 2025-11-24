@@ -11,25 +11,25 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
-  title: 'SMC – Avalie, compre e venda ativos digitais com dados reais',
+  title: 'SMC – Evaluate, Buy and Sell Digital Assets with Real Data',
   description:
-    'O SaaS Market Cap combina valuation automático, due diligence assistida por IA e compradores verificados para founders, investidores e flippers.',
+    'SaaS Market Cap combines automated valuation, AI-assisted due diligence, and verified buyers for founders, investors, and flippers.',
   keywords: [
     'SaaS marketplace',
-    'comprar SaaS',
-    'vender SaaS',
-    'valuation automático',
-    'due diligence IA',
-    'M&A ativos digitais',
-    'marketplace ativos digitais',
-    'investir em SaaS',
-    'múltiplos ARR',
+    'buy SaaS',
+    'sell SaaS',
+    'automated valuation',
+    'AI due diligence',
+    'digital assets M&A',
+    'digital assets marketplace',
+    'invest in SaaS',
+    'ARR multiples',
     'MRR',
     'micro-SaaS',
-    'newsletters pagas',
-    'apps digitais',
+    'paid newsletters',
+    'digital apps',
     'deal room',
-    'compradores verificados'
+    'verified buyers'
   ],
   authors: [{ name: 'SaaS Market Cap' }],
   creator: 'SaaS Market Cap',
@@ -50,61 +50,61 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    locale: 'pt_BR',
+    locale: 'en_US',
     url: SITE_CONFIG.url,
     siteName: 'SaaS Market Cap',
-    title: 'SMC – Marketplace de Ativos Digitais com Valuation Automático',
+    title: 'SMC – Digital Assets Marketplace with Automated Valuation',
     description:
-      'Compre e venda SaaS, newsletters e apps com dados verificados. Valuation automático, due diligence com IA e compradores qualificados. Mais de 2.400 investidores ativos.',
+      'Buy and sell SaaS, newsletters, and apps with verified data. Automated valuation, AI-powered due diligence, and qualified buyers. Over 2,400 active investors.',
     images: [
       {
         url: '/images/hero-dashboard.webp',
         width: 1024,
         height: 1024,
-        alt: 'Painel de controle do SaaS Market Cap mostrando métricas de valuation e análise de ativos digitais'
+        alt: 'SaaS Market Cap dashboard showing valuation metrics and digital assets analysis'
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SMC – Marketplace de Ativos Digitais',
+    title: 'SMC – Digital Assets Marketplace',
     description:
-      'Valuation automático, due diligence com IA e compradores verificados para negociar SaaS e ativos digitais.',
+      'Automated valuation, AI-powered due diligence, and verified buyers to trade SaaS and digital assets.',
     images: ['/images/hero-dashboard.webp'],
     creator: '@saasmarketcap'
   },
   verification: {
-    // TODO: Adicione seu código real do Google Search Console aqui
-    // Obtenha em: https://search.google.com/search-console
+    // TODO: Add your real Google Search Console code here
+    // Get it at: https://search.google.com/search-console
     google: 'ADICIONE_SEU_CODIGO_AQUI'
   }
 };
 
 const heroStats = [
   {
-    label: 'Ativos avaliados',
+    label: 'Assets evaluated',
     value: 326,
     suffix: '+',
-    description: 'MRR auditado nas últimas 12 semanas.'
+    description: 'MRR audited in the last 12 weeks.'
   },
   {
-    label: 'Volume listado',
+    label: 'Listed volume',
     value: 180,
-    prefix: 'R$ ',
-    suffix: ' mi',
-    description: 'Inventário disponível no marketplace.'
+    prefix: '$',
+    suffix: 'M',
+    description: 'Inventory available on the marketplace.'
   },
   {
-    label: 'Compradores verificados',
+    label: 'Verified buyers',
     value: 2400,
     suffix: '+',
-    description: 'Investidores, flippers e funds.'
+    description: 'Investors, flippers, and funds.'
   },
   {
-    label: 'Tempo médio de venda',
+    label: 'Average time to sale',
     value: 34,
-    suffix: ' dias',
-    description: 'Do publish ao closing.'
+    suffix: ' days',
+    description: 'From publish to closing.'
   }
 ];
 
@@ -112,100 +112,100 @@ const proofLogos = ['Atlas Capital', 'LatAm Operators', 'Orbit Ventures', 'Angel
 
 const howItWorks = [
   {
-    title: 'Envie seu ativo',
+    title: 'List your asset',
     description:
-      'Pitch guiado e intuitivo que organiza suas métricas em minutos. Interface simples que padroniza MRR, churn, CAC e stack sem planilhas complexas.',
+      'Guided, intuitive pitch that organizes your metrics in minutes. Simple interface that standardizes MRR, churn, CAC, and tech stack without complex spreadsheets.',
     highlight: '1 • Intake',
     icon: 'Upload'
   },
   {
-    title: 'Receba valuation automático',
+    title: 'Get automated valuation',
     description:
-      'Motor inteligente analisa seus dados e gera dossiê profissional pronto para apresentar. Valuation baseado em comparáveis reais do mercado.',
+      'Intelligent engine analyzes your data and generates a professional dossier ready to present. Valuation based on real market comparables.',
     highlight: '2 • Valuation',
     icon: 'Calculator'
   },
   {
-    title: 'Negocie com compradores qualificados',
+    title: 'Negotiate with qualified buyers',
     description:
-      'Processo facilitado com compradores verificados, NDA digital e trilha de negociação transparente. Do primeiro contato ao closing.',
-    highlight: '3 • Negociação',
+      'Streamlined process with verified buyers, digital NDA, and transparent negotiation trail. From first contact to closing.',
+    highlight: '3 • Negotiation',
     icon: 'Handshake'
   }
 ];
 
 const features = [
   {
-    title: 'Valuation Automático',
+    title: 'Automated Valuation',
     description:
-      'Modelo proprietário cruza MRR, churn, CAC, LTV, crescimento e riscos setoriais para recomendar múltiplos.',
+      'Proprietary model cross-references MRR, churn, CAC, LTV, growth, and sector risks to recommend multiples.',
     icon: 'ChartLine'
   },
   {
-    title: 'Due Diligence com IA',
+    title: 'AI-Powered Due Diligence',
     description:
-      'Checklist inteligente sinaliza anomalias em receitas, cohort, dependências e expõe todo o histórico de métricas.',
+      'Intelligent checklist flags anomalies in revenue, cohorts, dependencies, and exposes the complete metrics history.',
     icon: 'Brain'
   },
   {
-    title: 'Deal-Room Seguro',
+    title: 'Secure Deal Room',
     description:
-      'Uploads criptografados, blur automático e logs de acesso para compartilhar dados sensíveis só com quem avançar.',
+      'Encrypted uploads, automatic blur, and access logs to share sensitive data only with those who advance.',
     icon: 'Shield'
   },
   {
-    title: 'Base de Compradores',
+    title: 'Buyer Network',
     description:
-      'Funds, agregadores e flippers pré-verificados com acordo operacional e SLA para envio de propostas.',
+      'Pre-verified funds, aggregators, and flippers with operational agreements and SLAs for proposal submissions.',
     icon: 'Users'
   },
   {
-    title: 'Relatórios Exportáveis',
+    title: 'Exportable Reports',
     description:
-      'Gere PDF, planilhas e modelos de data-room em um clique para mostrar tração e uso de caixa com clareza.',
+      'Generate PDFs, spreadsheets, and data-room templates in one click to showcase traction and cash usage clearly.',
     icon: 'FileText'
   },
   {
-    title: 'Insights Operacionais',
+    title: 'Operational Insights',
     description:
-      'Alertas sobre churn, retenção, payback e health score para orientar founders antes de abrir rodada ou venda.',
+      'Alerts on churn, retention, payback, and health score to guide founders before opening a round or sale.',
     icon: 'Zap'
   }
 ];
 
 const useCases = [
   {
-    title: 'Fundadores de SaaS e apps',
-    description: 'Estruture os dados críticos, valide valuation e escolha quando abrir negociação com a base SMC.',
+    title: 'SaaS and app founders',
+    description: 'Structure critical data, validate valuation, and choose when to open negotiations with the SMC network.',
     highlight: 'Founders'
   },
   {
-    title: 'Investidores e compradores',
-    description: 'Acesso fácil às métricas principais (MRR, churn, CAC, LTV) padronizadas e auditáveis. Pipeline qualificado para decisões rápidas e informadas.',
-    highlight: 'Investidores'
+    title: 'Investors and buyers',
+    description: 'Easy access to standardized, auditable key metrics (MRR, churn, CAC, LTV). Qualified pipeline for fast, informed decisions.',
+    highlight: 'Investors'
   },
   {
-    title: 'Flippers e operadores',
-    description: 'Identifique deals subprecificados, acompanhe health score e planeje turnaround com dados completos.',
+    title: 'Flippers and operators',
+    description: 'Identify underpriced deals, track health scores, and plan turnarounds with complete data.',
     highlight: 'Flippers'
   }
 ];
 
 const testimonials = [
   {
-    quote: 'Vimos o dossiê completo, negociamos em duas chamadas e fechamos com múltiplo 4.3x ARR.',
+    quote: 'We reviewed the complete dossier, negotiated in two calls, and closed at 4.3x ARR multiple.',
     author: 'Ana Costa',
     role: 'Founder',
     company: 'BackOffice Pro'
   },
   {
-    quote: 'A automação de due diligence diminuiu 70% do tempo que gastávamos analisando micro-SaaS.',
+    quote: 'Due diligence automation reduced 70% of the time we spent analyzing micro-SaaS.',
     author: 'Marcos Lima',
     role: 'Investor',
     company: 'Horizon Capital'
   },
   {
-    quote: 'O marketplace virou o principal canal para flippar sites e newsletters rentáveis no Brasil.',
+    quote: 'The marketplace became the main channel for flipping profitable sites and newsletters.',
     author: 'Juliana Ribeiro',
     role: 'Operator',
     company: 'Digital Asset Lab'
@@ -214,117 +214,117 @@ const testimonials = [
 
 const faq = [
   {
-    question: 'Como o valuation automático é calculado?',
+    question: 'How is automated valuation calculated?',
     answer:
-      'Usamos múltiplos baseados em transações recentes, ajustados por MRR, churn, CAC, LTV, crescimento e risco setorial. Cada input gera um relatório com justificativa do múltiplo sugerido.'
+      'We use multiples based on recent transactions, adjusted for MRR, churn, CAC, LTV, growth, and sector risk. Each input generates a report with justification for the suggested multiple.'
   },
   {
-    question: 'Posso cadastrar ativos que ainda não geram receita recorrente?',
+    question: 'Can I list assets that don&apos;t generate recurring revenue yet?',
     answer:
-      'Sim. Para ativos em estágio inicial consideramos GMV, usuários ativos, leads e provas de tração. Você recebe orientações claras sobre o que precisa evoluir antes de abrir negociação.'
+      'Yes. For early-stage assets, we consider GMV, active users, leads, and traction proof. You receive clear guidance on what needs to evolve before opening negotiations.'
   },
   {
-    question: 'Como os compradores são verificados?',
+    question: 'How are buyers verified?',
     answer:
-      'Aplicamos KYC, pedimos prova de fundos e histórico de operações. Só liberamos acesso completo aos dados após acordo de confidencialidade e aceite dos termos da plataforma.'
+      'We apply KYC, request proof of funds, and transaction history. We only grant full data access after a confidentiality agreement and platform terms acceptance.'
   },
   {
-    question: 'Existe comissão sobre a venda?',
+    question: 'Is there a commission on the sale?',
     answer:
-      'Trabalhamos com success fee escalonado conforme o tamanho da transação. Não há custo para listar ativos; você só paga quando fecha negócio dentro do SMC.'
+      'We work with a tiered success fee based on transaction size. There&apos;s no cost to list assets; you only pay when you close a deal within SMC.'
   },
   {
-    question: 'Consigo negociar em sigilo?',
+    question: 'Can I negotiate in confidence?',
     answer:
-      'Sim. Você controla quem acessa o data-room, habilita blur automático e pode assinar NDA digital antes de revelar informações críticas.'
+      'Yes. You control who accesses the data room, enable automatic blur, and can sign a digital NDA before revealing critical information.'
   },
   {
-    question: 'Quais mercados e modelos o SMC cobre?',
+    question: 'What markets and models does SMC cover?',
     answer:
-      'SaaS B2B/B2C, apps mobile, marketplaces, newsletters pagas, APIs e plataformas de conteúdo digital. Expandimos os filtros constantemente.'
+      'B2B/B2C SaaS, mobile apps, marketplaces, paid newsletters, APIs, and digital content platforms. We constantly expand our filters.'
   },
   {
-    question: 'Como funciona o pagamento após o closing?',
+    question: 'How does payment work after closing?',
     answer:
-      'Trabalhamos com instrumentos de escrow e parceiros jurídicos para custodiar o valor até que as transferências de ativos sejam confirmadas.'
+      'We work with escrow instruments and legal partners to custody the value until asset transfers are confirmed.'
   },
   {
-    question: 'Posso listar vários ativos ao mesmo tempo?',
+    question: 'Can I list multiple assets at the same time?',
     answer:
-      'Pode. Cada ativo recebe um dossiê independente e tem indicadores próprios. Operamos com limites apenas para garantir qualidade do inventário.'
+      'Yes. Each asset receives an independent dossier with its own indicators. We operate with limits only to ensure inventory quality.'
   },
   {
-    question: 'O SMC fornece suporte jurídico ou contábil?',
+    question: 'Does SMC provide legal or accounting support?',
     answer:
-      'Temos parceiros especializados e templates prontos para contratos de compra e venda, reorganização societária e transferência de IP.'
+      'We have specialized partners and ready-made templates for purchase and sale contracts, corporate reorganization, and IP transfer.'
   },
   {
-    question: 'Qual o prazo médio para fechar uma venda?',
+    question: 'What&apos;s the average time to close a sale?',
     answer:
-      'A média atual é de 34 dias, mas depende do ticket, da qualidade dos dados e da velocidade de resposta entre as partes.'
+      'The current average is 34 days, but it depends on the ticket size, data quality, and response speed between parties.'
   }
 ];
 
 const galleryPlaceholders = Array.from({ length: 8 }).map((_, index) => index);
 
 const story = {
-  title: 'Criamos o SMC porque founders não podem depender de guesses para precificar um ativo digital.',
-  body: 'Depois de ver dezenas de negociações travarem por falta de dados e padrões, construímos uma infraestrutura focada em métricas e governança. O resultado é clareza para quem vende e convicção para quem compra.',
+  title: 'We built SMC because founders shouldn&apos;t depend on guesses to price a digital asset.',
+  body: 'After seeing dozens of deals stall due to lack of data and standards, we built an infrastructure focused on metrics and governance. The result is clarity for sellers and conviction for buyers.',
   highlights: [
-    'Metodologia própria inspirada em AngelList, Pitch.com e operadores brasileiros.',
-    'Processo de onboarding assistido com especialistas em M&A + automações com IA.',
-    'Relatórios que educam o fundador sobre o que precisa evoluir para capturar múltiplos maiores.'
+    'Proprietary methodology inspired by AngelList, Pitch.com, and Brazilian operators.',
+    'Assisted onboarding process with M&A specialists + AI automations.',
+    'Reports that educate founders on what needs to evolve to capture higher multiples.'
   ]
 };
 
 const productShots = [
   {
-    highlight: 'Insights de métricas',
-    title: 'Canvas de cohort',
-    description: 'Veja retenção, expansão e churn com filtros por plano e faixa de ticket.',
+    highlight: 'Metrics insights',
+    title: 'Cohort canvas',
+    description: 'View retention, expansion, and churn with filters by plan and ticket range.',
     metric: 'Net Revenue Retention · 118%',
     gradient: 'linear-gradient(135deg, #120C2C 0%, #302A73 50%, #5A45B7 100%)'
   },
   {
     highlight: 'Deal room',
-    title: 'Documentos com blur',
-    description: 'Compartilhe P&L e contratos com níveis de acesso configuráveis.',
-    metric: '16 documentos liberados',
+    title: 'Documents with blur',
+    description: 'Share P&L and contracts with configurable access levels.',
+    metric: '16 documents released',
     gradient: 'linear-gradient(135deg, #0F1F3C 0%, #123F6F 50%, #29A4D9 100%)'
   },
   {
-    highlight: 'Comparativo de múltiplos',
-    title: 'Múltiplos sugeridos',
-    description: 'Compare deals similares no mercado secundário e gere argumentos de valuation.',
-    metric: 'Faixa sugerida · 4.1x a 4.5x ARR',
+    highlight: 'Multiples comparison',
+    title: 'Suggested multiples',
+    description: 'Compare similar deals in the secondary market and generate valuation arguments.',
+    metric: 'Suggested range · 4.1x to 4.5x ARR',
     gradient: 'linear-gradient(135deg, #2D0F3B 0%, #6E0F88 60%, #A855F7 100%)'
   }
 ];
 
 const security = {
-  title: 'Camadas de confiança para negociar ativos de alto valor.',
+  title: 'Trust layers for negotiating high-value assets.',
   description:
-    'Utilizamos criptografia, logs auditáveis e políticas rígidas de acesso para proteger dados financeiros e estratégicos.',
+    'We use encryption, auditable logs, and strict access policies to protect financial and strategic data.',
   bullets: [
-    'Due diligence com histórico de alterações em métricas.',
-    'KYC e verificação manual de operadores antes de liberar data-room.',
-    'Integração com parceiros jurídicos e escrow para custodiar pagamentos.'
+    'Due diligence with history of metric changes.',
+    'KYC and manual verification of operators before releasing data room.',
+    'Integration with legal partners and escrow to custody payments.'
   ],
   callouts: [
     {
       highlight: 'Compliance',
-      title: 'Logs auditáveis',
-      description: 'Monitoramos cada acesso e alteração nos dados do ativo.'
+      title: 'Auditable logs',
+      description: 'We monitor every access and change to asset data.'
     },
     {
-      highlight: 'Sigilo',
-      title: 'Blur e NDA digital',
-      description: 'Escolha o nível de exposição de cada documento antes de liberar.'
+      highlight: 'Confidentiality',
+      title: 'Blur and digital NDA',
+      description: 'Choose the exposure level of each document before releasing.'
     },
     {
-      highlight: 'Liquidação',
-      title: 'Escrow protegido',
-      description: 'Parceiros jurídicos e financeiros dão segurança ao closing.'
+      highlight: 'Settlement',
+      title: 'Protected escrow',
+      description: 'Legal and financial partners provide security for closing.'
     }
   ]
 };

@@ -247,3 +247,5 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
 
 A padronização está completa e pronta para uso. Novas APIs devem seguir o padrão estabelecido.
 
+
+

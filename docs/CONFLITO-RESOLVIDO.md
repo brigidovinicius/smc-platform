@@ -100,3 +100,5 @@ Quando quiser migrar para shadcn:
 
 O projeto está funcionando e pronto para continuar a implementação dos componentes modernos!
 
+
+

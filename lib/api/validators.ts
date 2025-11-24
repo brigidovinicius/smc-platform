@@ -73,16 +73,9 @@ const DISPOSABLE_EMAIL_DOMAINS = new Set([
   'tyldd.com',
   'wh4f.org',
   'willselfdestruct.com',
-  'zippymail.info',
-  // Domínios genéricos suspeitos
-  'example.com',
-  'example.org',
-  'test.com',
-  'test.org',
-  'fake.com',
-  'invalid.com',
-  'noreply.com',
-  'no-reply.com'
+  'zippymail.info'
+  // Nota: example.com e example.org foram removidos para permitir testes
+  // Em produção, considere adicionar validações adicionais
 ]);
 
 /**

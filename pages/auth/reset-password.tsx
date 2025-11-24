@@ -38,9 +38,9 @@ const ResetPasswordPage = () => {
     }
     
     if (value.length < 8) {
-      setPasswordError('A senha deve ter pelo menos 8 caracteres');
+      setPasswordError('Password must be at least 8 characters');
     } else if (value.length > 128) {
-      setPasswordError('A senha deve ter no máximo 128 caracteres');
+      setPasswordError('Password must be at most 128 characters');
     }
   };
 
@@ -49,19 +49,19 @@ const ResetPasswordPage = () => {
     setError(null);
     setPasswordError(null);
 
-    // Validação final
+    // Final validation
     if (passwordError) {
-      setError('Por favor, corrija os erros no formulário');
+      setError('Please fix the errors in the form');
       return;
     }
 
     if (password !== confirmPassword) {
-      setError('As senhas não coincidem');
+      setError('Passwords do not match');
       return;
     }
 
     if (!token || typeof token !== 'string') {
-      setError('Token inválido');
+      setError('Invalid token');
       return;
     }
 
@@ -78,15 +78,15 @@ const ResetPasswordPage = () => {
 
       if (response.ok) {
         setSuccess(true);
-        // Redirecionar para login após 3 segundos
+        // Redirect to login after 3 seconds
         setTimeout(() => {
           router.push('/auth/login?passwordReset=1');
         }, 3000);
       } else {
-        setError(data.error || 'Erro ao redefinir senha. Tente novamente.');
+        setError(data.error || 'Error resetting password. Please try again.');
       }
     } catch (err) {
-      setError('Erro ao redefinir senha. Tente novamente.');
+      setError('Error resetting password. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -97,9 +97,9 @@ const ResetPasswordPage = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">Token inválido</h1>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">Invalid token</h1>
             <p className="text-slate-600">
-              O link de redefinição de senha é inválido ou expirou. Por favor, solicite um novo link.
+              The password reset link is invalid or has expired. Please request a new link.
             </p>
           </div>
 
@@ -116,14 +116,14 @@ const ResetPasswordPage = () => {
             href="/auth/forgot-password"
             className="w-full py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all text-center block mb-4"
           >
-            Solicitar novo link
+            Request new link
           </Link>
 
           <Link
             href="/auth/login"
             className="w-full py-3 rounded-lg font-medium border-2 border-slate-300 bg-white text-slate-700 hover:bg-slate-50 hover:border-indigo-300 transition-all text-center block"
           >
-            Voltar para login
+            Back to login
           </Link>
         </div>
       </div>
@@ -135,16 +135,16 @@ const ResetPasswordPage = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">Senha redefinida!</h1>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">Password reset!</h1>
             <p className="text-slate-600">
-              Sua senha foi redefinida com sucesso. Você será redirecionado para a página de login.
+              Your password has been reset successfully. You will be redirected to the login page.
             </p>
           </div>
 
           <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
             <p className="text-emerald-700 text-sm flex items-center gap-2">
               <span className="text-emerald-500">✓</span>
-              Senha alterada com sucesso. Você já pode fazer login com sua nova senha.
+              Password changed successfully. You can now sign in with your new password.
             </p>
           </div>
 
@@ -152,7 +152,7 @@ const ResetPasswordPage = () => {
             href="/auth/login"
             className="w-full py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all text-center block"
           >
-            Ir para login
+            Go to login
           </Link>
         </div>
       </div>
@@ -175,8 +175,8 @@ const ResetPasswordPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Redefinir senha</h1>
-          <p className="text-slate-600">Digite sua nova senha abaixo</p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Reset password</h1>
+          <p className="text-slate-600">Enter your new password below</p>
         </div>
 
         {error && (
@@ -191,7 +191,7 @@ const ResetPasswordPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4 mb-6">
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
-              Nova senha
+              New password
             </label>
             <input
               id="password"
@@ -221,14 +221,14 @@ const ResetPasswordPage = () => {
             {!passwordError && password && password.length >= 8 && (
               <p className="mt-1 text-xs text-emerald-600 flex items-center gap-1">
                 <span>✓</span>
-                Senha válida
+                Valid password
               </p>
             )}
           </div>
 
           <div>
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700 mb-2">
-              Confirmar senha
+              Confirm password
             </label>
             <input
               id="confirmPassword"
@@ -246,13 +246,13 @@ const ResetPasswordPage = () => {
             {confirmPassword && password !== confirmPassword && (
               <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
                 <span>⚠</span>
-                As senhas não coincidem
+                Passwords do not match
               </p>
             )}
             {confirmPassword && password === confirmPassword && password.length >= 8 && (
               <p className="mt-1 text-xs text-emerald-600 flex items-center gap-1">
                 <span>✓</span>
-                Senhas coincidem
+                Passwords match
               </p>
             )}
           </div>
@@ -269,10 +269,10 @@ const ResetPasswordPage = () => {
             {loading ? (
               <span className="flex items-center justify-center gap-2">
                 <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                Redefinindo...
+                Resetting...
               </span>
             ) : (
-              'Redefinir senha'
+              'Reset password'
             )}
           </button>
         </form>

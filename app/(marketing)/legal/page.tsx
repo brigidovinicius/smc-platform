@@ -3,19 +3,19 @@ import { Footer } from '../_components/footer';
 
 const docs = [
     {
-        title: 'Termos de uso',
+        title: 'Terms of Use',
         href: '/legal/termos-de-uso',
-        summary: 'Regras para uso da plataforma, cadastro, confidencialidade e limitações de responsabilidade.'
+        summary: 'Rules for platform use, registration, confidentiality, and liability limitations.'
     },
     {
-        title: 'Política de privacidade',
+        title: 'Privacy Policy',
         href: '/legal/privacidade',
-        summary: 'Como coletamos, armazenamos e utilizamos seus dados pessoais dentro da SMC Platform.'
+        summary: 'How we collect, store, and use your personal data within the SMC Platform.'
     },
     {
         title: 'Cookies',
         href: '/legal/cookies',
-        summary: 'Informações sobre cookies de sessão, analytics e preferências.'
+        summary: 'Information about session cookies, analytics, and preferences.'
     }
 ];
 
@@ -25,9 +25,9 @@ export default function LegalHubPage() {
             <div className="container py-20">
                 <div className="max-w-3xl space-y-4">
                     <p className="text-sm uppercase tracking-[0.3em] text-slate-500">Legal</p>
-                    <h1 className="text-4xl font-bold text-slate-900">Central legal da SMC</h1>
+                    <h1 className="text-4xl font-bold text-slate-900">SMC Legal Center</h1>
                     <p className="text-lg text-slate-600">
-                        Consulte as políticas que regem o uso do marketplace, tratamento de dados e cookies. Para casos específicos, fale com{' '}
+                        Review the policies governing marketplace use, data handling, and cookies. For specific cases, contact{' '}
                         <a className="text-[var(--color-primary)] font-medium" href="mailto:legal@saasmarketcap.com">
                             legal@saasmarketcap.com
                         </a>
@@ -45,7 +45,7 @@ export default function LegalHubPage() {
                             <div className="flex items-center justify-between">
                                 <h2 className="text-xl font-semibold text-slate-900">{doc.title}</h2>
                                 <span className="text-sm font-medium text-[var(--color-primary)] transition group-hover:translate-x-1">
-                                    Ler →
+                                    Read →
                                 </span>
                             </div>
                             <p className="mt-2 text-slate-600">{doc.summary}</p>

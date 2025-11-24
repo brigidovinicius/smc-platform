@@ -23,3 +23,5 @@ export const spaceGrotesk = Space_Grotesk({
 export const fontClasses = `${inter.variable} ${spaceGrotesk.variable}`;
 export const fontBodyClass = inter.className;
 
+
+

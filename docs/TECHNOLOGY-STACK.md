@@ -364,3 +364,5 @@ Estas são as versões exatas em uso. **NÃO atualize sem discussão prévia** p
 **Última Verificação:** Janeiro 2025  
 **Próxima Revisão:** Quando houver necessidade de atualização
 
+
+

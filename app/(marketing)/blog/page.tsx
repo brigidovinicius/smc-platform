@@ -6,10 +6,10 @@ import { SITE_CONFIG } from '@/lib/site-config';
 
 export const metadata: Metadata = {
   title: 'Blog | SMC Platform',
-  description: 'Insights sobre valuation, ativos digitais, guias e benchmarks do mercado secundário.',
+  description: 'Insights on valuation, digital assets, guides, and secondary market benchmarks.',
   openGraph: {
     title: 'Blog | SMC Platform',
-    description: 'Insights sobre valuation e ativos digitais',
+    description: 'Insights on valuation and digital assets',
     type: 'website',
   },
 };
@@ -22,8 +22,8 @@ export default function BlogPage() {
 
   return (
     <MarketingPageLayout
-      title="Blog SMC"
-      description="Insights sobre valuation, ativos digitais, guias e benchmarks do mercado secundário."
+      title="SMC Blog"
+      description="Insights on valuation, digital assets, guides, and secondary market benchmarks."
       showHero={true}
     >
       <section className="py-16 bg-background">

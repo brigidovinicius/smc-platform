@@ -148,3 +148,5 @@ components/
 
 **Status:** ✅ Base implementada, migração em progresso
 
+
+

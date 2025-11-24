@@ -95,3 +95,5 @@ Se você quer mudanças mais dramáticas, posso:
 
 **Status:** ✅ Componentes funcionando, mas mudanças visuais sutis
 
+
+

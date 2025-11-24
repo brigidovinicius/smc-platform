@@ -10,7 +10,7 @@ export function Footer() {
                             <span className="text-[var(--color-primary)]">SMC</span> Market Cap
                         </Link>
                         <p className="max-w-xs text-sm text-[var(--color-text-secondary)]">
-                            A plataforma definitiva para avaliar, comprar e vender ativos digitais com dados auditados e segurança jurídica.
+                            The definitive platform to evaluate, buy, and sell digital assets with audited data and legal security.
                         </p>
                         <div className="flex gap-4 pt-2">
                             {/* Social placeholders */}
@@ -21,41 +21,41 @@ export function Footer() {
                     </div>
 
                     <div>
-                        <h4 className="mb-4 font-semibold text-[var(--color-text)]">Plataforma</h4>
+                        <h4 className="mb-4 font-semibold text-[var(--color-text)]">Platform</h4>
                         <ul className="space-y-3 text-sm text-[var(--color-text-secondary)]">
                             <li><Link href="/" className="hover:text-[var(--color-primary)]">Home</Link></li>
                             <li><Link href="/feed" className="hover:text-[var(--color-primary)]">Feed</Link></li>
-                            <li><Link href="/wizard" className="hover:text-[var(--color-primary)]">Vender ativo</Link></li>
-                            <li><Link href="/pricing" className="hover:text-[var(--color-primary)]">Planos</Link></li>
+                            <li><Link href="/wizard" className="hover:text-[var(--color-primary)]">List asset</Link></li>
+                            <li><Link href="/pricing" className="hover:text-[var(--color-primary)]">Pricing</Link></li>
                             <li><Link href="/auth/login" className="hover:text-[var(--color-primary)]">Login</Link></li>
                         </ul>
                     </div>
 
                     <div>
-                        <h4 className="mb-4 font-semibold text-[var(--color-text)]">Recursos</h4>
+                        <h4 className="mb-4 font-semibold text-[var(--color-text)]">Resources</h4>
                         <ul className="space-y-3 text-sm text-[var(--color-text-secondary)]">
-                            <li><Link href="/recursos" className="hover:text-[var(--color-primary)]">Recursos</Link></li>
+                            <li><Link href="/recursos" className="hover:text-[var(--color-primary)]">Resources</Link></li>
                             <li><Link href="/blog" className="hover:text-[var(--color-primary)]">Blog</Link></li>
-                            <li><Link href="/calculator" className="hover:text-[var(--color-primary)]">Calculadora de Valuation</Link></li>
+                            <li><Link href="/calculator" className="hover:text-[var(--color-primary)]">Valuation Calculator</Link></li>
                             <li><Link href="/faq" className="hover:text-[var(--color-primary)]">FAQ</Link></li>
-                            <li><Link href="/suporte" className="hover:text-[var(--color-primary)]">Suporte</Link></li>
+                            <li><Link href="/suporte" className="hover:text-[var(--color-primary)]">Support</Link></li>
                         </ul>
                     </div>
 
                     <div>
                         <h4 className="mb-4 font-semibold text-[var(--color-text)]">Legal</h4>
                         <ul className="space-y-3 text-sm text-[var(--color-text-secondary)]">
-                            <li><Link href="/legal" className="hover:text-[var(--color-primary)]">Central legal</Link></li>
-                            <li><Link href="/legal/terms" className="hover:text-[var(--color-primary)]">Termos de Uso</Link></li>
-                            <li><Link href="/legal/privacy" className="hover:text-[var(--color-primary)]">Privacidade</Link></li>
+                            <li><Link href="/legal" className="hover:text-[var(--color-primary)]">Legal center</Link></li>
+                            <li><Link href="/legal/terms" className="hover:text-[var(--color-primary)]">Terms of Use</Link></li>
+                            <li><Link href="/legal/privacy" className="hover:text-[var(--color-primary)]">Privacy</Link></li>
                             <li><Link href="/legal/cookies" className="hover:text-[var(--color-primary)]">Cookies</Link></li>
                         </ul>
                     </div>
                 </div>
 
                 <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-[var(--color-border)] pt-8 text-sm text-[var(--color-text-secondary)] md:flex-row">
-                    <p>© {new Date().getFullYear()} SaaS Market Cap. Todos os direitos reservados.</p>
-                    <p>Feito com 💜 para founders.</p>
+                    <p>© {new Date().getFullYear()} SaaS Market Cap. All rights reserved.</p>
+                    <p>Made with 💜 for founders.</p>
                 </div>
             </div>
         </footer>

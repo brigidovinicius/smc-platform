@@ -231,3 +231,5 @@ Todos os arquivos relacionados a usuários estão **funcionais e seguros**. Os p
 **Revisão realizada por:** SMC-Engineer  
 **Data:** Janeiro 2025
 
+
+

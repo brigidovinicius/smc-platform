@@ -306,3 +306,5 @@ saas-market-cap/
 2. Decidir se vamos implementar Fase 1 (reorganização de `lib/`)
 3. Criar issues no GitHub para tracking
 
+
+
