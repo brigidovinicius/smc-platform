@@ -43,3 +43,5 @@ vercel env pull .env.production --environment=production --yes
 3. **Deploy:** `vercel --prod` (ou rely no Git deploy automático do projeto).
 4. Após o deploy, os domínios `smc-platform.vercel.app` e `saas-market-cap.vercel.app` já apontam para o mesmo deployment.
 
+
+

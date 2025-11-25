@@ -1,6 +1,6 @@
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -15,15 +15,16 @@ model User {
   image         String?
   password      String?
 
-  accounts Account[]
-  sessions Session[]
-  profile  Profile?
-  assets   SaaSAsset[]
-  offers   Offer[]      @relation("UserOffers")
-  purchases Offer[]     @relation("UserBuys")
-  transactionsSold Transaction[] @relation("TransactionSeller")
+  accounts           Account[]
+  sessions           Session[]
+  profile            Profile?
+  assets             SaaSAsset[]
+  newAssets          Asset[]       @relation("AssetOwner")
+  offers             Offer[]       @relation("UserOffers")
+  purchases          Offer[]       @relation("UserBuys")
+  transactionsSold   Transaction[] @relation("TransactionSeller")
   transactionsBought Transaction[] @relation("TransactionBuyer")
-  favorites Favorite[] @relation("UserFavorites")
+  favorites          Favorite[]    @relation("UserFavorites")
 }
 
 model Account {
@@ -92,19 +93,19 @@ model SaaSAsset {
 }
 
 model Offer {
-  id        String      @id @default(cuid())
-  assetId   String
-  asset     SaaSAsset   @relation(fields: [assetId], references: [id])
-  sellerId  String
-  seller    User        @relation("UserOffers", fields: [sellerId], references: [id])
-  buyerId   String?
-  buyer     User?       @relation("UserBuys", fields: [buyerId], references: [id])
-  price     Float
-  status    OfferStatus @default(ACTIVE)
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id           String        @id @default(cuid())
+  assetId      String
+  asset        SaaSAsset     @relation(fields: [assetId], references: [id])
+  sellerId     String
+  seller       User          @relation("UserOffers", fields: [sellerId], references: [id])
+  buyerId      String?
+  buyer        User?         @relation("UserBuys", fields: [buyerId], references: [id])
+  price        Float
+  status       OfferStatus   @default(ACTIVE)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
   transactions Transaction[]
-  favorites Favorite[] @relation("OfferFavorites")
+  favorites    Favorite[]    @relation("OfferFavorites")
 
   @@index([assetId])
   @@index([sellerId])
@@ -147,4 +148,141 @@ enum OfferStatus {
   UNDER_NEGOTIATION
   SOLD
   ARCHIVED
+}
+
+enum AssetType {
+  ECOMMERCE
+  SAAS
+  SOFTWARE
+  WEBSITE_CONTENT
+  SOCIAL_PROFILE
+  NEWSLETTER
+  COMMUNITY_MEMBERSHIP
+  COURSE_INFOPRODUCT
+  HYBRID_BUNDLE
+  OTHER
+}
+
+enum AssetStatus {
+  DRAFT
+  SUBMITTED
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  PUBLISHED
+}
+
+model Asset {
+  id      String @id @default(cuid())
+  ownerId String
+  owner   User   @relation("AssetOwner", fields: [ownerId], references: [id])
+
+  type   AssetType
+  status AssetStatus @default(DRAFT)
+
+  title            String
+  slug             String @unique
+  shortDescription String
+  fullDescription  String
+
+  // Pricing
+  askingPrice Float
+  currency    String @default("USD")
+
+  // Advisory valuation (suggestive only)
+  suggestedMinPrice Float?
+  suggestedMaxPrice Float?
+  valuationNote     String?
+
+  // Business & performance fields
+  monthlyRevenue  Float?
+  monthlyProfit   Float?
+  mrr             Float?
+  arr             Float?
+  churnRate       Float?
+  cac             Float?
+  ltv             Float?
+  primaryLanguage String?
+  websiteUrl      String?
+
+  // Meta
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  financials   AssetFinancials[]
+  performance  AssetPerformance?
+  verification AssetVerification?
+  moderation   AssetModeration?
+  media        AssetMedia[]
+
+  @@index([ownerId])
+  @@index([type])
+  @@index([status])
+  @@index([slug])
+}
+
+model AssetFinancials {
+  id      String @id @default(cuid())
+  assetId String
+  asset   Asset  @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  period   String // e.g. "2025-01", "last_12_months"
+  revenue  Float?
+  profit   Float?
+  expenses Float?
+
+  createdAt DateTime @default(now())
+
+  @@index([assetId])
+}
+
+model AssetPerformance {
+  id      String @id @default(cuid())
+  assetId String @unique
+  asset   Asset  @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  monthlyVisitors  Int?
+  emailSubscribers Int?
+  socialFollowers  Int?
+  mainChannels     String? // JSON or comma separated for now
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AssetVerification {
+  id      String @id @default(cuid())
+  assetId String @unique
+  asset   Asset  @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  flags     String   @default("[]") // JSON array of { code, severity, message }
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AssetModeration {
+  id      String @id @default(cuid())
+  assetId String @unique
+  asset   Asset  @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  adminReviewerId     String?
+  adminStatusComment  String?
+  adminSuggestedPrice Float?
+  adminPricingComment String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AssetMedia {
+  id      String @id @default(cuid())
+  assetId String
+  asset   Asset  @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  url       String
+  type      String // "screenshot", "proof", "logo", "deck", etc.
+  label     String?
+  createdAt DateTime @default(now())
+
+  @@index([assetId])
 }
