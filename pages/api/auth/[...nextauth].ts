@@ -145,6 +145,14 @@ export const authOptions: NextAuthOptions = {
         (session.user as { role?: string }).role = (token as { role?: string }).role ?? 'user';
       }
       return session;
+    },
+    async redirect({ url, baseUrl }) {
+      // Permite redirects relativos
+      if (url.startsWith('/')) return `${baseUrl}${url}`;
+      // Permite redirects para o mesmo domínio
+      if (new URL(url).origin === baseUrl) return url;
+      // Default: redirecionar para dashboard
+      return `${baseUrl}/dashboard`;
     }
   }
 };

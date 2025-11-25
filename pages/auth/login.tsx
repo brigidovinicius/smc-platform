@@ -50,8 +50,14 @@ const LoginPage = () => {
         };
         setError(errorMessages[result.error] || result.error || 'Error signing in. Please try again.');
       } else if (result?.ok) {
-        const callbackUrl = router.query.callbackUrl as string || '/dashboard';
-        router.push(callbackUrl);
+        // Login bem-sucedido - aguardar um pouco para garantir que a sessão foi criada no servidor
+        await new Promise(resolve => setTimeout(resolve, 300));
+        
+        const callbackUrl = (router.query.callbackUrl as string) || '/dashboard';
+        
+        // Forçar reload completo da página para garantir que a sessão seja carregada
+        // window.location.href força um full page reload que recarrega a sessão do servidor
+        window.location.href = callbackUrl;
       }
     } catch (err) {
       setError('Error signing in. Please try again.');
