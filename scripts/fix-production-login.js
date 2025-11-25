@@ -6,22 +6,11 @@
  *   DATABASE_URL="postgresql://..." node scripts/fix-production-login.js "email@exemplo.com" "senha123"
  */
 
-// Carregar variáveis de ambiente
-try {
-  require('dotenv').config({ path: '.env.local' });
-} catch (e) {
-  try {
-    require('dotenv').config();
-  } catch (e2) {
-    // Ignorar se não conseguir carregar
-  }
-}
-
 const fs = require('fs');
-const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 
-// Usar DATABASE_URL do ambiente
+// IMPORTANTE: Definir DATABASE_URL ANTES de importar Prisma
+// Ler DATABASE_URL primeiro
 let databaseUrl = process.env.DATABASE_URL;
 
 // Se não estiver no ambiente, tentar ler do .env.production
@@ -44,6 +33,25 @@ if (!databaseUrl) {
   databaseUrl = process.argv[4];
 }
 
+// Limpar a URL (remover \n e espaços)
+if (databaseUrl) {
+  databaseUrl = databaseUrl.trim().replace(/\\n/g, '').replace(/^["']|["']$/g, '');
+  // FORÇAR no process.env ANTES de importar Prisma
+  process.env.DATABASE_URL = databaseUrl;
+}
+
+// Carregar variáveis de ambiente (mas DATABASE_URL já está definida)
+try {
+  require('dotenv').config({ path: '.env.local' });
+} catch (e) {
+  try {
+    require('dotenv').config();
+  } catch (e2) {
+    // Ignorar se não conseguir carregar
+  }
+}
+
+// Verificar se DATABASE_URL foi definida
 if (!databaseUrl) {
   console.error('❌ DATABASE_URL não encontrada!');
   console.error('\nOpções:');
@@ -56,16 +64,13 @@ if (!databaseUrl) {
   process.exit(1);
 }
 
-// Limpar a URL (remover \n e espaços)
-databaseUrl = databaseUrl.trim().replace(/\\n/g, '');
+console.log('🔗 Usando DATABASE_URL:', databaseUrl.replace(/:[^:@]+@/, ':****@')); // Ocultar senha no log
 
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: databaseUrl
-    }
-  }
-});
+// AGORA importar Prisma (já com DATABASE_URL definida no process.env)
+const { PrismaClient } = require('@prisma/client');
+
+// Criar Prisma Client (DATABASE_URL já está no process.env)
+const prisma = new PrismaClient();
 
 async function main() {
   const email = process.argv[2];
