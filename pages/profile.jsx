@@ -1,13 +1,23 @@
 import Image from 'next/image';
+import { useState } from 'react';
 import { getSession, signIn, signOut, useSession } from 'next-auth/react';
 import CardWrapper from '@/components/ui/CardWrapper';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { User, Mail, Shield, LogOut, Settings } from 'lucide-react';
+import { User, Mail, Shield, LogOut, Settings, Lock, Edit2, Check, X } from 'lucide-react';
 import Link from 'next/link';
 
 const ProfilePage = () => {
   const { data: session, status } = useSession();
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [passwordData, setPasswordData] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+  const [emailData, setEmailData] = useState({ newEmail: '' });
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [emailSuccess, setEmailSuccess] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   if (status === 'loading') {
     return (
@@ -106,6 +116,260 @@ const ProfilePage = () => {
                 <p className="text-sm font-mono text-muted-foreground bg-muted p-2 rounded">
                   {session.user.id}
                 </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </CardWrapper>
+
+      <CardWrapper
+        title="Segurança"
+        description="Gerencie sua senha e email"
+      >
+        <div className="space-y-6">
+          {/* Alterar Email */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-semibold flex items-center gap-2">
+                  <Mail className="h-4 w-4" />
+                  Email
+                </h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Email atual: {session.user?.email}
+                </p>
+              </div>
+              {!showEmailForm && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setShowEmailForm(true);
+                    setShowPasswordForm(false);
+                    setEmailError(null);
+                    setEmailSuccess(null);
+                  }}
+                >
+                  <Edit2 className="h-4 w-4 mr-2" />
+                  Alterar Email
+                </Button>
+              )}
+            </div>
+
+            {showEmailForm && (
+              <div className="border rounded-lg p-4 space-y-4 bg-muted/50">
+                {emailError && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-center gap-2">
+                    <X className="h-4 w-4" />
+                    {emailError}
+                  </div>
+                )}
+                {emailSuccess && (
+                  <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm flex items-center gap-2">
+                    <Check className="h-4 w-4" />
+                    {emailSuccess}
+                  </div>
+                )}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Novo Email</label>
+                  <input
+                    type="email"
+                    value={emailData.newEmail}
+                    onChange={(e) => setEmailData({ newEmail: e.target.value })}
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="novo@email.com"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={async () => {
+                      setLoading(true);
+                      setEmailError(null);
+                      setEmailSuccess(null);
+
+                      try {
+                        const res = await fetch('/api/user/update-email', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ newEmail: emailData.newEmail }),
+                        });
+
+                        const data = await res.json();
+
+                        if (res.ok) {
+                          setEmailSuccess(data.message || 'Email atualizado com sucesso!');
+                          setEmailData({ newEmail: '' });
+                          setTimeout(() => {
+                            setShowEmailForm(false);
+                            window.location.reload();
+                          }, 2000);
+                        } else {
+                          setEmailError(data.error || 'Erro ao atualizar email');
+                        }
+                      } catch (error) {
+                        setEmailError('Erro ao atualizar email. Tente novamente.');
+                      } finally {
+                        setLoading(false);
+                      }
+                    }}
+                    disabled={loading || !emailData.newEmail}
+                  >
+                    {loading ? 'Salvando...' : 'Salvar'}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setShowEmailForm(false);
+                      setEmailData({ newEmail: '' });
+                      setEmailError(null);
+                      setEmailSuccess(null);
+                    }}
+                  >
+                    Cancelar
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Alterar Senha */}
+          <div className="space-y-4 border-t pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-semibold flex items-center gap-2">
+                  <Lock className="h-4 w-4" />
+                  Senha
+                </h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Altere sua senha para manter sua conta segura
+                </p>
+              </div>
+              {!showPasswordForm && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setShowPasswordForm(true);
+                    setShowEmailForm(false);
+                    setPasswordError(null);
+                    setPasswordSuccess(null);
+                  }}
+                >
+                  <Edit2 className="h-4 w-4 mr-2" />
+                  Alterar Senha
+                </Button>
+              )}
+            </div>
+
+            {showPasswordForm && (
+              <div className="border rounded-lg p-4 space-y-4 bg-muted/50">
+                {passwordError && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-center gap-2">
+                    <X className="h-4 w-4" />
+                    {passwordError}
+                  </div>
+                )}
+                {passwordSuccess && (
+                  <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm flex items-center gap-2">
+                    <Check className="h-4 w-4" />
+                    {passwordSuccess}
+                  </div>
+                )}
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Senha Atual</label>
+                    <input
+                      type="password"
+                      value={passwordData.currentPassword}
+                      onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                      className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      placeholder="Digite sua senha atual"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Nova Senha</label>
+                    <input
+                      type="password"
+                      value={passwordData.newPassword}
+                      onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                      className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      placeholder="Mínimo 8 caracteres"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Confirmar Nova Senha</label>
+                    <input
+                      type="password"
+                      value={passwordData.confirmPassword}
+                      onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                      className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      placeholder="Confirme sua nova senha"
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={async () => {
+                      setLoading(true);
+                      setPasswordError(null);
+                      setPasswordSuccess(null);
+
+                      // Validações
+                      if (passwordData.newPassword.length < 8) {
+                        setPasswordError('A nova senha deve ter no mínimo 8 caracteres');
+                        setLoading(false);
+                        return;
+                      }
+
+                      if (passwordData.newPassword !== passwordData.confirmPassword) {
+                        setPasswordError('As senhas não coincidem');
+                        setLoading(false);
+                        return;
+                      }
+
+                      try {
+                        const res = await fetch('/api/user/update-password', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            currentPassword: passwordData.currentPassword,
+                            newPassword: passwordData.newPassword,
+                          }),
+                        });
+
+                        const data = await res.json();
+
+                        if (res.ok) {
+                          setPasswordSuccess('Senha alterada com sucesso!');
+                          setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+                          setTimeout(() => {
+                            setShowPasswordForm(false);
+                          }, 2000);
+                        } else {
+                          setPasswordError(data.error || 'Erro ao alterar senha');
+                        }
+                      } catch (error) {
+                        setPasswordError('Erro ao alterar senha. Tente novamente.');
+                      } finally {
+                        setLoading(false);
+                      }
+                    }}
+                    disabled={loading || !passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword}
+                  >
+                    {loading ? 'Salvando...' : 'Salvar'}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setShowPasswordForm(false);
+                      setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+                      setPasswordError(null);
+                      setPasswordSuccess(null);
+                    }}
+                  >
+                    Cancelar
+                  </Button>
+                </div>
               </div>
             )}
           </div>
