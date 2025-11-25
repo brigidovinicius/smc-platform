@@ -48,7 +48,7 @@ export default function BlogPageClient({ posts, categories }: BlogPageClientProp
         onCategoryChange={setSelectedCategory}
       />
 
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-12">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-8 sm:mt-12">
         <BlogList posts={filteredPosts} />
       </div>
     </>

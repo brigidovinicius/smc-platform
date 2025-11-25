@@ -120,18 +120,18 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
         {/* Background Effects - Removed gradients per brand guidelines */}
         <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-30" />
 
-        <div className="container relative z-10 grid gap-8 md:gap-16 py-16 md:py-24 lg:py-32 lg:grid-cols-[1.1fr_0.9fr] lg:items-center px-4 sm:px-6">
+        <div className="container relative z-10 grid gap-8 md:gap-16 py-20 md:py-24 lg:py-32 lg:grid-cols-[1.1fr_0.9fr] lg:items-center px-4 sm:px-6">
           <div className="space-y-6 md:space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 backdrop-blur-md"
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 sm:px-4 py-1.5 backdrop-blur-md"
             >
-              <span className="relative flex h-2 w-2">
+              <span className="relative flex h-2 w-2 flex-shrink-0">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
               </span>
-              <span className="text-xs font-medium tracking-wide text-white/90 uppercase">Public Beta · Audited Data</span>
+              <span className="text-[10px] sm:text-xs font-medium tracking-wide text-white/90 uppercase">Public Beta · Audited Data</span>
             </motion.div>
 
             <div className="space-y-4 md:space-y-6">
@@ -178,8 +178,8 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
               </Link>
             </motion.div>
 
-            <div className="pt-8">
-              <p className="mb-4 text-xs font-medium uppercase tracking-widest text-slate-400">Trusted by players like</p>
+            <div className="pt-6 sm:pt-8">
+              <p className="mb-3 sm:mb-4 text-[10px] sm:text-xs font-medium uppercase tracking-widest text-slate-400">Trusted by players like</p>
               <Marquee items={proofLogos} speed={30} className="relative z-10" />
             </div>
           </div>
@@ -283,13 +283,13 @@ export function MarketingHomeContent(props: MarketingHomeContentProps) {
       </section>
 
       {/* TESTIMONIALS */}
-      <section id="testimonials" className="py-12 md:py-16 lg:py-24 bg-white overflow-hidden">
+      <section id="testimonials" className="py-12 md:py-16 lg:py-24 bg-white overflow-x-hidden">
         <div className="container mb-8 md:mb-12 text-center px-4 sm:px-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Who&apos;s already traded</h2>
         </div>
-        <div className="relative">
-          <div className="absolute left-0 top-0 z-10 h-full w-16 sm:w-32 bg-gradient-to-r from-white to-transparent" />
-          <div className="absolute right-0 top-0 z-10 h-full w-16 sm:w-32 bg-gradient-to-l from-white to-transparent" />
+        <div className="relative overflow-x-hidden">
+          <div className="absolute left-0 top-0 z-10 h-full w-16 sm:w-32 bg-gradient-to-r from-white to-transparent pointer-events-none" />
+          <div className="absolute right-0 top-0 z-10 h-full w-16 sm:w-32 bg-gradient-to-l from-white to-transparent pointer-events-none" />
 
           <motion.div
             className="flex gap-4 sm:gap-6 w-max"

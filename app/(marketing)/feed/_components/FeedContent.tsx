@@ -128,7 +128,7 @@ export function FeedContent({ offers }: FeedContentProps) {
       <motion.article
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`rounded-2xl border bg-white p-6 shadow-lg transition-all hover:shadow-xl hover:-translate-y-1 ${
+        className={`rounded-xl sm:rounded-2xl border bg-white p-4 sm:p-6 shadow-lg transition-all hover:shadow-xl hover:-translate-y-1 ${
           isHighlighted ? 'border-[#0044CC]' : 'border-slate-200'
         }`}
       >
@@ -140,9 +140,9 @@ export function FeedContent({ offers }: FeedContentProps) {
           )}
           <span>{offer.classification}</span>
         </div>
-        <h2 className="text-2xl font-semibold text-slate-900 mb-2">{offer.title}</h2>
-        <p className="text-slate-600 mb-4">{offer.summary}</p>
-        <div className="grid grid-cols-2 gap-4 text-sm text-slate-700 mb-4">
+        <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-slate-900 mb-2 line-clamp-2">{offer.title}</h2>
+        <p className="text-sm sm:text-base text-slate-600 mb-4 line-clamp-2">{offer.summary}</p>
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm text-slate-700 mb-4">
           <div>
             <p className="text-slate-500 text-xs flex items-center gap-1 mb-1">
               Revenue
@@ -190,7 +190,7 @@ export function FeedContent({ offers }: FeedContentProps) {
         )}
         <Link
           href={ctaHref}
-          className="mt-4 inline-flex items-center justify-center w-full rounded-full bg-[#0044CC] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0033AA]"
+          className="mt-4 inline-flex items-center justify-center w-full rounded-full bg-[#0044CC] px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-white transition hover:bg-[#0033AA]"
           aria-label={`${ctaLabel} - ${offer.title}`}
         >
           {ctaLabel}
@@ -202,24 +202,24 @@ export function FeedContent({ offers }: FeedContentProps) {
   return (
     <div className="container py-16 space-y-12">
       {/* Hero Stats Section */}
-      <section className="relative overflow-hidden rounded-[3rem] border border-slate-200 bg-white p-8 md:p-12 shadow-xl">
+      <section className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 md:p-12 shadow-xl">
         <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0 bg-[url('/grid-pattern.svg')]" />
         </div>
-        <div className="relative grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+        <div className="relative grid gap-8 md:gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
           <div className="space-y-4">
             <p className="tracking-[0.4em] uppercase text-xs text-[#0044CC] font-semibold">CounterX FEED · Public preview</p>
-            <h1 className="text-4xl md:text-5xl font-bold leading-[1.1] text-slate-900">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-[1.1] text-slate-900">
               SaaS, marketplace, and newsletter opportunities with audited metrics.
             </h1>
-            <p className="text-slate-600 max-w-2xl text-lg">
+            <p className="text-slate-600 max-w-2xl text-base sm:text-lg">
               Streamlined memorandums with investment range, MRR, and niche. Filter by ticket, classification, and MRR to
               find assets aligned with your profile. For complete data, sign in.
             </p>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-3">
               <Link
                 href="/auth/login?callbackUrl=/feed"
-                className="inline-flex items-center gap-2 rounded-full bg-slate-900 text-white px-6 py-3 text-sm font-semibold hover:bg-slate-800 transition hover:scale-105"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-900 text-white px-5 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold hover:bg-slate-800 transition hover:scale-105 w-full sm:w-auto"
                 aria-label="Sign in to receive complete memorandum"
               >
                 Get complete memorandum
@@ -227,7 +227,7 @@ export function FeedContent({ offers }: FeedContentProps) {
               </Link>
               <Link
                 href="/wizard"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-5 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-slate-900 hover:bg-slate-50 transition w-full sm:w-auto"
                 aria-label="List new asset on marketplace"
               >
                 List my asset
@@ -279,8 +279,8 @@ export function FeedContent({ offers }: FeedContentProps) {
             <Shield className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900">How we use this feed</h2>
-            <p className="text-slate-600">
+            <h2 className="text-xl sm:text-2xl font-semibold text-slate-900">How we use this feed</h2>
+            <p className="text-sm sm:text-base text-slate-600">
               Curation based on MRR, churn, CAC, and comparables. Founders use it to attract proposals; investors, to filter tickets and niches.
             </p>
           </div>
@@ -288,15 +288,15 @@ export function FeedContent({ offers }: FeedContentProps) {
       </section>
 
       {/* Filters Section */}
-      <section className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4" aria-label="Feed filters">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+      <section className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 space-y-4" aria-label="Feed filters">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
           <div className="flex items-center gap-2 text-slate-700">
-            <Filter className="h-4 w-4 text-[#0044CC]" />
-            <span className="text-sm font-semibold">Refine by ticket, MRR, and niche</span>
+            <Filter className="h-4 w-4 text-[#0044CC] flex-shrink-0" />
+            <span className="text-xs sm:text-sm font-semibold">Refine by ticket, MRR, and niche</span>
           </div>
-          <span className="text-xs text-slate-500">Public preview · Complete details require login</span>
+          <span className="text-[10px] sm:text-xs text-slate-500">Public preview · Complete details require login</span>
         </div>
-        <div className="grid gap-4 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <label className="flex flex-col gap-1 text-sm">
             <span className="text-slate-600 font-medium">Classification</span>
             <select
@@ -409,12 +409,12 @@ export function FeedContent({ offers }: FeedContentProps) {
 
       {/* Offers Grid */}
       <section className="space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-slate-600">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 text-xs sm:text-sm text-slate-600">
           <span>
             Showing <strong className="text-slate-900">{Math.min(visibleCount, filteredOffers.length)}</strong> of{' '}
             <strong className="text-slate-900">{filteredOffers.length}</strong> assets
           </span>
-          <span>Continuously updated with audited data.</span>
+          <span className="text-[10px] sm:text-xs">Continuously updated with audited data.</span>
         </div>
 
         {filteredOffers.length === 0 ? (

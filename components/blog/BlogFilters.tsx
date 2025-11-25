@@ -33,23 +33,23 @@ export default function BlogFilters({
     <div className="space-y-6">
       {/* Search Bar */}
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+        <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
         <Input
           type="text"
           placeholder="Search posts..."
           value={searchQuery}
           onChange={(e) => onSearchChange?.(e.target.value)}
-          className="pl-12 pr-4 py-6 text-base bg-background border-input"
+          className="pl-10 sm:pl-12 pr-4 py-4 sm:py-6 text-sm sm:text-base bg-background border-input"
         />
       </div>
 
       {/* Categories Filter */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-2 flex-shrink-0">
           <Filter className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-medium text-foreground">Categories:</span>
+          <span className="text-xs sm:text-sm font-medium text-foreground">Categories:</span>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 overflow-x-auto pb-2 sm:pb-0 -mx-2 px-2 sm:mx-0 sm:px-0">
           <Button
             variant={selectedCategory === null ? 'default' : 'outline'}
             size="sm"

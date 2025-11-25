@@ -189,11 +189,24 @@ select {
   font-family: inherit;
 }
 
+/* Ajuste de layout responsivo (mobile-first) */
 .container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--space-3);
+  padding: 0 1rem; /* 16px mobile */
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 0 1.5rem; /* 24px tablet */
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 var(--space-3); /* 16px desktop */
+  }
 }
 
 .section {

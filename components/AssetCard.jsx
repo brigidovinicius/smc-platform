@@ -2,7 +2,7 @@ import { Badge } from './ui/badge';
 
 const AssetCard = ({ asset }) => (
   <article 
-    className="bg-card border border-border rounded-xl sm:rounded-2xl p-4 sm:p-6 flex flex-col gap-3"
+    className="bg-card border border-border rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6 flex flex-col gap-2 sm:gap-3"
     aria-label={`Asset: ${asset.name}`}
   >
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">

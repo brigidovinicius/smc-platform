@@ -46,7 +46,7 @@ export function FeatureCards({ features, className = '' }: FeatureCardsProps) {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-100px' }}
-      className={`grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-3 md:grid-rows-2 h-auto md:h-[600px] ${className}`}
+      className={`grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-3 md:grid-rows-2 ${className}`}
     >
       {/* Large Item 1 - Valuation */}
       <motion.div
