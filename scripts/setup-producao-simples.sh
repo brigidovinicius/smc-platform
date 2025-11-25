@@ -17,7 +17,8 @@ fi
 
 DB_PASSWORD="$1"
 SUPABASE_HOST="db.eqkgcpbhsxjlzqozienv.supabase.co"
-DATABASE_URL="postgresql://postgres:${DB_PASSWORD}@${SUPABASE_HOST}:5432/postgres"
+# Exportar DATABASE_URL para uso em todos os comandos
+export DATABASE_URL="postgresql://postgres:${DB_PASSWORD}@${SUPABASE_HOST}:5432/postgres"
 
 echo "═══════════════════════════════════════════════════════════"
 echo "  🚀 CONFIGURAÇÃO DE PRODUÇÃO"
@@ -25,22 +26,23 @@ echo "════════════════════════�
 echo ""
 
 echo "📦 Aplicando migrations..."
-DATABASE_URL="$DATABASE_URL" npx prisma migrate deploy
+# Usar env -i para ignorar .env.local e usar apenas a variável exportada
+env -i PATH="$PATH" DATABASE_URL="$DATABASE_URL" npx prisma migrate deploy
 
 echo ""
 echo "👤 Verificando usuários existentes..."
-DATABASE_URL="$DATABASE_URL" node scripts/check-users.js
+env -i PATH="$PATH" DATABASE_URL="$DATABASE_URL" node scripts/check-users.js
 
 echo ""
 echo "👤 Criando usuário admin..."
-DATABASE_URL="$DATABASE_URL" node scripts/create-admin-user.js \
+env -i PATH="$PATH" DATABASE_URL="$DATABASE_URL" node scripts/create-admin-user.js \
   "Admin User" \
   "brigido254@gmail.com" \
   "admin123456"
 
 echo ""
 echo "✅ Verificando admin criado..."
-DATABASE_URL="$DATABASE_URL" node scripts/check-users.js
+env -i PATH="$PATH" DATABASE_URL="$DATABASE_URL" node scripts/check-users.js
 
 echo ""
 echo "═══════════════════════════════════════════════════════════"

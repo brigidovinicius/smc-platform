@@ -359,7 +359,7 @@ export function validateRegisterBody(body: any): { valid: true; data: RegisterBo
     data: {
       name: name?.trim(),
       email: email.trim().toLowerCase(),
-      password
+      password: password.trim()
     }
   };
 }

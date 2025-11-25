@@ -36,8 +36,9 @@ async function main() {
       process.exit(1);
     }
 
-    // Hash da nova senha
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    // Hash da nova senha (normalizar removendo espaços)
+    const normalizedPassword = newPassword.trim();
+    const hashedPassword = await bcrypt.hash(normalizedPassword, 10);
 
     // Atualizar senha
     await prisma.user.update({

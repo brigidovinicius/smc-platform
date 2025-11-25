@@ -94,8 +94,9 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
     );
   }
 
-  // Hash da nova senha
-  const hashedPassword = await bcrypt.hash(password, 10);
+  // Hash da nova senha (normalizar removendo espaços)
+  const normalizedPassword = password.trim();
+  const hashedPassword = await bcrypt.hash(normalizedPassword, 10);
 
   // Atualizar senha do usuário
   try {

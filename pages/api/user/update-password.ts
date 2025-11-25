@@ -47,14 +47,16 @@ async function handleUpdatePassword(req: NextApiRequest, res: NextApiResponse<Ap
       );
     }
 
-    // Verificar senha atual
-    const isValid = await bcrypt.compare(currentPassword, user.password);
+    // Verificar senha atual (normalizar removendo espaços)
+    const normalizedCurrentPassword = currentPassword.trim();
+    const isValid = await bcrypt.compare(normalizedCurrentPassword, user.password);
     if (!isValid) {
       return errorResponse(res, 'Senha atual incorreta', 400, 'INVALID_PASSWORD');
     }
 
-    // Hash da nova senha
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    // Hash da nova senha (normalizar removendo espaços)
+    const normalizedNewPassword = newPassword.trim();
+    const hashedPassword = await bcrypt.hash(normalizedNewPassword, 10);
 
     // Atualizar senha
     await prisma.user.update({

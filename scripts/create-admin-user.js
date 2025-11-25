@@ -71,8 +71,9 @@ async function createAdminUser(name, email, password) {
     };
   }
 
-  // Hash da senha
-  const hashedPassword = await bcrypt.hash(password, 10);
+  // Hash da senha (normalizar removendo espaços)
+  const normalizedPassword = password.trim();
+  const hashedPassword = await bcrypt.hash(normalizedPassword, 10);
 
   // Criar usuário e perfil
   const user = await prisma.user.create({

@@ -80,8 +80,10 @@ echo "  📦 APLICANDO MIGRATIONS"
 echo "═══════════════════════════════════════════════════════════"
 echo ""
 
-# Usar DATABASE_URL diretamente no comando para sobrescrever .env.local
-DATABASE_URL="$DATABASE_URL" npx prisma migrate deploy
+# Exportar DATABASE_URL e usar env -i para ignorar .env.local
+export DATABASE_URL
+echo "🔗 Conectando ao banco: ${DATABASE_URL%%@*}@..."
+env -i PATH="$PATH" HOME="$HOME" DATABASE_URL="$DATABASE_URL" npx prisma migrate deploy
 
 echo ""
 echo "═══════════════════════════════════════════════════════════"
@@ -89,7 +91,7 @@ echo "  👤 VERIFICANDO USUÁRIOS EXISTENTES"
 echo "═══════════════════════════════════════════════════════════"
 echo ""
 
-DATABASE_URL="$DATABASE_URL" node scripts/check-users.js
+env -i PATH="$PATH" HOME="$HOME" DATABASE_URL="$DATABASE_URL" node scripts/check-users.js
 
 echo ""
 echo "═══════════════════════════════════════════════════════════"
@@ -97,7 +99,7 @@ echo "  👤 CRIANDO USUÁRIO ADMIN"
 echo "═══════════════════════════════════════════════════════════"
 echo ""
 
-DATABASE_URL="$DATABASE_URL" node scripts/create-admin-user.js \
+env -i PATH="$PATH" HOME="$HOME" DATABASE_URL="$DATABASE_URL" node scripts/create-admin-user.js \
   "Admin User" \
   "brigido254@gmail.com" \
   "admin123456"
@@ -108,7 +110,7 @@ echo "  ✅ VERIFICANDO ADMIN CRIADO"
 echo "═══════════════════════════════════════════════════════════"
 echo ""
 
-DATABASE_URL="$DATABASE_URL" node scripts/check-users.js
+env -i PATH="$PATH" HOME="$HOME" DATABASE_URL="$DATABASE_URL" node scripts/check-users.js
 
 echo ""
 echo "═══════════════════════════════════════════════════════════"

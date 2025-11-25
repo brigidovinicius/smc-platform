@@ -12,50 +12,74 @@ fi
 
 DB_PASSWORD="$1"
 SUPABASE_HOST="db.eqkgcpbhsxjlzqozienv.supabase.co"
-FULL_DB_URL="postgresql://postgres:${DB_PASSWORD}@${SUPABASE_HOST}:5432/postgres"
+
+# Escapar caracteres especiais na senha (especialmente #)
+ESCAPED_PASSWORD=$(printf '%s' "$DB_PASSWORD" | sed 's/#/%23/g' | sed 's/@/%40/g' | sed 's/:/%3A/g' | sed 's/\//%2F/g' | sed 's/ /%20/g')
+FULL_DB_URL="postgresql://postgres:${ESCAPED_PASSWORD}@${SUPABASE_HOST}:5432/postgres"
 
 echo "═══════════════════════════════════════════════════════════"
 echo "  🚀 CONFIGURAÇÃO DE PRODUÇÃO"
 echo "═══════════════════════════════════════════════════════════"
 echo ""
 
-# Remover .env.local temporariamente
+# Remover .env.local e .env temporariamente
+ENV_LOCAL_BACKUP=""
 ENV_BACKUP=""
 if [ -f .env.local ]; then
-  ENV_BACKUP=".env.local.backup.$$"
-  mv .env.local "$ENV_BACKUP"
+  ENV_LOCAL_BACKUP=".env.local.backup.$$"
+  mv .env.local "$ENV_LOCAL_BACKUP"
   echo "📝 Arquivo .env.local temporariamente renomeado"
+fi
+if [ -f .env ]; then
+  ENV_BACKUP=".env.backup.$$"
+  mv .env "$ENV_BACKUP"
+  echo "📝 Arquivo .env temporariamente renomeado"
 fi
 
 # Criar .env temporário apenas com DATABASE_URL de produção
-echo "DATABASE_URL=\"$FULL_DB_URL\"" > .env.tmp
+echo "DATABASE_URL=\"$FULL_DB_URL\"" > .env
 
+# Garantir que a variável está exportada
+export DATABASE_URL="$FULL_DB_URL"
+
+echo "📦 Regenerando Prisma Client..."
+npx prisma generate --schema=./prisma/schema.prisma
+
+echo ""
 echo "📦 Aplicando migrations..."
-DATABASE_URL="$FULL_DB_URL" npx prisma migrate deploy --schema=./prisma/schema.prisma
+echo "🔗 URL: ${FULL_DB_URL%%@*}@..."
+npx prisma migrate deploy --schema=./prisma/schema.prisma
 
 echo ""
 echo "👤 Verificando usuários existentes..."
-DATABASE_URL="$FULL_DB_URL" node scripts/check-users.js
+node scripts/check-users.js
 
 echo ""
 echo "👤 Criando usuário admin..."
-DATABASE_URL="$FULL_DB_URL" node scripts/create-admin-user.js \
+node scripts/create-admin-user.js \
   "Admin User" \
   "brigido254@gmail.com" \
   "admin123456"
 
 echo ""
 echo "✅ Verificando admin criado..."
-DATABASE_URL="$FULL_DB_URL" node scripts/check-users.js
+node scripts/check-users.js
 
-# Restaurar .env.local se existia
-if [ -n "$ENV_BACKUP" ] && [ -f "$ENV_BACKUP" ]; then
-  mv "$ENV_BACKUP" .env.local
+# Restaurar arquivos se existiam
+if [ -n "$ENV_LOCAL_BACKUP" ] && [ -f "$ENV_LOCAL_BACKUP" ]; then
+  rm -f .env.local
+  mv "$ENV_LOCAL_BACKUP" .env.local
   echo "✅ Arquivo .env.local restaurado"
 fi
-
-# Limpar .env temporário
-rm -f .env.tmp
+if [ -n "$ENV_BACKUP" ] && [ -f "$ENV_BACKUP" ]; then
+  rm -f .env
+  mv "$ENV_BACKUP" .env
+  echo "✅ Arquivo .env restaurado"
+elif [ -f .env ]; then
+  # Se criamos .env temporário e não havia backup, remover
+  rm -f .env
+  echo "✅ Arquivo .env temporário removido"
+fi
 
 echo ""
 echo "═══════════════════════════════════════════════════════════"
