@@ -68,9 +68,9 @@ export default function BlogPostPage({ params }: Params) {
 
   return (
     <MarketingPageLayout showHero={false}>
-      <section className="py-16 bg-white min-h-screen">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto space-y-8">
+      <section className="py-8 sm:py-12 md:py-16 bg-white min-h-screen">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
             <Breadcrumbs
               items={[
                 { label: 'Blog', href: '/blog' },
