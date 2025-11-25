@@ -1,27 +1,33 @@
+'use client';
+
 import Image from 'next/image';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { Logo } from './Logo';
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { useTranslation } from '@/lib/i18n/context';
 
 export default function Navbar() {
   const { data: session, status } = useSession();
+  const { t } = useTranslation();
 
   return (
     <header className="navbar" role="banner">
       <div className="navbar-left">
         <Logo variant="primary" href="/" className="navbar-logo" width={120} height={28} />
-        <nav className="navbar-links" role="navigation" aria-label="Main navigation">
-          <Link href="/feed" aria-label="View available listings">Listings</Link>
-          <Link href="/dashboard" aria-label="Access dashboard">Dashboard</Link>
-          <Link href="/wizard" aria-label="List new asset">New Asset</Link>
-          <Link href="/profile" aria-label="Access profile">Profile</Link>
+        <nav className="navbar-links" role="navigation" aria-label={t('nav.home')}>
+          <Link href="/feed" aria-label={t('nav.listings')}>{t('nav.listings')}</Link>
+          <Link href="/dashboard" aria-label={t('nav.dashboard')}>{t('nav.dashboard')}</Link>
+          <Link href="/wizard" aria-label={t('nav.newAsset')}>{t('nav.newAsset')}</Link>
+          <Link href="/profile" aria-label={t('nav.profile')}>{t('nav.profile')}</Link>
         </nav>
       </div>
 
       <div className="navbar-right">
+        <LanguageSwitcher className="hidden md:flex" />
         {status === 'loading' && (
-          <span className="navbar-text" aria-live="polite" aria-label="Loading user information">
-            Loading...
+          <span className="navbar-text" aria-live="polite" aria-label={t('common.loading')}>
+            {t('common.loading')}
           </span>
         )}
 
@@ -29,9 +35,9 @@ export default function Navbar() {
           <button 
             className="button primary" 
             onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
-            aria-label="Sign in with Google"
+            aria-label={t('auth.signInWithGoogle')}
           >
-            Sign in
+            {t('auth.signIn')}
           </button>
         )}
 
@@ -56,12 +62,13 @@ export default function Navbar() {
             <button 
               className="button ghost" 
               onClick={() => signOut({ callbackUrl: '/' })}
-              aria-label="Sign out"
+              aria-label={t('auth.signOut')}
             >
-              Sign out
+              {t('auth.signOut')}
             </button>
           </div>
         )}
+        <LanguageSwitcher className="md:hidden mt-2" variant="ghost" />
       </div>
     </header>
   );

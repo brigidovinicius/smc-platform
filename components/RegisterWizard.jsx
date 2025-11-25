@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 const MIN_CHARACTERS = 20; // Reduced from 40 for better UX
 const AUTO_SAVE_INTERVAL = 30000; // 30 seconds
-const STORAGE_KEY = 'smc_wizard_draft';
+const STORAGE_KEY = 'counterx_wizard_draft';
 
 const validateStep = (step, value) => {
   const trimmed = value.trim();
@@ -16,11 +16,11 @@ const validateStep = (step, value) => {
   }
 
   if (!trimmed) {
-    return 'Descreva este passo para avançar.';
+    return 'Describe this step to continue.';
   }
 
   if (trimmed.length < MIN_CHARACTERS) {
-    return `Use pelo menos ${MIN_CHARACTERS} caracteres para contextualizar.`;
+    return `Use at least ${MIN_CHARACTERS} characters to provide context.`;
   }
 
   return '';
@@ -117,11 +117,11 @@ const RegisterWizard = () => {
 
   const handleSaveDraft = () => {
     saveDraft();
-    alert('Rascunho salvo com sucesso! Você pode continuar depois.');
+    alert('Draft saved successfully! You can continue later.');
   };
 
   const clearDraft = () => {
-    if (confirm('Tem certeza que deseja limpar o rascunho?')) {
+    if (confirm('Are you sure you want to clear the draft?')) {
       localStorage.removeItem(STORAGE_KEY);
       setProgress({});
       setLastSaved(null);
@@ -131,20 +131,20 @@ const RegisterWizard = () => {
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
       <CardWrapper
-        title={`Cadastro guiado (${wizardSteps.length} passos)`}
-        description="Preencha o pitch padrão CounterX: Problema → Validação → Produto → Mercado → Modelo → Métricas → Entrega → Preço."
+        title={`Guided registration (${wizardSteps.length} steps)`}
+        description="Fill out the standard CounterX pitch: Problem → Validation → Product → Market → Model → Metrics → Delivery → Price."
         actions={
           lastSaved && (
             <div className="text-xs text-muted-foreground flex items-center gap-2">
               {isSaving ? (
                 <>
                   <span className="inline-block w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin"></span>
-                  <span>Salvando...</span>
+                  <span>Saving...</span>
                 </>
               ) : (
                 <>
                   <span className="text-emerald-500">✓</span>
-                  <span>Salvo {lastSaved.toLocaleTimeString()}</span>
+                  <span>Saved {lastSaved.toLocaleTimeString()}</span>
                 </>
               )}
             </div>
@@ -157,10 +157,10 @@ const RegisterWizard = () => {
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-sm font-semibold text-foreground">
-                Progresso: {completion}%
+                Progress: {completion}%
               </span>
               <span className="text-sm text-muted-foreground">
-                Passo {currentIndex + 1} de {wizardSteps.length}
+                Step {currentIndex + 1} of {wizardSteps.length}
               </span>
             </div>
             <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
@@ -233,7 +233,7 @@ const RegisterWizard = () => {
                           {step.description}
                         </p>
                         {step.optional && (
-                          <span className="text-xs text-muted-foreground mt-1 block">Opcional</span>
+                          <span className="text-xs text-muted-foreground mt-1 block">Optional</span>
                         )}
                       </div>
                       {isCompleted && (
@@ -251,7 +251,7 @@ const RegisterWizard = () => {
             <label htmlFor={currentStep.id} className="block text-lg font-semibold text-foreground">
               {currentStep.title}
               {currentStep.optional && (
-                <span className="ml-2 text-sm font-normal text-muted-foreground">(opcional)</span>
+                <span className="ml-2 text-sm font-normal text-muted-foreground">(optional)</span>
               )}
             </label>
             <p className="text-sm text-muted-foreground mb-3">{currentStep.description}</p>
@@ -281,11 +281,11 @@ const RegisterWizard = () => {
                     : 'text-muted-foreground'
                 }`}
               >
-                {currentValue.trim().length} / {MIN_CHARACTERS} caracteres mínimos
+                {currentValue.trim().length} / {MIN_CHARACTERS} minimum characters
               </span>
               {currentValue.trim().length >= MIN_CHARACTERS && (
                 <span className="text-emerald-600 font-semibold flex items-center gap-1">
-                  ✓ Pronto para avançar
+                  ✓ Ready to continue
                 </span>
               )}
             </div>
@@ -299,14 +299,14 @@ const RegisterWizard = () => {
                 onClick={() => goToStep('back')}
                 disabled={currentIndex === 0}
               >
-                ← Voltar
+                ← Back
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleSaveDraft}
               >
-                💾 Salvar rascunho
+                💾 Save draft
               </Button>
               {lastSaved && (
                 <Button
@@ -314,7 +314,7 @@ const RegisterWizard = () => {
                   size="sm"
                   onClick={clearDraft}
                 >
-                  Limpar
+                  Clear
                 </Button>
               )}
             </div>
@@ -323,7 +323,7 @@ const RegisterWizard = () => {
               disabled={disableNext}
               className="w-full sm:w-auto"
             >
-              {currentIndex === wizardSteps.length - 1 ? '✨ Finalizar' : 'Próximo →'}
+              {currentIndex === wizardSteps.length - 1 ? '✨ Finish' : 'Next →'}
             </Button>
           </div>
         </div>

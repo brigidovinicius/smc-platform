@@ -1,34 +1,34 @@
 # ⚡ Quick Start - CounterX
 
-**Comece a desenvolver em 5 minutos!**
+**Start building in under 5 minutes.**
 
 ---
 
-## 🚀 Passo 1: Setup Inicial
+## 🚀 Step 1: Initial setup
 
 ```bash
-# Clone o repositório (se ainda não fez)
+# Clone the repository
 git clone <repo-url>
 cd saas-market-cap
 
-# Instale dependências
+# Install dependencies
 npm install
 
-# Configure variáveis de ambiente
+# Configure environment variables
 cp .env.example .env.local
-# Edite .env.local com suas credenciais
+# Edit .env.local with your credentials
 
-# Inicie o servidor
+# Start the dev server
 npm run dev
 ```
 
-Acesse: http://localhost:3000
+Visit http://localhost:3000 (or the port shown in the console).
 
 ---
 
-## 📝 Passo 2: Criar Sua Primeira API
+## 📝 Step 2: Create your first API route
 
-Crie `pages/api/test/route.ts`:
+Create `pages/api/test.ts`:
 
 ```typescript
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -40,13 +40,13 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
 });
 ```
 
-Teste: http://localhost:3000/api/test
+Test at http://localhost:3000/api/test
 
 ---
 
-## 🎨 Passo 3: Criar Seu Primeiro Componente
+## 🎨 Step 3: Create your first component
 
-Crie `components/Hello.tsx`:
+Create `components/Hello.tsx`:
 
 ```typescript
 import { cn } from '@/lib/utils/utils';
@@ -59,41 +59,41 @@ interface HelloProps {
 export function Hello({ name, className }: HelloProps) {
   return (
     <div className={cn("p-4 bg-blue-500 text-white rounded", className)}>
-      Olá, {name}!
+      Hello, {name}!
     </div>
   );
 }
 ```
 
-Use em qualquer página:
+Use it anywhere:
 
 ```typescript
 import { Hello } from '@/components/Hello';
 
 export default function Page() {
-  return <Hello name="Mundo" />;
+  return <Hello name="CounterX" />;
 }
 ```
 
 ---
 
-## 📚 Próximos Passos
+## 📚 Next steps
 
-1. ✅ Leia o [Guia Rápido](GUIA-RAPIDO-DESENVOLVEDOR.md)
-2. ✅ Veja o [Exemplo de API Completa](EXEMPLO-API-COMPLETA.md)
-3. ✅ Consulte as [Convenções](CONVENCOES-CODIGO.md)
-
----
-
-## 🆘 Problemas?
-
-- **Erro ao instalar?** → Verifique Node.js (v18+)
-- **Erro de build?** → Execute `npm run lint`
-- **Dúvidas?** → Consulte [README-DESENVOLVIMENTO.md](../README-DESENVOLVIMENTO.md)
+1. ✅ Read the [Developer Quick Guide](GUIA-RAPIDO-DESENVOLVEDOR.md)
+2. ✅ Review the [Complete API Example](EXEMPLO-API-COMPLETA.md)
+3. ✅ Follow the [Code Conventions](CONVENCOES-CODIGO.md)
 
 ---
 
-**Pronto! Você está desenvolvendo! 🎉**
+## 🆘 Need help?
+
+- **Install errors?** → Check your Node.js version (v18+)
+- **Build errors?** → Run `npm run lint`
+- **Questions?** → See [README-DESENVOLVIMENTO.md](../README-DESENVOLVIMENTO.md)
+
+---
+
+**You're ready to build with CounterX! 🎉**
 
 
 

@@ -2,6 +2,7 @@ import { SessionProvider } from 'next-auth/react';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Layout from '@/components/Layout';
+import { TranslationProvider } from '@/lib/i18n/context';
 import '../styles/globals.css';
 
 const inter = Inter({
@@ -22,10 +23,12 @@ export default function MyApp({ Component, pageProps: { session, ...pageProps } 
 
   return (
     <SessionProvider session={session}>
-      <div className={`${inter.variable} ${spaceGrotesk.variable}`}>
-        {getLayout(<Component {...pageProps} />)}
-        <SpeedInsights />
-      </div>
+      <TranslationProvider locale={pageProps?.locale}>
+        <div className={`${inter.variable} ${spaceGrotesk.variable}`}>
+          {getLayout(<Component {...pageProps} />)}
+          <SpeedInsights />
+        </div>
+      </TranslationProvider>
     </SessionProvider>
   );
 }

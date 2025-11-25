@@ -1,6 +1,7 @@
 import '@/styles/globals.css';
 import type { ReactNode } from 'react';
 import { Inter, Space_Grotesk } from 'next/font/google';
+import { TranslationProviderClient } from '@/components/TranslationProviderClient';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -17,10 +18,8 @@ const spaceGrotesk = Space_Grotesk({
 export default function MarketingLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.className} ${spaceGrotesk.variable} bg-[var(--color-bg)] text-[var(--color-text)] antialiased`}
-      >
-        {children}
+      <body className={`${inter.className} ${spaceGrotesk.variable} bg-[var(--color-bg)] text-[var(--color-text)] antialiased`}>
+        <TranslationProviderClient>{children}</TranslationProviderClient>
       </body>
     </html>
   );

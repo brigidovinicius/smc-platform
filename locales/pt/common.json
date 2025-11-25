@@ -1,0 +1,153 @@
+{
+  "site": {
+    "name": "CounterX",
+    "tagline": "The Digital Deal Desk",
+    "description": "CounterX é a plataforma moderna para compra, venda e valuation de ativos SaaS e digitais."
+  },
+  "nav": {
+    "home": "Início",
+    "marketplace": "Marketplace",
+    "blog": "Blog",
+    "pricing": "Preços",
+    "resources": "Recursos",
+    "support": "Suporte",
+    "about": "Sobre",
+    "login": "Entrar",
+    "register": "Começar",
+    "listings": "Listagens",
+    "dashboard": "Dashboard",
+    "newAsset": "Novo ativo",
+    "profile": "Perfil"
+  },
+  "auth": {
+    "signIn": "Entrar",
+    "signOut": "Sair",
+    "signUp": "Cadastrar",
+    "email": "E-mail",
+    "password": "Senha",
+    "forgotPassword": "Esqueceu a senha?",
+    "dontHaveAccount": "Não tem uma conta?",
+    "alreadyHaveAccount": "Já tem uma conta?",
+    "signInWithGoogle": "Entrar com Google",
+    "accessRequired": "Acesso necessário",
+    "mustBeLoggedIn": "Você precisa estar logado para acessar esta página."
+  },
+  "dashboard": {
+    "title": "Dashboard de ativos digitais",
+    "description": "Acompanhe métricas, readiness score e prepare-se para negociações com investidores qualificados.",
+    "myAssets": "Meus ativos",
+    "myAssetsDescription": "Selecione um ativo para ajustar métricas, readiness e badges.",
+    "activeOffers": "Ofertas ativas",
+    "activeOffersDescription": "Resumo das propostas em negociação.",
+    "gamification": "Gamificação & Badges",
+    "gamificationDescription": "Conquiste badges ao completar tarefas críticas.",
+    "valuations": "Valuations e métricas",
+    "valuationsDescription": "Resumo das análises automáticas feitas com base em MRR, churn e CAC.",
+    "readinessScore": "Readiness score",
+    "suggestedValuation": "Valuation sugerido",
+    "listedAssets": "Ativos listados",
+    "noAssets": "Nenhum ativo",
+    "noAssetsDescription": "Cadastre seu primeiro ativo para começar.",
+    "noOffers": "Sem ofertas",
+    "noOffersDescription": "Publique seu ativo para receber propostas.",
+    "tasks": {
+      "updateMetrics": {
+        "title": "Atualizar métricas",
+        "description": "Adicione MRR, churn, LTV e ticket para manter o dossiê atual."
+      },
+      "addBenchmark": {
+        "title": "Adicionar benchmark de churn",
+        "description": "Compare com os KPIs do setor SaaS."
+      },
+      "shareChecklist": {
+        "title": "Compartilhar checklists jurídicos",
+        "description": "Envie o checklist padrão para o advisor."
+      }
+    },
+    "taskStatus": {
+      "inProgress": "Em andamento",
+      "pending": "Pendente",
+      "done": "Concluído"
+    }
+  },
+  "profile": {
+    "title": "Meu Perfil",
+    "description": "Gerencie suas informações e configurações",
+    "personalInfo": "Informações pessoais",
+    "quickActions": "Ações rápidas",
+    "fullName": "Nome completo",
+    "role": "Função",
+    "profileId": "ID do perfil",
+    "notProvided": "Não informado",
+    "signOutQuestion": "Deseja sair da sua conta?"
+  },
+  "wizard": {
+    "title": "Cadastro guiado",
+    "description": "Preencha o pitch padrão CounterX",
+    "progress": "Progresso",
+    "step": "Passo",
+    "of": "de",
+    "optional": "Opcional",
+    "back": "Voltar",
+    "next": "Próximo",
+    "finish": "Finalizar",
+    "saveDraft": "Salvar rascunho",
+    "clear": "Limpar",
+    "saving": "Salvando...",
+    "saved": "Salvo",
+    "readyToContinue": "Pronto para avançar",
+    "minimumCharacters": "caracteres mínimos"
+  },
+  "blog": {
+    "title": "CounterX Blog",
+    "description": "Artigos editoriais sobre valuation, aquisição de SaaS e operações de M&A digital.",
+    "readMore": "Ler mais",
+    "categories": "Categorias",
+    "authors": "Autores",
+    "relatedPosts": "Posts relacionados",
+    "publishedOn": "Publicado em",
+    "by": "Por"
+  },
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "create": "Criar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "noResults": "Nenhum resultado encontrado",
+    "backToHome": "Voltar para início",
+    "language": "Idioma",
+    "languageOptions": {
+      "en": "Inglês",
+      "pt": "Português"
+    },
+    "madeWithLove": "Feito com 💜 para founders."
+  },
+  "marketing": {
+    "nav": {
+      "howItWorks": "Como funciona",
+      "features": "Recursos",
+      "testimonials": "Depoimentos"
+    },
+    "cta": {
+      "signIn": "Entrar",
+      "getStarted": "Começar"
+    },
+    "footer": {
+      "platform": "Plataforma",
+      "resources": "Recursos",
+      "legal": "Legal",
+      "description": "A plataforma definitiva para avaliar, comprar e vender ativos digitais com dados auditados e segurança jurídica.",
+      "legalCenter": "Central legal",
+      "terms": "Termos de uso",
+      "privacy": "Privacidade",
+      "cookies": "Cookies"
+    }
+  }
+}
+

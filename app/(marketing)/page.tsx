@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
   title: 'CounterX – Evaluate, Buy and Sell Digital Assets with Real Data',
   description:
-    'CounterX é a plataforma moderna para compra, venda e valuation de ativos SaaS e digitais.',
+    'CounterX is the modern platform for buying, selling, and valuing SaaS and digital assets.',
   keywords: [
     'SaaS marketplace',
     'buy SaaS',
@@ -76,7 +76,7 @@ export const metadata: Metadata = {
   verification: {
     // TODO: Add your real Google Search Console code here
     // Get it at: https://search.google.com/search-console
-    google: 'ADICIONE_SEU_CODIGO_AQUI'
+    google: 'ADD_YOUR_CODE_HERE'
   }
 };
 

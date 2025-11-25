@@ -7,6 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "type-check": "tsc --noEmit",
     "generate:post": "node scripts/generateDailyPost.js",
     "schedule:posts": "node scripts/scheduleGeneratePost.js",
     "postinstall": "node scripts/postinstall-safe.js",
@@ -39,6 +43,7 @@
     "lucide-react": "^0.554.0",
     "next": "14.2.0",
     "next-auth": "^4.24.13",
+    "next-intl": "^4.5.5",
     "node-cron": "^4.2.1",
     "nodemailer": "^7.0.10",
     "openai": "^6.9.1",
@@ -52,16 +57,21 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
     "@types/node": "20.11.17",
     "@types/nodemailer": "^7.0.4",
     "@types/react": "18.2.43",
     "@types/react-dom": "18.2.17",
+    "@vitest/ui": "^4.0.13",
     "autoprefixer": "^10.4.22",
     "eslint": "8.57.0",
     "eslint-config-next": "14.2.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.1",
     "typescript": "5.4.2",
-    "vercel": "^48.10.3"
+    "vercel": "^48.10.3",
+    "vitest": "^4.0.13"
   }
 }

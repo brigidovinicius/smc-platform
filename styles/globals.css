@@ -4,11 +4,14 @@
 
 @layer base {
   :root {
-    /* CounterX Brand Colors */
+    /* CounterX Brand Colors - Neo Finance Identity */
     --color-primary: #0044CC;
-    --color-black: #070708;
+    --color-primary-hover: #0033AA;
+    --color-primary-light: #1a75ff;
+    --color-black: #050711;
     --color-gray: #9EA3B0;
     --color-white: #FFFFFF;
+    --color-surface-dark: #0b1224;
     --radius-default: 12px;
     --radius-round: 20px;
     --spacing-grid: 8px;

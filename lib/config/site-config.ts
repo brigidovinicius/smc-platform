@@ -12,7 +12,7 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://counterx.io
 export const SITE_CONFIG = {
     name: 'CounterX – The Digital Deal Desk',
     shortName: 'CounterX',
-    description: 'CounterX é a plataforma moderna para compra, venda e valuation de ativos SaaS e digitais.',
+    description: 'CounterX is the modern platform for buying, selling, and valuing SaaS and digital assets.',
     url: SITE_URL,
     keywords: [
         'SaaS marketplace',

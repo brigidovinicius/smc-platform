@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Logo } from '@/components/Logo';
+import { useTranslation } from '@/lib/i18n/context';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
 interface MarketingPageLayoutProps {
   children: ReactNode;
@@ -23,6 +25,7 @@ export function MarketingPageLayout({
 }: MarketingPageLayoutProps) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
@@ -31,9 +34,9 @@ export function MarketingPageLayout({
   }, []);
 
   const navItems = [
-    { label: 'How it works', href: '/#como-funciona' },
-    { label: 'Features', href: '/#recursos' },
-    { label: 'Testimonials', href: '/#depoimentos' }
+    { label: t('marketing.nav.howItWorks'), href: '/#how-it-works' },
+    { label: t('marketing.nav.features'), href: '/#features' },
+    { label: t('marketing.nav.testimonials'), href: '/#testimonials' }
   ];
 
   return (
@@ -54,7 +57,7 @@ export function MarketingPageLayout({
           />
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -70,11 +73,12 @@ export function MarketingPageLayout({
 
           {/* Desktop CTA Buttons */}
           <div className="hidden md:flex items-center gap-4">
+          <LanguageSwitcher className="text-white" variant="ghost" />
             <Link
               href="/auth/login"
               className={`text-sm font-medium ${scrolled ? 'text-slate-900' : 'text-white'}`}
             >
-              Sign in
+            {t('marketing.cta.signIn')}
             </Link>
             <Link
               href="/auth/register?callbackUrl=/feed"
@@ -84,7 +88,7 @@ export function MarketingPageLayout({
                   : 'bg-white text-slate-900 hover:bg-slate-100'
               }`}
             >
-              Get Started
+            {t('marketing.cta.getStarted')}
             </Link>
           </div>
 
@@ -112,8 +116,8 @@ export function MarketingPageLayout({
           </button>
 
           {/* Mobile Menu */}
-          {mobileMenuOpen && (
-            <div className="absolute top-full left-0 right-0 bg-white shadow-lg md:hidden">
+        {mobileMenuOpen && (
+          <div className="absolute top-full left-0 right-0 bg-white shadow-lg md:hidden">
               <nav className="container px-4 py-6 space-y-4">
                 {navItems.map((item) => (
                   <Link
@@ -125,20 +129,21 @@ export function MarketingPageLayout({
                     {item.label}
                   </Link>
                 ))}
+              <LanguageSwitcher className="pt-2" />
                 <div className="pt-4 border-t border-slate-200 space-y-3">
                   <Link
                     href="/auth/login"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block text-sm font-medium text-slate-900 py-2"
                   >
-                    Sign in
+                  {t('marketing.cta.signIn')}
                   </Link>
                   <Link
                     href="/auth/register?callbackUrl=/feed"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block w-full text-center rounded-full bg-slate-900 text-white px-5 py-2 text-sm font-medium transition-all hover:bg-slate-800"
                   >
-                    Get Started
+                  {t('marketing.cta.getStarted')}
                   </Link>
                 </div>
               </nav>

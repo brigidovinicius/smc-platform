@@ -1,24 +1,34 @@
 /**
- * Design Tokens Centralizados
+ * Centralized Design Tokens
  * 
- * Sistema de design tokens para manter consistência visual
- * em toda a aplicação. Usado por componentes e estilos globais.
+ * Design token system to maintain visual consistency
+ * across the entire application. Used by components and global styles.
+ * 
+ * Neo Finance Identity - CounterX Platform
  */
 
 export const colors = {
-  // Brand Colors
+  // CounterX Brand Colors (Neo Finance Identity)
   primary: {
-    50: '#eef2ff',
-    100: '#e0e7ff',
-    200: '#c7d2fe',
-    300: '#a5b4fc',
-    400: '#818cf8',
-    500: '#6366f1', // Primary
-    600: '#4f46e5',
-    700: '#4338ca',
-    800: '#3730a3',
-    900: '#312e81',
-    950: '#1e1b4b'
+    50: '#e6f0ff',
+    100: '#b3d1ff',
+    200: '#80b3ff',
+    300: '#4d94ff',
+    400: '#1a75ff',
+    500: '#0044CC', // CounterX Primary Blue
+    600: '#0033AA',
+    700: '#002288',
+    800: '#001166',
+    900: '#000044',
+    950: '#000022'
+  },
+  // Neo Finance Accent Colors
+  accent: {
+    electric: '#0044CC', // Primary blue
+    dark: '#050711', // Dark background
+    surface: '#0b1224', // Surface dark
+    gray: '#9EA3B0', // Neutral gray
+    white: '#FFFFFF' // Pure white
   },
   // Semantic Colors
   success: {

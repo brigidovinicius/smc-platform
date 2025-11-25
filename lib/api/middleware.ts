@@ -99,6 +99,8 @@ export function logRequest(req: NextApiRequest) {
   const url = req.url;
   const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
 
-  console.log(`[${timestamp}] ${method} ${url} - IP: ${ip}`);
+  if (process.env.NODE_ENV !== 'production') {
+    console.warn(`[${timestamp}] ${method} ${url} - IP: ${ip}`);
+  }
 }
 

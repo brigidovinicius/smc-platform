@@ -104,7 +104,7 @@ const LoginPage = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full px-4 py-3 rounded-lg border-2 border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
-              placeholder="seu@email.com"
+              placeholder="your@email.com"
             />
           </div>
 

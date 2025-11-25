@@ -51,7 +51,7 @@ const plans = [
       'Guaranteed SLA'
     ],
     cta: 'Talk to sales',
-    href: '/suporte',
+    href: '/support',
     popular: false
   }
 ];

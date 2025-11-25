@@ -9,12 +9,7 @@ import MarketGrid from '@/components/MarketGrid';
 import EmptyState from '@/components/EmptyState';
 import { getUserAssets, getUserOffers, getDashboardStats } from '@/lib/services/dashboard';
 import { AppShell } from '@/components/layout/AppShell';
-
-const readinessTasks = [
-  { id: 'task-1', title: 'Atualizar MRR dos últimos 6 meses', description: 'Suba os indicadores na aba Métricas', status: 'inProgress', statusLabel: 'Em andamento' },
-  { id: 'task-2', title: 'Adicionar benchmark de churn', description: 'Compare com o setor B2B SaaS', status: 'pending', statusLabel: 'Pendente' },
-  { id: 'task-3', title: 'Compartilhar checklists jurídicos', description: 'Envie o checklist padrão para o advisor', status: 'done', statusLabel: 'Concluído' }
-];
+import { useTranslation } from '@/lib/i18n/context';
 
 const badges = [
   { label: 'Founder PRO', variant: 'default' },
@@ -24,28 +19,53 @@ const badges = [
 
 export default function Dashboard({ assets, offers, stats }) {
   const { data: session } = useSession();
+  const { t } = useTranslation();
+
+  const readinessTasks = [
+    {
+      id: 'task-1',
+      title: t('dashboard.tasks.updateMetrics.title'),
+      description: t('dashboard.tasks.updateMetrics.description'),
+      status: 'inProgress',
+      statusLabel: t('dashboard.taskStatus.inProgress')
+    },
+    {
+      id: 'task-2',
+      title: t('dashboard.tasks.addBenchmark.title'),
+      description: t('dashboard.tasks.addBenchmark.description'),
+      status: 'pending',
+      statusLabel: t('dashboard.taskStatus.pending')
+    },
+    {
+      id: 'task-3',
+      title: t('dashboard.tasks.shareChecklist.title'),
+      description: t('dashboard.tasks.shareChecklist.description'),
+      status: 'done',
+      statusLabel: t('dashboard.taskStatus.done')
+    }
+  ];
 
   return (
     <div className="stack-lg">
       <Card
-        title="Dashboard de ativos digitais"
-        description="Acompanhe métricas, readiness score e prepare-se para negociações com investidores qualificados."
+        title={t('dashboard.title')}
+        description={t('dashboard.description')}
         actions={
           session && (
             <Badge variant="default">
-              {session.user?.name?.split(' ')[0] ?? 'Usuário'} · Nível Founder
+              {session.user?.name?.split(' ')[0] ?? 'User'} · Founder Level
             </Badge>
           )
         }
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <StatBlock label="Readiness score" value={`${stats.readinessScore}%`} sublabel="Pronto para due diligence" trend="+6% este mês" />
-          <StatBlock label="Valuation sugerido" value={stats.valuation} sublabel="Com base em MRR e churn" />
-          <StatBlock label="Ativos listados" value={stats.assetsCount} sublabel="Total em carteira" />
+          <StatBlock label="Readiness score" value={`${stats.readinessScore}%`} sublabel="Ready for due diligence" trend="+6% this month" />
+          <StatBlock label="Suggested valuation" value={stats.valuation} sublabel="Based on MRR and churn" />
+          <StatBlock label="Listed assets" value={stats.assetsCount} sublabel="Total in portfolio" />
         </div>
       </Card>
 
-      <Card title="Meus ativos" description="Selecione um ativo para ajustar métricas, readiness e badges.">
+      <Card title={t('dashboard.myAssets')} description={t('dashboard.myAssetsDescription')}>
         {assets.length ? (
           <MarketGrid
             items={assets}
@@ -67,30 +87,30 @@ export default function Dashboard({ assets, offers, stats }) {
             )}
           />
         ) : (
-          <EmptyState title="Nenhum ativo" description="Cadastre seu primeiro ativo para começar." />
+          <EmptyState title={t('dashboard.noAssets')} description={t('dashboard.noAssetsDescription')} />
         )}
       </Card>
 
-      <Card title="Ofertas ativas" description="Resumo das propostas em negociação.">
+      <Card title={t('dashboard.activeOffers')} description={t('dashboard.activeOffersDescription')}>
         {offers.length ? (
           <MarketGrid
             items={offers}
             renderItem={(offer) => <OfferCard key={offer.id} offer={{
               ...offer,
-              title: offer.asset?.name ?? 'Oferta',
+              title: offer.asset?.name ?? 'Offer',
               summary: offer.asset?.description ?? '',
               classification: offer.asset?.category ?? 'SaaS',
-              revenueRange: offer.asset?.mrr ? `MRR R$ ${Number(offer.asset.mrr).toLocaleString('pt-BR')}` : 'Sob consulta',
+              revenueRange: offer.asset?.mrr ? `MRR $${Number(offer.asset.mrr).toLocaleString('en-US')}` : 'On request',
               investmentRange: { min: Number(offer.price), max: Number(offer.price) },
               valuationMultiple: 'N/A'
             }} />}
           />
         ) : (
-          <EmptyState title="Sem ofertas" description="Publique seu ativo para receber propostas." />
+          <EmptyState title={t('dashboard.noOffers')} description={t('dashboard.noOffersDescription')} />
         )}
       </Card>
 
-      <Card title="Gamificação & badges" description="Conquiste badges ao completar tarefas críticas.">
+      <Card title={t('dashboard.gamification')} description={t('dashboard.gamificationDescription')}>
         <div className="flex flex-wrap gap-3 mb-6">
           {badges.map((badge) => (
             <Badge key={badge.label} variant={badge.variant}>
@@ -101,11 +121,11 @@ export default function Dashboard({ assets, offers, stats }) {
         <ProgressList items={readinessTasks} />
       </Card>
 
-      <Card title="Valuations e métricas" description="Resumo das análises automáticas feitas com base em MRR, churn e CAC.">
+      <Card title={t('dashboard.valuations')} description={t('dashboard.valuationsDescription')}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-          <StatBlock label="MRR auditado" value="R$ 28.400" sublabel="crescimento 9% nos últimos 30 dias" />
-          <StatBlock label="Churn controlado" value="1.9%" sublabel="benchmark SaaS B2B" />
-          <StatBlock label="CAC payback" value="5.2 meses" sublabel="ideal < 7 meses" />
+          <StatBlock label="Audited MRR" value="$28,400" sublabel="9% growth in the last 30 days" />
+          <StatBlock label="Controlled churn" value="1.9%" sublabel="B2B SaaS benchmark" />
+          <StatBlock label="CAC payback" value="5.2 months" sublabel="ideal < 7 months" />
         </div>
       </Card>
     </div>

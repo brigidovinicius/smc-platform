@@ -39,16 +39,34 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.7
         },
         {
-            url: `${baseUrl}/recursos`,
+            url: `${baseUrl}/resources`,
             lastModified: currentDate,
             changeFrequency: 'monthly',
             priority: 0.7
         },
         {
-            url: `${baseUrl}/suporte`,
+            url: `${baseUrl}/support`,
             lastModified: currentDate,
             changeFrequency: 'monthly',
             priority: 0.6
+        },
+        {
+            url: `${baseUrl}/about`,
+            lastModified: currentDate,
+            changeFrequency: 'monthly',
+            priority: 0.7
+        },
+        {
+            url: `${baseUrl}/sell`,
+            lastModified: currentDate,
+            changeFrequency: 'monthly',
+            priority: 0.6
+        },
+        {
+            url: `${baseUrl}/marketplace`,
+            lastModified: currentDate,
+            changeFrequency: 'hourly',
+            priority: 0.8
         },
         {
             url: `${baseUrl}/blog`,

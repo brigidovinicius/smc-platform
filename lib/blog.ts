@@ -68,7 +68,7 @@ export const getPostBySlug = (slug: string): BlogPost | null => {
 
   // Try to find by filename first
   const filePath = path.join(BLOG_DIR, `${slug}.mdx`);
-  let raw = readFileSafe(filePath);
+  const raw = readFileSafe(filePath);
   
   if (raw) {
     const { data, content } = matter(raw);

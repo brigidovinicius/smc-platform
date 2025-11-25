@@ -5,9 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { User, Mail, Shield, LogOut, Settings } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslation } from '@/lib/i18n/context';
 
 const ProfilePage = () => {
   const { data: session, status } = useSession();
+  const { t } = useTranslation();
 
   if (status === 'loading') {
     return (
@@ -23,16 +25,13 @@ const ProfilePage = () => {
   if (!session) {
     return (
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <CardWrapper
-          title="Acesso necessário"
-          description="Você precisa estar logado para acessar seu perfil."
-        >
+        <CardWrapper title={t('auth.accessRequired')} description={t('auth.mustBeLoggedIn')}>
           <div className="flex flex-col sm:flex-row gap-4">
             <Button onClick={() => signIn('google', { callbackUrl: '/dashboard' })}>
-              Entrar com Google
+              {t('auth.signInWithGoogle')}
             </Button>
             <Button variant="outline" asChild>
-              <Link href="/">Voltar para início</Link>
+              <Link href="/">{t('common.backToHome')}</Link>
             </Button>
           </div>
         </CardWrapper>
@@ -44,14 +43,14 @@ const ProfilePage = () => {
     <div className="container mx-auto px-4 py-8 max-w-4xl space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Meu Perfil</h1>
-          <p className="text-muted-foreground mt-1">Gerencie suas informações e configurações</p>
+          <h1 className="text-3xl font-bold text-foreground">{t('profile.title')}</h1>
+          <p className="text-muted-foreground mt-1">{t('profile.description')}</p>
         </div>
       </div>
 
       <CardWrapper
-        title="Informações pessoais"
-        description="Suas informações de conta e perfil"
+        title={t('profile.personalInfo')}
+        description={t('profile.description')}
       >
         <div className="flex flex-col sm:flex-row gap-6">
           {session.user?.image && (
@@ -71,20 +70,20 @@ const ProfilePage = () => {
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <User className="h-4 w-4" />
-                <span>Nome completo</span>
+                <span>{t('profile.fullName')}</span>
               </div>
               <p className="text-lg font-semibold text-foreground">
-                {session.user?.name ?? 'Não informado'}
+                {session.user?.name ?? t('profile.notProvided')}
               </p>
             </div>
 
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4" />
-                <span>Email</span>
+                <span>{t('auth.email')}</span>
               </div>
               <p className="text-lg text-foreground">
-                {session.user?.email ?? 'Não informado'}
+                {session.user?.email ?? t('profile.notProvided')}
               </p>
             </div>
 
@@ -92,7 +91,7 @@ const ProfilePage = () => {
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Shield className="h-4 w-4" />
-                  <span>Função</span>
+                  <span>{t('profile.role')}</span>
                 </div>
                 <Badge variant="secondary">{session.user.role}</Badge>
               </div>
@@ -101,7 +100,7 @@ const ProfilePage = () => {
             {session.user?.id && (
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <span>ID do perfil</span>
+                  <span>{t('profile.profileId')}</span>
                 </div>
                 <p className="text-sm font-mono text-muted-foreground bg-muted p-2 rounded">
                   {session.user.id}
@@ -113,8 +112,8 @@ const ProfilePage = () => {
       </CardWrapper>
 
       <CardWrapper
-        title="Ações rápidas"
-        description="Acesse rapidamente as principais funcionalidades"
+        title={t('profile.quickActions')}
+        description={t('profile.description')}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Button variant="outline" className="justify-start h-auto py-4" asChild>
@@ -123,7 +122,7 @@ const ProfilePage = () => {
                 <Settings className="h-5 w-5" />
                 <div className="text-left">
                   <div className="font-semibold">Dashboard</div>
-                  <div className="text-xs text-muted-foreground">Acompanhe seus ativos</div>
+                  <div className="text-xs text-muted-foreground">{t('dashboard.description')}</div>
                 </div>
               </div>
             </Link>
@@ -134,8 +133,8 @@ const ProfilePage = () => {
               <div className="flex items-center gap-3">
                 <User className="h-5 w-5" />
                 <div className="text-left">
-                  <div className="font-semibold">Novo Ativo</div>
-                  <div className="text-xs text-muted-foreground">Cadastre um novo ativo</div>
+                  <div className="font-semibold">New Asset</div>
+                  <div className="text-xs text-muted-foreground">{t('dashboard.myAssetsDescription')}</div>
                 </div>
               </div>
             </Link>
@@ -147,7 +146,7 @@ const ProfilePage = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
           <div>
             <p className="text-sm text-muted-foreground">
-              Deseja sair da sua conta?
+              {t('profile.signOutQuestion')}
             </p>
           </div>
           <Button 
@@ -156,7 +155,7 @@ const ProfilePage = () => {
             className="w-full sm:w-auto"
           >
             <LogOut className="h-4 w-4 mr-2" />
-            Sair da conta
+            {t('auth.signOut')}
           </Button>
         </div>
       </CardWrapper>

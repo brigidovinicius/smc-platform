@@ -1,35 +1,39 @@
-# https://www.robotstxt.org/robotstxt.html
-
-# Allow all major search engine crawlers
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-# Allow AI crawlers explicitly
-User-agent: GPTBot
-Allow: /
-
-User-agent: CCBot
-Allow: /
+# CounterX Platform - robots.txt
+# Optimized for search engine crawling
 
 User-agent: *
 Allow: /
-
-# Disallow admin and private areas
-Disallow: /api/
-Disallow: /admin/
-Disallow: /_next/
-Disallow: /auth/
-
-# Allow specific public paths
-Allow: /feed
-Allow: /wizard
 Allow: /blog
+Allow: /blog/*
+Allow: /feed
+Allow: /marketplace
+Allow: /pricing
+Allow: /calculator
+Allow: /faq
+Allow: /about
+Allow: /resources
+Allow: /support
+Allow: /legal
+Allow: /legal/*
+Allow: /asset/*
 
-# Crawl-delay for polite crawlers
-Crawl-delay: 1
+# Disallow private/admin areas
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /dashboard
+Disallow: /dashboard/*
+Disallow: /wizard
+Disallow: /profile
+Disallow: /auth
+Disallow: /auth/*
 
-# Sitemap location
+# Disallow API routes
+Disallow: /api
+Disallow: /api/*
+
+# Allow sitemaps
 Sitemap: https://counterx.io/sitemap.xml
+Sitemap: https://counterx.io/sitemap-blog.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1

@@ -2,7 +2,7 @@ const StatBlock = ({ label, value, sublabel, trend }) => (
   <div 
     className="rounded-2xl bg-card border border-border p-4 flex flex-col gap-1"
     role="region"
-    aria-label={`Estatística: ${label}`}
+    aria-label={`Statistic: ${label}`}
   >
     <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">{label}</p>
     <strong className="text-2xl text-foreground" aria-label={`${label}: ${value}`}>

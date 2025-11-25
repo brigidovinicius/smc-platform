@@ -1,0 +1,153 @@
+{
+  "site": {
+    "name": "CounterX",
+    "tagline": "The Digital Deal Desk",
+    "description": "CounterX is the modern platform for buying, selling, and valuing SaaS and digital assets."
+  },
+  "nav": {
+    "home": "Home",
+    "marketplace": "Marketplace",
+    "blog": "Blog",
+    "pricing": "Pricing",
+    "resources": "Resources",
+    "support": "Support",
+    "about": "About",
+    "login": "Sign in",
+    "register": "Get started",
+    "listings": "Listings",
+    "dashboard": "Dashboard",
+    "newAsset": "New asset",
+    "profile": "Profile"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "signUp": "Sign up",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "signInWithGoogle": "Sign in with Google",
+    "accessRequired": "Access required",
+    "mustBeLoggedIn": "You need to be logged in to access this page."
+  },
+  "dashboard": {
+    "title": "Digital Assets Dashboard",
+    "description": "Track metrics, readiness score and prepare for negotiations with qualified investors.",
+    "myAssets": "My Assets",
+    "myAssetsDescription": "Select an asset to adjust metrics, readiness and badges.",
+    "activeOffers": "Active Offers",
+    "activeOffersDescription": "Summary of proposals under negotiation.",
+    "gamification": "Gamification & Badges",
+    "gamificationDescription": "Earn badges by completing critical tasks.",
+    "valuations": "Valuations & Metrics",
+    "valuationsDescription": "Summary of automatic analyses based on MRR, churn, and CAC.",
+    "readinessScore": "Readiness score",
+    "suggestedValuation": "Suggested valuation",
+    "listedAssets": "Listed assets",
+    "noAssets": "No assets",
+    "noAssetsDescription": "Register your first asset to get started.",
+    "noOffers": "No offers",
+    "noOffersDescription": "Publish your asset to receive proposals.",
+    "tasks": {
+      "updateMetrics": {
+        "title": "Update metrics",
+        "description": "Add MRR, churn, LTV and ticket to keep the dossier current."
+      },
+      "addBenchmark": {
+        "title": "Add churn benchmark",
+        "description": "Compare against SaaS sector KPIs."
+      },
+      "shareChecklist": {
+        "title": "Share legal checklists",
+        "description": "Send the standard checklist to the advisor."
+      }
+    },
+    "taskStatus": {
+      "inProgress": "In progress",
+      "pending": "Pending",
+      "done": "Completed"
+    }
+  },
+  "profile": {
+    "title": "My Profile",
+    "description": "Manage your information and settings",
+    "personalInfo": "Personal Information",
+    "quickActions": "Quick Actions",
+    "fullName": "Full name",
+    "role": "Role",
+    "profileId": "Profile ID",
+    "notProvided": "Not provided",
+    "signOutQuestion": "Do you want to sign out?"
+  },
+  "wizard": {
+    "title": "Guided registration",
+    "description": "Fill out the standard CounterX pitch",
+    "progress": "Progress",
+    "step": "Step",
+    "of": "of",
+    "optional": "Optional",
+    "back": "Back",
+    "next": "Next",
+    "finish": "Finish",
+    "saveDraft": "Save draft",
+    "clear": "Clear",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "readyToContinue": "Ready to continue",
+    "minimumCharacters": "minimum characters"
+  },
+  "blog": {
+    "title": "CounterX Blog",
+    "description": "Editorial articles about valuation, SaaS acquisition, and digital M&A operations.",
+    "readMore": "Read more",
+    "categories": "Categories",
+    "authors": "Authors",
+    "relatedPosts": "Related Posts",
+    "publishedOn": "Published on",
+    "by": "By"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "noResults": "No results found",
+    "backToHome": "Back to home",
+    "language": "Language",
+    "languageOptions": {
+      "en": "English",
+      "pt": "Portuguese"
+    },
+    "madeWithLove": "Made with 💜 for founders."
+  },
+  "marketing": {
+    "nav": {
+      "howItWorks": "How it works",
+      "features": "Features",
+      "testimonials": "Testimonials"
+    },
+    "cta": {
+      "signIn": "Sign in",
+      "getStarted": "Get started"
+    },
+    "footer": {
+      "platform": "Platform",
+      "resources": "Resources",
+      "legal": "Legal",
+      "description": "The definitive platform to evaluate, buy, and sell digital assets with audited data and legal security.",
+      "legalCenter": "Legal center",
+      "terms": "Terms of Use",
+      "privacy": "Privacy",
+      "cookies": "Cookies"
+    }
+  }
+}
+

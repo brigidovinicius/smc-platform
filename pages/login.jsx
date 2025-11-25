@@ -20,7 +20,7 @@ const LoginRedirect = () => {
             height: '100vh',
             fontFamily: 'system-ui, -apple-system, sans-serif'
         }}>
-            <p>Redirecionando para login...</p>
+            <p>Redirecting to login...</p>
         </div>
     );
 };

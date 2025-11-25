@@ -22,8 +22,8 @@ import nodemailer from 'nodemailer';
 let transporter: nodemailer.Transporter | null = null;
 
 /**
- * Verifica se SMTP está configurado
- * @returns {boolean} True se todas as variáveis SMTP estão configuradas
+ * Checks if SMTP is configured
+ * @returns {boolean} True if all SMTP variables are configured
  */
 export function isSmtpConfigured(): boolean {
   const host = process.env.SMTP_HOST;
@@ -73,36 +73,36 @@ export async function sendVerificationEmail(email: string, token: string): Promi
     await transport.sendMail({
       from: process.env.EMAIL_FROM || 'CounterX <no-reply@counterx.io>',
       to: email,
-      subject: 'Confirme seu cadastro no CounterX',
-      text: `Bem-vindo(a)! Confirme seu e-mail acessando: ${verificationUrl}`,
+      subject: 'Confirm your CounterX registration',
+      text: `Welcome! Confirm your email by accessing: ${verificationUrl}`,
       html: `
-        <p>Bem-vindo(a) ao CounterX!</p>
-        <p>Para ativar sua conta, clique no botão abaixo:</p>
-        <p><a href="${verificationUrl}" style="display:inline-block;padding:12px 20px;border-radius:8px;background:#6c5ce7;color:#ffffff;text-decoration:none;">Verificar e-mail</a></p>
-        <p>Ou copie e cole este link no navegador: <br />${verificationUrl}</p>
+        <p>Welcome to CounterX!</p>
+        <p>To activate your account, click the button below:</p>
+        <p><a href="${verificationUrl}" style="display:inline-block;padding:12px 20px;border-radius:8px;background:#6c5ce7;color:#ffffff;text-decoration:none;">Verify email</a></p>
+        <p>Or copy and paste this link into your browser: <br />${verificationUrl}</p>
       `
     });
 
     return true;
   } catch (error) {
-    console.error('[email] Erro ao enviar email de verificação:', error);
+    console.error('[email] Error sending verification email:', error);
     return false;
   }
 }
 
 /**
- * Envia email de boas-vindas quando o cadastro é concluído
- * (usado quando SMTP está configurado mas verificação não é obrigatória)
+ * Sends welcome email when registration is completed
+ * (used when SMTP is configured but verification is not required)
  * 
- * @param {string} email - Email do usuário
- * @param {string} [name] - Nome do usuário (opcional)
- * @returns {Promise<boolean>} True se o email foi enviado com sucesso
+ * @param {string} email - User email
+ * @param {string} [name] - User name (optional)
+ * @returns {Promise<boolean>} True if email was sent successfully
  */
 export async function sendWelcomeEmail(email: string, name?: string): Promise<boolean> {
   try {
     const transport = getTransporter();
     if (!transport) {
-      console.warn('[email] SMTP settings missing, não foi possível enviar email de boas-vindas');
+      console.warn('[email] SMTP settings missing, could not send welcome email');
       return false;
     }
 
@@ -112,37 +112,37 @@ export async function sendWelcomeEmail(email: string, name?: string): Promise<bo
     await transport.sendMail({
       from: process.env.EMAIL_FROM || 'CounterX <no-reply@counterx.io>',
       to: email,
-      subject: 'Bem-vindo(a) ao CounterX!',
-      text: `Olá${name ? ` ${name}` : ''}!\n\nBem-vindo(a) ao CounterX! Sua conta foi criada com sucesso.\n\nVocê já pode fazer login e começar a usar a plataforma: ${loginUrl}\n\nAtenciosamente,\nEquipe CounterX`,
+      subject: 'Welcome to CounterX!',
+      text: `Hello${name ? ` ${name}` : ''}!\n\nWelcome to CounterX! Your account has been created successfully.\n\nYou can now log in and start using the platform: ${loginUrl}\n\nBest regards,\nCounterX Team`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h1 style="color: #6c5ce7; margin-bottom: 20px;">Bem-vindo(a) ao CounterX!</h1>
-          <p>Olá${name ? ` <strong>${name}</strong>` : ''}!</p>
-          <p>Sua conta foi criada com sucesso. Você já pode fazer login e começar a usar a plataforma.</p>
+          <h1 style="color: #6c5ce7; margin-bottom: 20px;">Welcome to CounterX!</h1>
+          <p>Hello${name ? ` <strong>${name}</strong>` : ''}!</p>
+          <p>Your account has been created successfully. You can now log in and start using the platform.</p>
           <p style="margin: 30px 0;">
-            <a href="${loginUrl}" style="display:inline-block;padding:12px 24px;border-radius:8px;background:#6c5ce7;color:#ffffff;text-decoration:none;font-weight:bold;">Fazer Login</a>
+            <a href="${loginUrl}" style="display:inline-block;padding:12px 24px;border-radius:8px;background:#6c5ce7;color:#ffffff;text-decoration:none;font-weight:bold;">Log In</a>
           </p>
-          <p>Ou acesse: <a href="${loginUrl}">${loginUrl}</a></p>
+          <p>Or access: <a href="${loginUrl}">${loginUrl}</a></p>
           <hr style="border:none;border-top:1px solid #e0e0e0;margin:30px 0;" />
-          <p style="color:#666;font-size:12px;">Atenciosamente,<br />Equipe CounterX</p>
+          <p style="color:#666;font-size:12px;">Best regards,<br />CounterX Team</p>
         </div>
       `
     });
 
     return true;
   } catch (error) {
-    console.error('[email] Erro ao enviar email de boas-vindas:', error);
+    console.error('[email] Error sending welcome email:', error);
     return false;
   }
 }
 
 /**
- * Envia email de recuperação de senha
+ * Sends password recovery email
  * 
- * @param {string} email - Email do usuário
- * @param {string} token - Token de reset de senha
- * @param {string} [name] - Nome do usuário (opcional)
- * @returns {Promise<boolean>} True se o email foi enviado com sucesso
+ * @param {string} email - User email
+ * @param {string} token - Password reset token
+ * @param {string} [name] - User name (optional)
+ * @returns {Promise<boolean>} True if email was sent successfully
  */
 export async function sendPasswordResetEmail(email: string, token: string, name?: string): Promise<boolean> {
   try {
@@ -158,28 +158,28 @@ export async function sendPasswordResetEmail(email: string, token: string, name?
     await transport.sendMail({
       from: process.env.EMAIL_FROM || 'CounterX <no-reply@counterx.io>',
       to: email,
-      subject: 'Redefinir sua senha - CounterX',
-      text: `Olá${name ? ` ${name}` : ''}!\n\nVocê solicitou a redefinição de senha. Clique no link abaixo para criar uma nova senha:\n\n${resetUrl}\n\nEste link expira em 1 hora.\n\nSe você não solicitou esta redefinição, ignore este email.\n\nAtenciosamente,\nEquipe CounterX`,
+      subject: 'Reset your password - CounterX',
+      text: `Hello${name ? ` ${name}` : ''}!\n\nYou requested a password reset. Click the link below to create a new password:\n\n${resetUrl}\n\nThis link expires in 1 hour.\n\nIf you did not request this reset, please ignore this email.\n\nBest regards,\nCounterX Team`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h1 style="color: #6c5ce7; margin-bottom: 20px;">Redefinir senha</h1>
-          <p>Olá${name ? ` <strong>${name}</strong>` : ''}!</p>
-          <p>Você solicitou a redefinição de senha. Clique no botão abaixo para criar uma nova senha:</p>
+          <h1 style="color: #6c5ce7; margin-bottom: 20px;">Reset password</h1>
+          <p>Hello${name ? ` <strong>${name}</strong>` : ''}!</p>
+          <p>You requested a password reset. Click the button below to create a new password:</p>
           <p style="margin: 30px 0;">
-            <a href="${resetUrl}" style="display:inline-block;padding:12px 24px;border-radius:8px;background:#6c5ce7;color:#ffffff;text-decoration:none;font-weight:bold;">Redefinir senha</a>
+            <a href="${resetUrl}" style="display:inline-block;padding:12px 24px;border-radius:8px;background:#6c5ce7;color:#ffffff;text-decoration:none;font-weight:bold;">Reset password</a>
           </p>
-          <p>Ou copie e cole este link no navegador:<br /><a href="${resetUrl}">${resetUrl}</a></p>
-          <p style="color:#666;font-size:14px;margin-top:30px;">Este link expira em <strong>1 hora</strong>.</p>
-          <p style="color:#999;font-size:12px;margin-top:20px;">Se você não solicitou esta redefinição, ignore este email.</p>
+          <p>Or copy and paste this link into your browser:<br /><a href="${resetUrl}">${resetUrl}</a></p>
+          <p style="color:#666;font-size:14px;margin-top:30px;">This link expires in <strong>1 hour</strong>.</p>
+          <p style="color:#999;font-size:12px;margin-top:20px;">If you did not request this reset, please ignore this email.</p>
           <hr style="border:none;border-top:1px solid #e0e0e0;margin:30px 0;" />
-          <p style="color:#666;font-size:12px;">Atenciosamente,<br />Equipe CounterX</p>
+          <p style="color:#666;font-size:12px;">Best regards,<br />CounterX Team</p>
         </div>
       `
     });
 
     return true;
   } catch (error) {
-    console.error('[email] Erro ao enviar email de reset de senha:', error);
+    console.error('[email] Error sending password reset email:', error);
     return false;
   }
 }
