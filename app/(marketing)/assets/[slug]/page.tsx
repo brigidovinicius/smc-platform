@@ -6,6 +6,7 @@ import { SITE_CONFIG, SITE_URL } from '@/lib/config/site-config';
 import { Badge } from '@/components/ui/badge';
 import prisma from '@/lib/prisma';
 import { ASSET_TYPE_LABELS } from '@/lib/assetTypes';
+import { LeadInterestForm } from '@/components/marketplace/LeadInterestForm';
 
 interface Params {
   params: { slug: string };
@@ -192,27 +193,7 @@ export default async function AssetPage({ params }: Params) {
                 </section>
               )}
 
-              {/* CTA */}
-              <section className="bg-slate-50 border border-slate-200 rounded-3xl p-6 space-y-4">
-                <h2 className="text-xl font-semibold text-slate-900">Interested in this asset?</h2>
-                <p className="text-slate-600">
-                  Log in to access complete financial data, due diligence materials, and connect with the seller.
-                </p>
-                <div className="flex gap-4 flex-wrap">
-                  <Link
-                    href="/auth/login?callbackUrl=/profile"
-                    className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-[#0044CC] text-white font-medium hover:bg-[#0033AA] transition-colors"
-                  >
-                    Talk to an advisor
-                  </Link>
-                  <Link
-                    href="/dashboard/assets/new"
-                    className="inline-flex items-center justify-center px-6 py-3 rounded-full border-2 border-[#0044CC] text-[#0044CC] font-medium hover:bg-[#0044CC]/5 transition-colors"
-                  >
-                    List your asset
-                  </Link>
-                </div>
-              </section>
+              <LeadInterestForm assetId={asset.id} assetTitle={asset.title} assetSlug={asset.slug} />
             </div>
           </div>
         </section>

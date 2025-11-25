@@ -172,6 +172,21 @@ enum AssetStatus {
   PUBLISHED
 }
 
+enum LeadStatus {
+  NEW
+  IN_CONTACT
+  PROPOSAL_SENT
+  WON
+  LOST
+}
+
+enum LeadBuyerType {
+  INVESTOR
+  COMPANY
+  INDIVIDUAL
+  OTHER
+}
+
 model Asset {
   id      String @id @default(cuid())
   ownerId String
@@ -214,6 +229,7 @@ model Asset {
   verification AssetVerification?
   moderation   AssetModeration?
   media        AssetMedia[]
+  leads        Lead[]
 
   @@index([ownerId])
   @@index([type])
@@ -285,4 +301,23 @@ model AssetMedia {
   createdAt DateTime @default(now())
 
   @@index([assetId])
+}
+
+model Lead {
+  id          String        @id @default(cuid())
+  assetId     String
+  asset       Asset         @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  name        String
+  email       String
+  buyerType   LeadBuyerType @default(OTHER)
+  budgetRange String?
+  message     String
+  status      LeadStatus    @default(NEW)
+  source      String?       @default("marketplace")
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([assetId])
+  @@index([status])
+  @@index([createdAt])
 }
