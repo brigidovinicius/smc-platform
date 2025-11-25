@@ -4,6 +4,7 @@
  */
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function SetupUserPage() {
   const [loading, setLoading] = useState(false);
@@ -88,12 +89,12 @@ export default function SetupUserPage() {
               {JSON.stringify(result, null, 2)}
             </pre>
             <div className="mt-4">
-              <a
+              <Link
                 href="/auth/login"
                 className="text-emerald-700 hover:text-emerald-800 underline text-sm"
               >
                 → Fazer login agora
-              </a>
+              </Link>
             </div>
           </div>
         )}
