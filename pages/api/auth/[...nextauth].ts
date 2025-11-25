@@ -30,16 +30,20 @@ export const authOptions: NextAuthOptions = {
         try {
           // Validar credenciais
           if (!credentials?.email || !credentials.password || typeof credentials.email !== 'string') {
+            console.error('[AUTH] Credenciais inválidas - campos faltando');
             return null;
           }
+
+          // Normalizar email (trim e lowercase)
+          const normalizedEmail = credentials.email.trim().toLowerCase();
 
           let user;
           try {
             user = await prisma.user.findUnique({ 
-              where: { email: credentials.email } 
+              where: { email: normalizedEmail } 
             });
           } catch (dbError: any) {
-            console.error('Database error:', dbError);
+            console.error('[AUTH] Database error:', dbError);
             if (dbError.code === 'P1001' || dbError.message?.includes('can\'t reach database server')) {
               throw new Error('Serviço temporariamente indisponível. Por favor, tente novamente em alguns instantes.');
             }
@@ -47,26 +51,34 @@ export const authOptions: NextAuthOptions = {
           }
 
           if (!user) {
+            console.error(`[AUTH] Usuário não encontrado: ${normalizedEmail}`);
             return null;
           }
 
           // Verificar se o usuário tem email (não pode ser null)
           if (!user.email) {
-            console.error('User found but email is null:', user.id);
+            console.error('[AUTH] User found but email is null:', user.id);
             return null;
           }
 
           if (!user.password) {
+            console.error(`[AUTH] Usuário sem senha: ${normalizedEmail}`);
             return null;
           }
 
           // Email sempre é marcado como verificado no registro
           // Não é necessário verificar emailVerified aqui
 
-          const isValid = await bcrypt.compare(credentials.password, user.password);
+          // Remover espaços da senha
+          const trimmedPassword = credentials.password.trim();
+          
+          const isValid = await bcrypt.compare(trimmedPassword, user.password);
           if (!isValid) {
+            console.error(`[AUTH] Senha incorreta para: ${normalizedEmail}`);
             return null;
           }
+
+          console.log(`[AUTH] Login bem-sucedido: ${normalizedEmail}`);
 
           // Buscar o role do Profile
           let role = 'user';
