@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession, SessionProvider } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
@@ -129,7 +129,11 @@ function DashboardLayoutContent({ children }: DashboardLayoutProps) {
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  return <DashboardLayoutContent>{children}</DashboardLayoutContent>;
+  return (
+    <SessionProvider>
+      <DashboardLayoutContent>{children}</DashboardLayoutContent>
+    </SessionProvider>
+  );
 }
 
 

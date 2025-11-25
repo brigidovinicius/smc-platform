@@ -13,10 +13,10 @@ const ProfilePage = () => {
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [passwordData, setPasswordData] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
   const [emailData, setEmailData] = useState({ newEmail: '' });
-  const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
-  const [emailError, setEmailError] = useState<string | null>(null);
-  const [emailSuccess, setEmailSuccess] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState(null);
+  const [passwordSuccess, setPasswordSuccess] = useState(null);
+  const [emailError, setEmailError] = useState(null);
+  const [emailSuccess, setEmailSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
 
   if (status === 'loading') {
