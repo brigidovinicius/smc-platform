@@ -103,9 +103,40 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.sub = user.id;
-        // Usar o role retornado pelo authorize ou buscar se não estiver disponível
-        token.role = (user as { role?: string }).role ?? 'user';
+        // Tentar usar o role do objeto user (credentials provider)
+        const userRole = (user as { role?: string }).role;
+        
+        if (userRole) {
+          token.role = userRole;
+        } else {
+          // Se não houver role no user (ex: Google OAuth), buscar do Profile
+          try {
+            const profile = await prisma.profile.findUnique({
+              where: { userId: user.id },
+              select: { role: true },
+            });
+            token.role = profile?.role?.toLowerCase() ?? 'user';
+          } catch (error) {
+            console.error('Error fetching profile role in JWT callback:', error);
+            token.role = 'user';
+          }
+        }
+      } else if (token.sub) {
+        // Atualizar role do token se já existir (para refresh de sessão)
+        // Isso garante que o role está sempre atualizado mesmo após refresh
+        try {
+          const profile = await prisma.profile.findUnique({
+            where: { userId: token.sub },
+            select: { role: true },
+          });
+          if (profile?.role) {
+            token.role = profile.role.toLowerCase();
+          }
+        } catch (error) {
+          console.error('Error refreshing profile role in JWT callback:', error);
+        }
       }
+      
       return token;
     },
     async session({ session, token }) {
