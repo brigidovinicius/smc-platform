@@ -16,10 +16,15 @@ export const authOptions: NextAuthOptions = {
     signIn: '/auth/login'
   },
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? ''
-    }),
+    // Google Provider só é adicionado se as credenciais estiverem configuradas
+    ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+      ? [
+          GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET
+          })
+        ]
+      : []),
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
