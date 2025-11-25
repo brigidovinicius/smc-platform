@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   description: 'Create a new asset listing',
 };
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function NewAssetPage() {
   return (
     <div className="py-8">
