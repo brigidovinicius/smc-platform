@@ -13,7 +13,7 @@ interface Params {
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  const asset = await prisma.asset.findUnique({
+  const asset = await prisma.asset.findFirst({
     where: { slug: params.slug, status: 'PUBLISHED' },
     include: { owner: { select: { name: true } } },
   });
@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 }
 
 export default async function AssetPage({ params }: Params) {
-  const asset = await prisma.asset.findUnique({
+  const asset = await prisma.asset.findFirst({
     where: { slug: params.slug, status: 'PUBLISHED' },
     include: {
       owner: {
