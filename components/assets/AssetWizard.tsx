@@ -70,13 +70,32 @@ export default function AssetWizard({ assetId }: { assetId?: string }) {
 
   // Auto-save draft
   useEffect(() => {
+    const saveDraft = async () => {
+      try {
+        const url = assetId ? `/api/assets/${assetId}` : '/api/assets';
+        const method = assetId ? 'PUT' : 'POST';
+        
+        await fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...data,
+            status: 'DRAFT',
+          }),
+        });
+      } catch (error) {
+        // Silently fail for auto-save
+        console.error('Auto-save failed:', error);
+      }
+    };
+
     const timer = setTimeout(() => {
       if (data.title || data.type) {
         saveDraft();
       }
     }, 30000); // Auto-save every 30 seconds
     return () => clearTimeout(timer);
-  }, [data]);
+  }, [data, assetId]);
 
   const saveDraft = async () => {
     try {

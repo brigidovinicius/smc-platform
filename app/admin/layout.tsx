@@ -31,9 +31,10 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/auth/login?callbackUrl=' + encodeURIComponent(pathname));
+      router.push('/auth/login?callbackUrl=' + encodeURIComponent(pathname || '/admin'));
     } else if (status === 'authenticated') {
-      const userRole = (session?.user?.role as string)?.toLowerCase();
+      const user = session?.user as { role?: string } | undefined;
+      const userRole = user?.role ? String(user.role).toLowerCase() : '';
       if (userRole !== 'admin') {
         router.push('/dashboard');
       }
@@ -51,7 +52,8 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
     );
   }
 
-  const userRole = (session?.user?.role as string)?.toLowerCase();
+  const user = session?.user as { role?: string } | undefined;
+  const userRole = user?.role ? String(user.role).toLowerCase() : '';
   if (!session || userRole !== 'admin') {
     return null;
   }
