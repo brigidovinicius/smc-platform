@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -42,11 +42,7 @@ export default function AdminAssetsPage() {
     search: '',
   });
 
-  useEffect(() => {
-    loadAssets();
-  }, [filters]);
-
-  const loadAssets = async () => {
+  const loadAssets = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -74,7 +70,11 @@ export default function AdminAssetsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    loadAssets();
+  }, [loadAssets]);
 
   return (
     <div className="space-y-6">

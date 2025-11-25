@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -42,11 +42,7 @@ export default function AdminAssetDetailPage({ params }: { params: { id: string 
   const [statusComment, setStatusComment] = useState('');
   const [newStatus, setNewStatus] = useState('');
 
-  useEffect(() => {
-    loadAsset();
-  }, [params.id]);
-
-  const loadAsset = async () => {
+  const loadAsset = useCallback(async () => {
     try {
       const response = await fetch(`/api/assets/${params.id}`);
       const result = await response.json();
@@ -59,7 +55,11 @@ export default function AdminAssetDetailPage({ params }: { params: { id: string 
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.id]);
+
+  useEffect(() => {
+    loadAsset();
+  }, [loadAsset]);
 
   const handleStatusUpdate = async () => {
     if (!asset || !newStatus) return;

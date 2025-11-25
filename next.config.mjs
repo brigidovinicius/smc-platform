@@ -16,6 +16,16 @@ const nextConfig = {
     // typedRoutes: true // Disabled - causing build errors
   },
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
+  webpack: (config, { isServer }) => {
+    // Exclude test files from production build
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        '@/tests': false,
+      };
+    }
+    return config;
+  },
   images: {
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
