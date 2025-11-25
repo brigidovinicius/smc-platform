@@ -45,8 +45,11 @@ const LoginPage = () => {
           'Usuário não encontrado': 'Incorrect email or password',
           'Senha incorreta': 'Incorrect email or password',
           'Credenciais inválidas': 'Please fill in all fields',
-          'Serviço temporariamente indisponível': 'Service temporarily unavailable. Please try again in a few moments.',
-          'Erro ao acessar o banco de dados': 'Error accessing database. Check server configuration.'
+          'Usuário sem senha cadastrada. Use o método de login original (Google, etc).': 'This account has no password. Please use the original login method (Google, etc).',
+          'Usuário sem email válido': 'User account has invalid email',
+          'Serviço temporariamente indisponível. Por favor, tente novamente em alguns instantes.': 'Service temporarily unavailable. Please try again in a few moments.',
+          'Erro ao acessar o banco de dados. Verifique a configuração.': 'Error accessing database. Check server configuration.',
+          'Erro desconhecido na autenticação': 'Unknown authentication error. Please try again.'
         };
         setError(errorMessages[result.error] || result.error || 'Error signing in. Please try again.');
       } else if (result?.ok) {

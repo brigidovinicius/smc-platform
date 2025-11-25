@@ -35,7 +35,7 @@ export const authOptions: NextAuthOptions = {
           // Validar credenciais
           if (!credentials?.email || !credentials.password || typeof credentials.email !== 'string') {
             console.error('[AUTH] ❌ Credenciais inválidas - campos faltando');
-            return null;
+            throw new Error('Credenciais inválidas');
           }
 
           // Normalizar email (trim e lowercase)
@@ -57,18 +57,18 @@ export const authOptions: NextAuthOptions = {
 
           if (!user) {
             console.error(`[AUTH] Usuário não encontrado: ${normalizedEmail}`);
-            return null;
+            throw new Error('Usuário não encontrado');
           }
 
           // Verificar se o usuário tem email (não pode ser null)
           if (!user.email) {
             console.error('[AUTH] User found but email is null:', user.id);
-            return null;
+            throw new Error('Usuário sem email válido');
           }
 
           if (!user.password) {
             console.error(`[AUTH] Usuário sem senha: ${normalizedEmail}`);
-            return null;
+            throw new Error('Usuário sem senha cadastrada. Use o método de login original (Google, etc).');
           }
 
           // Email sempre é marcado como verificado no registro
@@ -76,14 +76,15 @@ export const authOptions: NextAuthOptions = {
 
           // Remover espaços da senha
           const trimmedPassword = credentials.password.trim();
+          console.log('[AUTH] Comparando senha...');
           
           const isValid = await bcrypt.compare(trimmedPassword, user.password);
           if (!isValid) {
             console.error(`[AUTH] Senha incorreta para: ${normalizedEmail}`);
-            return null;
+            throw new Error('Senha incorreta');
           }
 
-          console.log(`[AUTH] Login bem-sucedido: ${normalizedEmail}`);
+          console.log(`[AUTH] ✅ Login bem-sucedido: ${normalizedEmail}`);
 
           // Buscar o role do Profile
           let role = 'user';
@@ -93,6 +94,7 @@ export const authOptions: NextAuthOptions = {
               select: { role: true },
             });
             role = profile?.role?.toLowerCase() ?? 'user';
+            console.log(`[AUTH] Role do usuário: ${role}`);
           } catch (error) {
             console.error('Error fetching profile in authorize:', error);
           }
@@ -106,12 +108,16 @@ export const authOptions: NextAuthOptions = {
             role: role
           };
         } catch (error) {
-          console.error('Auth error:', error);
+          console.error('[AUTH] ❌ Erro na autenticação:', error);
           // Se for erro de email não verificado, propagar
           if (error instanceof Error && error.message.includes('E-mail não verificado')) {
             throw error;
           }
-          return null;
+          // Para outros erros, lançar para que o NextAuth possa capturar
+          if (error instanceof Error) {
+            throw error;
+          }
+          throw new Error('Erro desconhecido na autenticação');
         }
       }
     })
