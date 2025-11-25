@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
@@ -47,12 +47,12 @@ export function AppShell({ children }: AppShellProps) {
       <aside className="hidden w-72 flex-col border-r border-[#9EA3B0]/20 bg-[#070708] lg:flex">
         {/* Logo */}
         <div className="flex h-20 items-center border-b border-[#9EA3B0]/20 px-6">
-          <Link href="/dashboard" className="flex items-center gap-3 group">
-            <Logo variant="icon-only" width={40} height={40} className="group-hover:opacity-90 transition-opacity" />
-            <span className="text-xl font-bold text-white">
+          <div className="flex items-center gap-3 group">
+            <Logo variant="icon-only" href="/dashboard" width={40} height={40} className="group-hover:opacity-90 transition-opacity" />
+            <Link href="/dashboard" className="text-xl font-bold text-white hover:opacity-90 transition-opacity">
               Dashboard
-            </span>
-          </Link>
+            </Link>
+          </div>
         </div>
         
         <nav className="flex-1 space-y-2 p-4">
@@ -112,12 +112,12 @@ export function AppShell({ children }: AppShellProps) {
           />
           <aside className="fixed left-0 top-0 h-full w-72 bg-[#070708] border-r border-[#9EA3B0]/20">
             <div className="flex h-20 items-center justify-between border-b border-[#9EA3B0]/20 px-6">
-              <Link href="/dashboard" className="flex items-center gap-3">
-                <Logo variant="icon-only" width={40} height={40} />
-                <span className="text-xl font-bold text-white">
+              <div className="flex items-center gap-3">
+                <Logo variant="icon-only" href="/dashboard" width={40} height={40} />
+                <Link href="/dashboard" className="text-xl font-bold text-white">
                   Dashboard
-                </span>
-              </Link>
+                </Link>
+              </div>
               <button
                 onClick={() => setSidebarOpen(false)}
                 className="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
@@ -177,12 +177,15 @@ export function AppShell({ children }: AppShellProps) {
                 </div>
               </div>
             )}
-            <Link href="/api/auth/signout">
-              <Button variant="ghost" size="sm" className="text-[#9EA3B0] hover:text-white hover:bg-white/5 border border-[#9EA3B0]/20">
-                <LogOut className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Sign out</span>
-              </Button>
-            </Link>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-[#9EA3B0] hover:text-white hover:bg-white/5 border border-[#9EA3B0]/20"
+              onClick={() => signOut({ callbackUrl: '/' })}
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Sign out</span>
+            </Button>
           </div>
         </header>
 
