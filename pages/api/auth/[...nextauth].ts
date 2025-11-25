@@ -28,14 +28,19 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         try {
+          console.log('[AUTH] === INÍCIO AUTENTICAÇÃO ===');
+          console.log('[AUTH] Email recebido:', credentials?.email);
+          console.log('[AUTH] Senha recebida (length):', credentials?.password?.length);
+          
           // Validar credenciais
           if (!credentials?.email || !credentials.password || typeof credentials.email !== 'string') {
-            console.error('[AUTH] Credenciais inválidas - campos faltando');
+            console.error('[AUTH] ❌ Credenciais inválidas - campos faltando');
             return null;
           }
 
           // Normalizar email (trim e lowercase)
           const normalizedEmail = credentials.email.trim().toLowerCase();
+          console.log('[AUTH] Email normalizado:', normalizedEmail);
 
           let user;
           try {
