@@ -110,7 +110,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           <nav className="p-4 space-y-2">
             {adminNavItems.map((item) => {
               const Icon = item.icon;
-              const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+              const isActive = pathname ? (pathname === item.href || pathname.startsWith(item.href + '/')) : false;
               
               return (
                 <Link key={item.href} href={item.href}>
