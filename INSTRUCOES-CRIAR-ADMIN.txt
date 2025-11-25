@@ -1,0 +1,67 @@
+═══════════════════════════════════════════════════════════
+  🚀 COMO CRIAR ADMIN NO BANCO DE PRODUÇÃO
+═══════════════════════════════════════════════════════════
+
+PASSO 1: NO VERCEL (tela que você está vendo)
+───────────────────────────────────────────────────────────
+
+1. Procure pela variável "DATABASE_URL" na lista
+   → Se encontrar: clique no ícone de lápis e copie o valor
+   → Se NÃO encontrar: você precisa adicionar (veja abaixo)
+
+2. Para ADICIONAR se não existir:
+   → Clique em "Add Another"
+   → No campo "Key": digite DATABASE_URL
+   → No campo "Value": cole a URL do seu banco PostgreSQL
+   → Selecione os ambientes (Production, Preview, Development)
+   → Clique em "Save"
+
+PASSO 2: NO TERMINAL (neste computador)
+───────────────────────────────────────────────────────────
+
+Execute este comando (SUBSTITUA pela URL que você copiou):
+
+DATABASE_URL="postgresql://usuario:senha@host:porta/banco" \
+  node scripts/create-admin-user.js \
+  "Admin User" \
+  "brigido254@gmail.com" \
+  "admin123456"
+
+Exemplo real seria algo como:
+DATABASE_URL="postgresql://postgres:abc123@db.xyz.supabase.co:5432/postgres" \
+  node scripts/create-admin-user.js \
+  "Admin User" \
+  "brigido254@gmail.com" \
+  "admin123456"
+
+PASSO 3: VERIFICAR SE FUNCIONOU
+───────────────────────────────────────────────────────────
+
+DATABASE_URL="sua_url_aqui" node scripts/check-users.js
+
+Deve mostrar:
+✅ Email: brigido254@gmail.com
+✅ Role: ADMIN
+
+PASSO 4: TESTAR LOGIN
+───────────────────────────────────────────────────────────
+
+1. Acesse sua URL de produção
+2. Vá em /auth/login
+3. Email: brigido254@gmail.com
+4. Senha: admin123456
+5. Deve fazer login com sucesso!
+
+═══════════════════════════════════════════════════════════
+
+🔒 SEGURANÇA:
+   - NUNCA compartilhe a DATABASE_URL publicamente
+   - Mantenha-a segura e privada
+   - Apenas você deve ter acesso a ela
+
+💡 DICA:
+   Se a URL estiver mascarada (mostrando apenas ***), você
+   pode precisar usar a opção "Reveal" ou criar uma nova.
+
+═══════════════════════════════════════════════════════════
+
