@@ -68,25 +68,12 @@ export const authOptions: NextAuthOptions = {
             return null;
           }
 
-          // Buscar o role do Profile
-          let role = 'user';
-          try {
-            const profile = await prisma.profile.findUnique({
-              where: { userId: user.id },
-              select: { role: true },
-            });
-            role = profile?.role?.toLowerCase() ?? 'user';
-          } catch (error) {
-            console.error('Error fetching profile in authorize:', error);
-          }
-
           // Retornar objeto compatível com NextAuth
           return {
             id: user.id,
             email: user.email || '',
             name: user.name || null,
-            image: user.image || null,
-            role: role
+            image: user.image || null
           };
         } catch (error) {
           console.error('Auth error:', error);
@@ -103,7 +90,6 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.sub = user.id;
-        // Usar o role retornado pelo authorize ou buscar se não estiver disponível
         token.role = (user as { role?: string }).role ?? 'user';
       }
       return token;

@@ -203,5 +203,3 @@ Recommended folder structure for Cursor:
    ui-guidelines.md
 ```
 
-
-

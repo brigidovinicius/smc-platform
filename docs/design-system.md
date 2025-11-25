@@ -82,5 +82,3 @@ import { Logo } from '@/components/Logo';
 - Colors: `/branding/colors.md`
 - Typography: `/branding/typography.md`
 
-
-

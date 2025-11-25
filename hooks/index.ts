@@ -1,3 +1,0 @@
-export { useFavorites } from './useFavorites';
-
-

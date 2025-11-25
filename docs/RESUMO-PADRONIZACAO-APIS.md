@@ -249,5 +249,3 @@ A padronização está completa e pronta para uso. Novas APIs devem seguir o pad
 
 
 
-
-

@@ -8,5 +8,3 @@ export { slugify } from './slugify';
 
 
 
-
-

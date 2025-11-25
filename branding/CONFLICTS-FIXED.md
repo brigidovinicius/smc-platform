@@ -106,5 +106,3 @@ Estes componentes ainda contêm gradientes, mas são menos críticos:
 3. Atualizar RegisterWizard se necessário
 4. Validar que não há mais conflitos visuais
 
-
-
