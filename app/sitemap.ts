@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 import { getAllPosts, getAllCategories, getAllAuthors } from '@/lib/blog';
-import { SITE_URL } from '@/lib/site-config';
+import { SITE_URL } from '@/lib/config/site-config';
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = SITE_URL;

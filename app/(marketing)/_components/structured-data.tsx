@@ -1,5 +1,5 @@
 import Script from 'next/script';
-import { SITE_CONFIG } from '@/lib/site-config';
+import { SITE_CONFIG } from '@/lib/config/site-config';
 
 export function StructuredData({ faq }: { faq?: Array<{ question: string; answer: string }> }) {
     const organizationSchema = {

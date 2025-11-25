@@ -1,9 +1,29 @@
+/**
+ * Email Service
+ * 
+ * Handles all email sending functionality using Nodemailer.
+ * Supports verification emails, welcome emails, and password reset emails.
+ * 
+ * Configuration via environment variables:
+ * - SMTP_HOST: SMTP server hostname
+ * - SMTP_PORT: SMTP server port (default: 587 for TLS, 465 for SSL)
+ * - SMTP_USER: SMTP authentication username
+ * - SMTP_PASS: SMTP authentication password
+ * - EMAIL_FROM: Sender email address (default: CounterX <no-reply@counterx.io>)
+ * 
+ * @module lib/email
+ * @example
+ * import { sendVerificationEmail } from '@/lib/email';
+ * await sendVerificationEmail('user@example.com', 'token123');
+ */
+
 import nodemailer from 'nodemailer';
 
 let transporter: nodemailer.Transporter | null = null;
 
 /**
  * Verifica se SMTP está configurado
+ * @returns {boolean} True se todas as variáveis SMTP estão configuradas
  */
 export function isSmtpConfigured(): boolean {
   const host = process.env.SMTP_HOST;
@@ -73,6 +93,10 @@ export async function sendVerificationEmail(email: string, token: string): Promi
 /**
  * Envia email de boas-vindas quando o cadastro é concluído
  * (usado quando SMTP está configurado mas verificação não é obrigatória)
+ * 
+ * @param {string} email - Email do usuário
+ * @param {string} [name] - Nome do usuário (opcional)
+ * @returns {Promise<boolean>} True se o email foi enviado com sucesso
  */
 export async function sendWelcomeEmail(email: string, name?: string): Promise<boolean> {
   try {
@@ -114,6 +138,11 @@ export async function sendWelcomeEmail(email: string, name?: string): Promise<bo
 
 /**
  * Envia email de recuperação de senha
+ * 
+ * @param {string} email - Email do usuário
+ * @param {string} token - Token de reset de senha
+ * @param {string} [name] - Nome do usuário (opcional)
+ * @returns {Promise<boolean>} True se o email foi enviado com sucesso
  */
 export async function sendPasswordResetEmail(email: string, token: string, name?: string): Promise<boolean> {
   try {

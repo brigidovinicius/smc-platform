@@ -5,7 +5,7 @@ import { MarketingPageLayout } from '@/app/(marketing)/_components/MarketingPage
 import BlogPost from '@/components/blog/BlogPost';
 import RelatedPosts from '@/components/blog/RelatedPosts';
 import { Breadcrumbs } from '@/components/blog/Breadcrumbs';
-import { SITE_CONFIG } from '@/lib/site-config';
+import { SITE_CONFIG } from '@/lib/config/site-config';
 
 interface Params {
   params: { slug: string };

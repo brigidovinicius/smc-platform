@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { MarketingHomeContent } from './_components/marketing-home-content';
 import { StructuredData } from './_components/structured-data';
-import { SITE_CONFIG } from '@/lib/site-config';
+import { SITE_CONFIG } from '@/lib/config/site-config';
 
 export const viewport: Viewport = {
   width: 'device-width',

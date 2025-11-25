@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { getAllOffers, getOfferBySlug } from '@/lib/offers';
-import { SITE_URL } from '@/lib/site-config';
+import { SITE_URL } from '@/lib/config/site-config';
 
 const metricsList = [
   { key: 'mrr', label: 'MRR' },

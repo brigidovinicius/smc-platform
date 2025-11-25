@@ -1,3 +1,15 @@
+/**
+ * Prisma Client Singleton
+ * 
+ * Provides a single instance of PrismaClient across the application.
+ * Uses a global variable in development to prevent multiple instances during hot reload.
+ * 
+ * @module lib/prisma
+ * @example
+ * import prisma from '@/lib/prisma';
+ * const users = await prisma.user.findMany();
+ */
+
 import { PrismaClient } from '@prisma/client';
 
 const globalForPrisma = global as unknown as { prisma?: PrismaClient };

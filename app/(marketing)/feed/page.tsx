@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { MarketingPageLayout } from '@/app/(marketing)/_components/MarketingPageLayout';
 import { FeedContent } from './_components/FeedContent';
 import { listOffers } from '@/lib/services/offers';
-import { SITE_CONFIG, SITE_URL } from '@/lib/site-config';
+import { SITE_CONFIG, SITE_URL } from '@/lib/config/site-config';
 
 export const metadata: Metadata = {
   title: 'Opportunities Feed – CounterX | SaaS & Digital Assets',

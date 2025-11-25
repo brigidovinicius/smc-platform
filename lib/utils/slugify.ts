@@ -1,3 +1,14 @@
+/**
+ * Slugify Utility
+ * 
+ * Converts a string into a URL-friendly slug.
+ * 
+ * @param {string} value - The string to slugify
+ * @returns {string} URL-friendly slug
+ * @example
+ * slugify('Hello World!') // 'hello-world'
+ * slugify('  Multiple   Spaces  ') // 'multiple-spaces'
+ */
 export const slugify = (value: string) =>
   value
     .toLowerCase()
@@ -6,6 +17,7 @@ export const slugify = (value: string) =>
     .replace(/--+/g, '-')
     .replace(/^-+/, '')
     .replace(/-+$/, '');
+
 
 
 
