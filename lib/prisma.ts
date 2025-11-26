@@ -4,9 +4,22 @@ const globalForPrisma = global as unknown as { prisma?: PrismaClient };
 
 // Verificar se DATABASE_URL está configurado e é válido
 // Prioridade: POSTGRES_URL_NON_POOLING (recomendado para Supabase) > POSTGRES_URL > DATABASE_URL
+// IMPORTANTE: Definir DATABASE_URL no runtime se POSTGRES_URL_NON_POOLING estiver disponível
+// O Prisma schema sempre usa env("DATABASE_URL"), então precisamos garantir que esteja configurada
 const databaseUrl = process.env.POSTGRES_URL_NON_POOLING || 
                     process.env.POSTGRES_URL || 
                     process.env.DATABASE_URL;
+
+// Se POSTGRES_URL_NON_POOLING estiver disponível mas DATABASE_URL não estiver (ou estiver diferente),
+// definir DATABASE_URL no runtime para que o Prisma Client possa usá-la
+if (process.env.POSTGRES_URL_NON_POOLING && process.env.DATABASE_URL !== process.env.POSTGRES_URL_NON_POOLING) {
+  process.env.DATABASE_URL = process.env.POSTGRES_URL_NON_POOLING;
+  console.log('✅ DATABASE_URL definida automaticamente a partir de POSTGRES_URL_NON_POOLING');
+} else if (process.env.POSTGRES_URL && process.env.DATABASE_URL !== process.env.POSTGRES_URL) {
+  process.env.DATABASE_URL = process.env.POSTGRES_URL;
+  console.log('✅ DATABASE_URL definida automaticamente a partir de POSTGRES_URL');
+}
+
 const isValidDatabaseUrl = databaseUrl && 
   !databaseUrl.includes('dummy') && 
   !databaseUrl.includes('postgres:5432') &&
@@ -43,9 +56,15 @@ if (globalForPrisma.prisma) {
 } else {
   try {
     // Only create Prisma Client if we have a valid database URL
-    // Otherwise, create a minimal instance that won't try to connect
+    // Sempre especificar datasource explicitamente para garantir que use a URL correta
+    // Isso é importante porque o Prisma pode cachear a URL do ambiente
     if (isValidDatabaseUrl) {
       prismaInstance = new PrismaClient({
+        datasources: {
+          db: {
+            url: databaseUrl
+          }
+        },
         log: ['warn', 'error']
       });
     } else {
@@ -67,10 +86,12 @@ if (globalForPrisma.prisma) {
   } catch (error) {
     console.error('Error initializing Prisma Client:', error);
     // Create a minimal instance that won't crash
+    // Tentar usar a URL válida primeiro, depois fallback para dummy
+    const fallbackUrl = isValidDatabaseUrl ? databaseUrl : prismaUrl;
     prismaInstance = new PrismaClient({
       datasources: {
         db: {
-          url: prismaUrl
+          url: fallbackUrl
         }
       },
       log: []
