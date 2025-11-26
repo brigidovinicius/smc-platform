@@ -32,6 +32,11 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: 'CounterX | Digital Asset Marketplace',
   description: 'Buy and sell digital assets with confidence',
+  icons: {
+    icon: '/counterx-icon-only.svg',
+    apple: '/counterx-icon-only.svg',
+    shortcut: '/counterx-icon-only.svg',
+  },
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
