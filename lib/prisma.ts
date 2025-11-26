@@ -3,10 +3,10 @@ import { PrismaClient } from '@prisma/client';
 const globalForPrisma = global as unknown as { prisma?: PrismaClient };
 
 // Verificar se DATABASE_URL está configurado e é válido
-// Supabase pode usar POSTGRES_URL ou POSTGRES_URL_NON_POOLING
-const databaseUrl = process.env.DATABASE_URL || 
-                    process.env.POSTGRES_URL_NON_POOLING || 
-                    process.env.POSTGRES_URL;
+// Prioridade: POSTGRES_URL_NON_POOLING (recomendado para Supabase) > POSTGRES_URL > DATABASE_URL
+const databaseUrl = process.env.POSTGRES_URL_NON_POOLING || 
+                    process.env.POSTGRES_URL || 
+                    process.env.DATABASE_URL;
 const isValidDatabaseUrl = databaseUrl && 
   !databaseUrl.includes('dummy') && 
   !databaseUrl.includes('postgres:5432') &&
@@ -17,11 +17,11 @@ if (!isValidDatabaseUrl) {
     '⚠️  DATABASE_URL não está configurado ou é inválido!\n' +
     'A aplicação funcionará em modo limitado (sem persistência de dados).\n' +
     'Para habilitar o banco de dados, configure uma das seguintes variáveis no Vercel:\n' +
-    '  - DATABASE_URL\n' +
-    '  - POSTGRES_URL_NON_POOLING (recomendado para Supabase)\n' +
-    '  - POSTGRES_URL\n' +
+    '  - POSTGRES_URL_NON_POOLING (RECOMENDADO para Supabase - sem connection pooling)\n' +
+    '  - POSTGRES_URL (com connection pooling)\n' +
+    '  - DATABASE_URL (fallback)\n' +
     '\n' +
-    'Exemplo para Supabase:\n' +
+    'Exemplo para Supabase (recomendado):\n' +
     'POSTGRES_URL_NON_POOLING="postgresql://user:password@host:5432/database?sslmode=require"\n' +
     '\n' +
     'Ou para PostgreSQL local:\n' +

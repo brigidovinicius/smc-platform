@@ -21,9 +21,10 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
   const { name, email, password } = validation.data;
 
   // Verificar se banco de dados está configurado
-  const databaseUrl = process.env.DATABASE_URL || 
-                     process.env.POSTGRES_URL_NON_POOLING || 
-                     process.env.POSTGRES_URL;
+  // Prioridade: POSTGRES_URL_NON_POOLING (recomendado para Supabase) > POSTGRES_URL > DATABASE_URL
+  const databaseUrl = process.env.POSTGRES_URL_NON_POOLING || 
+                     process.env.POSTGRES_URL || 
+                     process.env.DATABASE_URL;
   if (!databaseUrl || databaseUrl.includes('dummy') || databaseUrl.includes('postgres:5432')) {
     return errorResponse(
       res,

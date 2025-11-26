@@ -11,16 +11,17 @@ async function checkDatabase() {
   console.log('🔍 Verificando configuração do banco de dados...\n');
 
   // Verificar variáveis de ambiente
-  const databaseUrl = process.env.DATABASE_URL || 
-                     process.env.POSTGRES_URL_NON_POOLING || 
-                     process.env.POSTGRES_URL;
+  // Prioridade: POSTGRES_URL_NON_POOLING (recomendado para Supabase) > POSTGRES_URL > DATABASE_URL
+  const databaseUrl = process.env.POSTGRES_URL_NON_POOLING || 
+                     process.env.POSTGRES_URL || 
+                     process.env.DATABASE_URL;
 
   if (!databaseUrl) {
     console.error('❌ Nenhuma variável de banco de dados encontrada!');
     console.log('\nConfigure uma das seguintes variáveis no Vercel:');
-    console.log('  - DATABASE_URL');
-    console.log('  - POSTGRES_URL_NON_POOLING (recomendado para Supabase)');
-    console.log('  - POSTGRES_URL');
+    console.log('  - POSTGRES_URL_NON_POOLING (RECOMENDADO para Supabase - sem connection pooling)');
+    console.log('  - POSTGRES_URL (com connection pooling)');
+    console.log('  - DATABASE_URL (fallback)');
     process.exit(1);
   }
 
