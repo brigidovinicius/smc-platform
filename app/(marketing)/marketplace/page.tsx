@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Metadata } from 'next';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { MarketingPageLayout } from '@/app/(marketing)/_components/MarketingPageLayout';
 import { ASSET_TYPE_LABELS, ASSET_TYPE_OPTIONS } from '@/lib/assetTypes';
@@ -31,11 +30,7 @@ export default function MarketplacePage() {
   const [minPrice, setMinPrice] = useState<number | ''>('');
   const [maxPrice, setMaxPrice] = useState<number | ''>('');
 
-  useEffect(() => {
-    loadAssets();
-  }, [selectedTypes, minPrice, maxPrice]);
-
-  const loadAssets = async () => {
+  const loadAssets = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -64,7 +59,11 @@ export default function MarketplacePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedTypes, minPrice, maxPrice]);
+
+  useEffect(() => {
+    loadAssets();
+  }, [loadAssets]);
 
   const toggleTypeFilter = (type: string) => {
     setSelectedTypes(prev =>

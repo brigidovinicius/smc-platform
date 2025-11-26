@@ -1,4 +1,5 @@
 import type { Lead, Asset } from '@prisma/client';
+import { recordLeadEvent } from '@/lib/context7';
 
 interface LeadWithAsset extends Lead {
   asset?: Pick<Asset, 'id' | 'title' | 'slug'>;
@@ -18,9 +19,16 @@ export async function handleNewLeadSideEffects(lead: LeadWithAsset) {
     status: lead.status,
   });
 
-  // TODO: Futuras integrações
-  // - Enviar email para o time interno ou advisor
-  // - Disparar webhooks para automações (n8n, Make, GoHighLevel)
-  // - Criar registros em CRMs ou plataformas de atendimento
+  await recordLeadEvent({
+    leadId: lead.id,
+    assetId: lead.assetId,
+    email: lead.email,
+    status: lead.status,
+    metadata: {
+      assetSlug: lead.asset?.slug,
+      assetTitle: lead.asset?.title
+    }
+  });
 }
+
 

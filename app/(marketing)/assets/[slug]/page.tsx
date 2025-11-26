@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -181,11 +182,16 @@ export default async function AssetPage({ params }: Params) {
                   <h2 className="text-xl font-semibold text-slate-900 mb-4">Media Gallery</h2>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {asset.media.map((media) => (
-                      <div key={media.id} className="aspect-video bg-slate-200 rounded-lg overflow-hidden">
-                        <img
+                      <div
+                        key={media.id}
+                        className="relative aspect-video bg-slate-200 rounded-lg overflow-hidden"
+                      >
+                        <Image
                           src={media.url}
                           alt={media.label || 'Asset media'}
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 33vw"
                         />
                       </div>
                     ))}

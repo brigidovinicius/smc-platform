@@ -2,19 +2,53 @@ import Image from 'next/image';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { Logo } from './Logo';
+import { useContext7 } from '@/components/providers/Context7Provider';
 
 export default function Navbar() {
   const { data: session, status } = useSession();
+  const { trackEvent, getFeatureFlag } = useContext7();
+  const betaNavbar = getFeatureFlag('betaNavbar');
+
+  const handleNavClick = (destination) => {
+    trackEvent('nav_click', {
+      destination,
+      location: 'navbar'
+    });
+  };
+
+  const handleAuthClick = (action) => {
+    trackEvent('auth_cta', {
+      action,
+      location: 'navbar'
+    });
+  };
 
   return (
     <header className="navbar" role="banner">
       <div className="navbar-left">
         <Logo variant="primary" href="/" className="navbar-logo" width={120} height={28} />
         <nav className="navbar-links" role="navigation" aria-label="Main navigation">
-          <Link href="/feed" aria-label="View available listings">Listings</Link>
-          <Link href="/dashboard" aria-label="Access dashboard">Dashboard</Link>
-          <Link href="/wizard" aria-label="List new asset">New Asset</Link>
-          <Link href="/profile" aria-label="Access profile">Profile</Link>
+          <Link href="/feed" aria-label="View available listings" onClick={() => handleNavClick('feed')}>
+            Listings
+          </Link>
+          <Link
+            href="/dashboard"
+            aria-label="Access dashboard"
+            onClick={() => handleNavClick('dashboard')}
+          >
+            Dashboard
+          </Link>
+          <Link href="/wizard" aria-label="List new asset" onClick={() => handleNavClick('wizard')}>
+            New Asset
+          </Link>
+          <Link href="/profile" aria-label="Access profile" onClick={() => handleNavClick('profile')}>
+            Profile
+          </Link>
+          {betaNavbar ? (
+            <Link href="/blog" aria-label="Read blog" onClick={() => handleNavClick('blog')}>
+              Blog
+            </Link>
+          ) : null}
         </nav>
       </div>
 
@@ -28,7 +62,10 @@ export default function Navbar() {
         {status === 'unauthenticated' && (
           <button 
             className="button primary" 
-            onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+            onClick={() => {
+              handleAuthClick('sign_in');
+              signIn('google', { callbackUrl: '/dashboard' });
+            }}
             aria-label="Sign in with Google"
           >
             Sign in
@@ -55,7 +92,10 @@ export default function Navbar() {
             </div>
             <button 
               className="button ghost" 
-              onClick={() => signOut({ callbackUrl: '/' })}
+              onClick={() => {
+                handleAuthClick('sign_out');
+                signOut({ callbackUrl: '/' });
+              }}
               aria-label="Sign out"
             >
               Sign out

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { MarketingHomeContent } from './_components/marketing-home-content';
 import { StructuredData } from './_components/structured-data';
 import { SITE_CONFIG } from '@/lib/site-config';
+import { Context7PageTracker } from '@/components/providers/Context7Provider';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -345,6 +346,16 @@ export default function MarketingHome() {
         gallery={galleryPlaceholders}
         story={story}
         security={security}
+      />
+      <Context7PageTracker
+        page="marketing_home"
+        data={{
+          sections: {
+            heroStats: heroStats.length,
+            features: features.length,
+            testimonials: testimonials.length
+          }
+        }}
       />
     </>
   );

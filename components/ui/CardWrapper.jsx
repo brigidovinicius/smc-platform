@@ -2,7 +2,7 @@
 // Provides the old API (title, description, actions) while using shadcn Card internally
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './card';
 
-export default function CardWrapper({ title, description, actions, children, className, ...props }) {
+export default function CardWrapper({ title, description, actions, children, className, ...props } = {}) {
   return (
     <Card className={className} {...props}>
       {(title || description || actions) && (
