@@ -10,11 +10,15 @@ const { execSync } = require('child_process');
 try {
   console.log('📦 Generating Prisma Client...');
   
-  // Set a dummy DATABASE_URL if not present to avoid Prisma validation errors
-  // Prisma Client generation doesn't actually need a real connection
-  if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL && !process.env.POSTGRES_URL_NON_POOLING) {
+  // Check if DATABASE_URL is valid (not pointing to localhost/docker hostnames)
+  const dbUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.POSTGRES_URL_NON_POOLING;
+  
+  // If DATABASE_URL is invalid (contains 'postgres:' hostname or is missing), use dummy
+  if (!dbUrl || dbUrl.includes('postgres:5432') || dbUrl.includes('@postgres:')) {
+    console.log('⚠️  DATABASE_URL is invalid or missing, using dummy URL for Prisma Client generation');
     process.env.DATABASE_URL = 'postgresql://dummy:dummy@localhost:5432/dummy?schema=public';
-    console.log('⚠️  Using dummy DATABASE_URL for Prisma Client generation');
+  } else {
+    console.log('✅ Using provided DATABASE_URL for Prisma Client generation');
   }
   
   execSync('prisma generate', { 
@@ -30,7 +34,8 @@ try {
 } catch (error) {
   console.error('❌ Error generating Prisma Client:', error.message);
   console.log('⚠️  Continuing build without Prisma Client generation...');
-  console.log('   Make sure DATABASE_URL is set in Vercel environment variables.');
+  console.log('   Make sure DATABASE_URL is set correctly in Vercel environment variables.');
+  console.log('   DATABASE_URL should be a valid PostgreSQL connection string (e.g., from Supabase or Vercel Postgres).');
   // Don't fail the build - exit with success
   process.exit(0);
 }
