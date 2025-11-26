@@ -8,6 +8,7 @@ import type { Session } from 'next-auth';
 import Script from 'next/script';
 import { SessionProvider } from '@/components/providers/SessionProvider';
 import { Context7Provider } from '@/components/providers/Context7Provider';
+import { CookieSetter } from '@/components/SEO/CookieSetter';
 import {
   CONTEXT7_SESSION_COOKIE,
   CONTEXT7_VISITOR_COOKIE,
@@ -50,32 +51,16 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const sessionUser = session?.user as (Session['user'] & { id?: string | null; role?: string | null }) | undefined;
   const cookieStore = cookies();
 
+  // Get existing cookies or generate new IDs
+  // Note: We can't set cookies in Server Components, so we'll handle this client-side
   let sessionId = cookieStore.get(CONTEXT7_SESSION_COOKIE)?.value;
   if (!sessionId) {
     sessionId = generateSessionId();
-    cookieStore.set({
-      name: CONTEXT7_SESSION_COOKIE,
-      value: sessionId,
-      httpOnly: false,
-      sameSite: 'lax',
-      path: '/',
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24 * 30
-    });
   }
 
   let visitorId = cookieStore.get(CONTEXT7_VISITOR_COOKIE)?.value;
   if (!visitorId) {
     visitorId = generateSessionId();
-    cookieStore.set({
-      name: CONTEXT7_VISITOR_COOKIE,
-      value: visitorId,
-      httpOnly: false,
-      sameSite: 'lax',
-      path: '/',
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24 * 365
-    });
   }
 
   const headerStore = headers();
@@ -106,6 +91,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         className={`${inter.className} ${spaceGrotesk.variable} bg-background text-foreground antialiased`}
         suppressHydrationWarning
       >
+        <CookieSetter sessionId={sessionId} visitorId={visitorId} />
         {context7Bootstrap.snippet ? (
           <Script id="context7-bootstrap" strategy="afterInteractive">
             {context7Bootstrap.snippet}
