@@ -16,9 +16,14 @@ if (!isValidDatabaseUrl) {
   console.warn(
     '⚠️  DATABASE_URL não está configurado ou é inválido!\n' +
     'A aplicação funcionará em modo limitado (sem persistência de dados).\n' +
-    'Para habilitar o banco de dados, configure DATABASE_URL no Vercel:\n' +
+    'Para habilitar o banco de dados, configure uma das seguintes variáveis no Vercel:\n' +
+    '  - DATABASE_URL\n' +
+    '  - POSTGRES_URL_NON_POOLING (recomendado para Supabase)\n' +
+    '  - POSTGRES_URL\n' +
+    '\n' +
     'Exemplo para Supabase:\n' +
-    'DATABASE_URL="postgresql://user:password@host:5432/database?sslmode=require"\n' +
+    'POSTGRES_URL_NON_POOLING="postgresql://user:password@host:5432/database?sslmode=require"\n' +
+    '\n' +
     'Ou para PostgreSQL local:\n' +
     'DATABASE_URL="postgresql://user:password@localhost:5432/database"'
   );
