@@ -30,7 +30,7 @@ const prismaUrl = isValidDatabaseUrl
 export const prisma =
   globalForPrisma.prisma ||
   new PrismaClient({
-    datasources: {
+    datasources: isValidDatabaseUrl ? undefined : {
       db: {
         url: prismaUrl
       }

@@ -7,10 +7,26 @@ import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
 
 // Only use PrismaAdapter if DATABASE_URL is configured
-const hasDatabase = Boolean(process.env.DATABASE_URL && !process.env.DATABASE_URL.includes('dummy'));
+const hasDatabase = Boolean(
+  process.env.DATABASE_URL && 
+  !process.env.DATABASE_URL.includes('dummy') &&
+  !process.env.DATABASE_URL.includes('postgres:5432') &&
+  process.env.DATABASE_URL.startsWith('postgresql://')
+);
+
+// Only create adapter if database is available
+let adapter = undefined;
+if (hasDatabase) {
+  try {
+    adapter = PrismaAdapter(prisma);
+  } catch (error) {
+    console.error('Error creating PrismaAdapter:', error);
+    adapter = undefined;
+  }
+}
 
 export const authOptions: NextAuthOptions = {
-  ...(hasDatabase ? { adapter: PrismaAdapter(prisma) } : {}),
+  ...(adapter ? { adapter } : {}),
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt'
