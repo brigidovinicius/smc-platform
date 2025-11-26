@@ -161,7 +161,7 @@ export const authOptions: NextAuthOptions = {
         } else {
           token.role = 'user';
         }
-      } else if (token.sub) {
+      } else if (token.sub && hasDatabase) {
         // Atualizar role do token se já existir (para refresh de sessão)
         // Isso garante que o role está sempre atualizado mesmo após refresh
         try {
