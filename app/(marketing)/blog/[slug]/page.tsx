@@ -84,7 +84,7 @@ export default function BlogPostPage({ params }: Params) {
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.excerpt,
-    image: post.coverImage ? `${SITE_CONFIG.url}${post.coverImage}` : `${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`,
+    image: `${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`,
     datePublished: post.date,
     dateModified: post.date,
     author: {
