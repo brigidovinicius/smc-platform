@@ -7,11 +7,15 @@ import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
 
 // Only use PrismaAdapter if DATABASE_URL is configured
+// Supabase pode usar POSTGRES_URL ou POSTGRES_URL_NON_POOLING
+const databaseUrl = process.env.DATABASE_URL || 
+                    process.env.POSTGRES_URL_NON_POOLING || 
+                    process.env.POSTGRES_URL;
 const hasDatabase = Boolean(
-  process.env.DATABASE_URL && 
-  !process.env.DATABASE_URL.includes('dummy') &&
-  !process.env.DATABASE_URL.includes('postgres:5432') &&
-  process.env.DATABASE_URL.startsWith('postgresql://')
+  databaseUrl && 
+  !databaseUrl.includes('dummy') &&
+  !databaseUrl.includes('postgres:5432') &&
+  (databaseUrl.startsWith('postgresql://') || databaseUrl.startsWith('postgres://'))
 );
 
 // Only create adapter if database is available

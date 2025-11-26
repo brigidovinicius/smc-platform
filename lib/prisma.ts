@@ -3,11 +3,14 @@ import { PrismaClient } from '@prisma/client';
 const globalForPrisma = global as unknown as { prisma?: PrismaClient };
 
 // Verificar se DATABASE_URL está configurado e é válido
-const databaseUrl = process.env.DATABASE_URL;
+// Supabase pode usar POSTGRES_URL ou POSTGRES_URL_NON_POOLING
+const databaseUrl = process.env.DATABASE_URL || 
+                    process.env.POSTGRES_URL_NON_POOLING || 
+                    process.env.POSTGRES_URL;
 const isValidDatabaseUrl = databaseUrl && 
   !databaseUrl.includes('dummy') && 
   !databaseUrl.includes('postgres:5432') &&
-  databaseUrl.startsWith('postgresql://');
+  (databaseUrl.startsWith('postgresql://') || databaseUrl.startsWith('postgres://'));
 
 if (!isValidDatabaseUrl) {
   console.warn(

@@ -20,6 +20,19 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
 
   const { name, email, password } = validation.data;
 
+  // Verificar se banco de dados está configurado
+  const databaseUrl = process.env.DATABASE_URL || 
+                     process.env.POSTGRES_URL_NON_POOLING || 
+                     process.env.POSTGRES_URL;
+  if (!databaseUrl || databaseUrl.includes('dummy') || databaseUrl.includes('postgres:5432')) {
+    return errorResponse(
+      res,
+      'Banco de dados não configurado. Configure DATABASE_URL ou POSTGRES_URL no Vercel.',
+      503,
+      'DATABASE_NOT_CONFIGURED'
+    );
+  }
+
   // Verificar conexão com banco de dados
   try {
     await prisma.$connect();
