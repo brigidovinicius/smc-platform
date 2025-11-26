@@ -50,6 +50,11 @@ export const authOptions: NextAuthOptions = {
           const normalizedEmail = credentials.email.trim().toLowerCase();
           console.log('[AUTH] Email normalizado:', normalizedEmail);
 
+          // Check if database is available
+          if (!hasDatabase) {
+            throw new Error('Autenticação não disponível. Banco de dados não configurado.');
+          }
+
           let user;
           try {
             user = await prisma.user.findUnique({ 

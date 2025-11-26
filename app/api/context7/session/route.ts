@@ -42,7 +42,13 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  const nextSession = await getServerSession(authOptions);
+  let nextSession = null;
+  try {
+    nextSession = await getServerSession(authOptions);
+  } catch (error) {
+    console.error('Error getting server session in context7:', error);
+    // Continue without session if there's an error
+  }
   const sessionUser = nextSession?.user as (Session['user'] & {
     id?: string | null;
     role?: string | null;
