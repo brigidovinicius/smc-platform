@@ -27,16 +27,41 @@ const prismaUrl = isValidDatabaseUrl
   ? databaseUrl 
   : 'postgresql://dummy:dummy@localhost:5432/dummy?schema=public';
 
-export const prisma =
-  globalForPrisma.prisma ||
-  new PrismaClient({
-    datasources: isValidDatabaseUrl ? undefined : {
-      db: {
-        url: prismaUrl
-      }
-    },
-    log: isValidDatabaseUrl ? ['warn', 'error'] : []
-  });
+// Create Prisma Client with proper configuration
+let prismaInstance: PrismaClient;
+
+if (globalForPrisma.prisma) {
+  prismaInstance = globalForPrisma.prisma;
+} else {
+  try {
+    prismaInstance = new PrismaClient({
+      datasources: isValidDatabaseUrl ? undefined : {
+        db: {
+          url: prismaUrl
+        }
+      },
+      log: isValidDatabaseUrl ? ['warn', 'error'] : []
+    });
+    
+    // Only store in global if not in production (to avoid memory leaks)
+    if (process.env.NODE_ENV !== 'production') {
+      globalForPrisma.prisma = prismaInstance;
+    }
+  } catch (error) {
+    console.error('Error initializing Prisma Client:', error);
+    // Create a minimal instance that won't crash
+    prismaInstance = new PrismaClient({
+      datasources: {
+        db: {
+          url: prismaUrl
+        }
+      },
+      log: []
+    });
+  }
+}
+
+export const prisma = prismaInstance;
 
 if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = prisma;
