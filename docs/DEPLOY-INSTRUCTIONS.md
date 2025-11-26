@@ -103,3 +103,4 @@ Verifique se `NEXTAUTH_SECRET` está configurado e é único.
 2. Verifique se o status é PUBLISHED
 3. Verifique os logs do servidor
 
+

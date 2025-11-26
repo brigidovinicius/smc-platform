@@ -144,3 +144,4 @@ ALTER TABLE "AssetModeration" ADD CONSTRAINT "AssetModeration_assetId_fkey" FORE
 ALTER TABLE "AssetMedia" ADD CONSTRAINT "AssetMedia_assetId_fkey" FOREIGN KEY ("assetId") REFERENCES "Asset"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 
+

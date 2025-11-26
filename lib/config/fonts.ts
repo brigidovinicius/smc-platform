@@ -27,3 +27,4 @@ export const fontBodyClass = inter.className;
 
 
 
+

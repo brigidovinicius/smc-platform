@@ -70,3 +70,4 @@ node scripts/create-admin-user.js
 # O script detectará e perguntará se deseja torná-lo admin
 ```
 
+

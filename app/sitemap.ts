@@ -21,6 +21,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.9
         },
         {
+            url: `${baseUrl}/marketplace`,
+            lastModified: currentDate,
+            changeFrequency: 'hourly',
+            priority: 0.9
+        },
+        {
             url: `${baseUrl}/pricing`,
             lastModified: currentDate,
             changeFrequency: 'weekly',
@@ -45,7 +51,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.7
         },
         {
+            url: `${baseUrl}/resources`,
+            lastModified: currentDate,
+            changeFrequency: 'monthly',
+            priority: 0.7
+        },
+        {
             url: `${baseUrl}/suporte`,
+            lastModified: currentDate,
+            changeFrequency: 'monthly',
+            priority: 0.6
+        },
+        {
+            url: `${baseUrl}/support`,
             lastModified: currentDate,
             changeFrequency: 'monthly',
             priority: 0.6
@@ -132,17 +150,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
         }
     ];
 
-    // Protected pages (wizard is public but requires auth to use)
-    const protectedPages: MetadataRoute.Sitemap = [
+    // Public pages that may require auth but are indexable
+    const publicPages: MetadataRoute.Sitemap = [
         {
-            url: `${baseUrl}/wizard`,
+            url: `${baseUrl}/vender-ativo`,
             lastModified: currentDate,
             changeFrequency: 'weekly',
-            priority: 0.8
+            priority: 0.7
         }
     ];
 
-    const staticPages = [...mainPages, ...legalPages, ...authPages, ...protectedPages];
+    const staticPages = [...mainPages, ...legalPages, ...authPages, ...publicPages];
 
     // Blog posts
     const posts = getAllPosts();

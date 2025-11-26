@@ -98,3 +98,4 @@ Após aplicar a migration, teste criando um asset:
 3. Verifique no admin `/admin/assets`
 
 
+

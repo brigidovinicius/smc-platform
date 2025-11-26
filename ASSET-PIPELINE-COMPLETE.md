@@ -236,3 +236,4 @@ O sistema está pronto para uso assim que a migration for aplicada no banco de d
 🎉 **Asset Intake & Listing Pipeline está 100% implementado!**
 
 
+

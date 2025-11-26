@@ -28,3 +28,4 @@
   - Webhooks para automação (n8n, Make, GoHighLevel, CRMs, etc.).
   - Criação de tarefas em pipelines de vendas.
 
+

@@ -127,3 +127,4 @@ Após criar o admin:
 - **Documentação Admin:** `docs/ADMIN-SETUP.md`
 - **Reset de Senha:** `docs/RESET-SENHA-PRODUCAO.md`
 
+

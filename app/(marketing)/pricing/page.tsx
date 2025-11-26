@@ -1,10 +1,12 @@
 'use client';
 
+import type { Metadata } from 'next';
 import { MarketingPageLayout } from '@/app/(marketing)/_components/MarketingPageLayout';
 import { GridBackground } from '@/components/marketing';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
+import { SITE_CONFIG } from '@/lib/site-config';
 
 const plans = [
   {

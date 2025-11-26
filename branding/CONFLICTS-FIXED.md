@@ -108,3 +108,4 @@ Estes componentes ainda contêm gradientes, mas são menos críticos:
 
 
 
+

@@ -95,3 +95,4 @@ export type AssetUpdateInput = z.infer<typeof AssetUpdateSchema>;
 export type AssetQueryInput = z.infer<typeof AssetQuerySchema>;
 
 
+

@@ -11,3 +11,4 @@ fi
 # Executar o comando passado
 exec "$@"
 
+

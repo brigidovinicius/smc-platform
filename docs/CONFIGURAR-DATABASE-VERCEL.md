@@ -132,3 +132,4 @@ postgresql://postgres:minhasenha@db.xyz.supabase.co:5432/postgres
 - **Railway Docs:** https://docs.railway.app/databases/postgresql
 - **Neon Docs:** https://neon.tech/docs
 
+

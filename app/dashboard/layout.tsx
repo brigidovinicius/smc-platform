@@ -5,6 +5,7 @@ import { useSession, SessionProvider } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
+import { NoIndexMeta } from '@/components/SEO/NoIndexMeta';
 import { 
   LayoutDashboard, 
   Package, 
@@ -53,8 +54,10 @@ function DashboardLayoutContent({ children }: DashboardLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#050711] text-white">
-      {/* Top Navbar */}
+    <>
+      <NoIndexMeta />
+      <div className="min-h-screen bg-[#050711] text-white">
+        {/* Top Navbar */}
       <header className="bg-[#0a0f1f] border-b border-slate-800 sticky top-0 z-40">
         <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16">
           <div className="flex items-center gap-4">
@@ -124,7 +127,7 @@ function DashboardLayoutContent({ children }: DashboardLayoutProps) {
           {children}
         </main>
       </div>
-    </div>
+    </>
   );
 }
 

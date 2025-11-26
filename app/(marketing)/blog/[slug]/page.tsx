@@ -37,6 +37,17 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     alternates: {
       canonical: postUrl,
     },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
     openGraph: {
       title: post.title,
       description: post.excerpt,
@@ -65,33 +76,69 @@ export default function BlogPostPage({ params }: Params) {
   }
 
   const relatedPosts = getRelatedPosts(post.slug, post.category, 3);
+  const postUrl = `${SITE_CONFIG.url}/blog/${params.slug}`;
+
+  // Structured data for blog post
+  const blogPostSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    image: post.coverImage ? `${SITE_CONFIG.url}${post.coverImage}` : `${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: {
+      '@type': 'Person',
+      name: post.author || 'CounterX Team',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_CONFIG.name,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_CONFIG.url}/logo.svg`,
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': postUrl,
+    },
+    articleSection: post.category,
+    keywords: post.tags?.join(', ') || '',
+  };
 
   return (
-    <MarketingPageLayout showHero={false}>
-      <section className="py-16 bg-white min-h-screen">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto space-y-8">
-            <Breadcrumbs
-              items={[
-                { label: 'Blog', href: '/blog' },
-                { label: post.title }
-              ]}
-            />
-            <BlogPost 
-              title={post.title} 
-              date={post.date} 
-              author={post.author} 
-              content={post.content}
-              category={post.category}
-              tags={post.tags}
-            />
-            
-            {relatedPosts.length > 0 && (
-              <RelatedPosts posts={relatedPosts} />
-            )}
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostSchema) }}
+      />
+      <MarketingPageLayout showHero={false}>
+        <section className="py-16 bg-white min-h-screen">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto space-y-8">
+              <Breadcrumbs
+                items={[
+                  { label: 'Blog', href: '/blog' },
+                  { label: post.title }
+                ]}
+              />
+              <BlogPost 
+                title={post.title} 
+                date={post.date} 
+                author={post.author} 
+                content={post.content}
+                category={post.category}
+                tags={post.tags}
+              />
+              
+              {relatedPosts.length > 0 && (
+                <RelatedPosts posts={relatedPosts} />
+              )}
+            </div>
           </div>
-        </div>
-      </section>
-    </MarketingPageLayout>
+        </section>
+      </MarketingPageLayout>
+    </>
   );
 }

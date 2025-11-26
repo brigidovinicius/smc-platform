@@ -43,3 +43,4 @@ echo "   Senha: admin123456"
 echo ""
 echo "🌐 Teste o login em: https://sua-app.vercel.app/auth/login"
 
+

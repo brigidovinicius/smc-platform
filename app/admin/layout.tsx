@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSession, SessionProvider } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { NoIndexMeta } from '@/components/SEO/NoIndexMeta';
 import { 
   LayoutDashboard, 
   Package, 
@@ -59,8 +60,10 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
+    <>
+      <NoIndexMeta />
+      <div className="min-h-screen bg-background">
+        {/* Header */}
       <header className="border-b bg-background sticky top-0 z-40">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
@@ -143,7 +146,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           {children}
         </main>
       </div>
-    </div>
+    </>
   );
 }
 

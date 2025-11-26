@@ -20,16 +20,31 @@ Allow: /
 # Disallow admin and private areas
 Disallow: /api/
 Disallow: /admin/
+Disallow: /dashboard/
 Disallow: /_next/
 Disallow: /auth/
+Disallow: /profile
+Disallow: /wizard
 
 # Allow specific public paths
 Allow: /feed
-Allow: /wizard
 Allow: /blog
+Allow: /marketplace
+Allow: /pricing
+Allow: /precos
+Allow: /calculator
+Allow: /calculadora-valuation
+Allow: /faq
+Allow: /recursos
+Allow: /resources
+Allow: /suporte
+Allow: /support
+Allow: /legal
+Allow: /vender-ativo
 
 # Crawl-delay for polite crawlers
 Crawl-delay: 1
 
-# Sitemap location
+# Sitemap locations
 Sitemap: https://counterx.io/sitemap.xml
+Sitemap: https://counterx.io/sitemap-blog.xml
