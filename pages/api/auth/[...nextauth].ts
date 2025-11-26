@@ -101,15 +101,17 @@ export const authOptions: NextAuthOptions = {
 
           // Buscar o role do Profile
           let role = 'user';
-          try {
-            const profile = await prisma.profile.findUnique({
-              where: { userId: user.id },
-              select: { role: true },
-            });
-            role = profile?.role?.toLowerCase() ?? 'user';
-            console.log(`[AUTH] Role do usuário: ${role}`);
-          } catch (error) {
-            console.error('Error fetching profile in authorize:', error);
+          if (hasDatabase) {
+            try {
+              const profile = await prisma.profile.findUnique({
+                where: { userId: user.id },
+                select: { role: true },
+              });
+              role = profile?.role?.toLowerCase() ?? 'user';
+              console.log(`[AUTH] Role do usuário: ${role}`);
+            } catch (error) {
+              console.error('Error fetching profile in authorize:', error);
+            }
           }
 
           // Retornar objeto compatível com NextAuth
@@ -144,7 +146,7 @@ export const authOptions: NextAuthOptions = {
         
         if (userRole) {
           token.role = userRole;
-        } else {
+        } else if (hasDatabase) {
           // Se não houver role no user (ex: Google OAuth), buscar do Profile
           try {
             const profile = await prisma.profile.findUnique({
@@ -156,6 +158,8 @@ export const authOptions: NextAuthOptions = {
             console.error('Error fetching profile role in JWT callback:', error);
             token.role = 'user';
           }
+        } else {
+          token.role = 'user';
         }
       } else if (token.sub) {
         // Atualizar role do token se já existir (para refresh de sessão)
