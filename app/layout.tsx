@@ -40,7 +40,13 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const session = await getServerSession(authOptions);
+  let session = null;
+  try {
+    session = await getServerSession(authOptions);
+  } catch (error) {
+    console.error('Error getting server session:', error);
+    // Continue without session if there's an error (e.g., database connection issue)
+  }
   const sessionUser = session?.user as (Session['user'] & { id?: string | null; role?: string | null }) | undefined;
   const cookieStore = cookies();
 

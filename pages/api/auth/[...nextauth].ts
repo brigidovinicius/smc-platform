@@ -6,8 +6,11 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
 
+// Only use PrismaAdapter if DATABASE_URL is configured
+const hasDatabase = Boolean(process.env.DATABASE_URL && !process.env.DATABASE_URL.includes('dummy'));
+
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  ...(hasDatabase ? { adapter: PrismaAdapter(prisma) } : {}),
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt'
