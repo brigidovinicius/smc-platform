@@ -34,14 +34,23 @@ if (globalForPrisma.prisma) {
   prismaInstance = globalForPrisma.prisma;
 } else {
   try {
-    prismaInstance = new PrismaClient({
-      datasources: isValidDatabaseUrl ? undefined : {
-        db: {
-          url: prismaUrl
-        }
-      },
-      log: isValidDatabaseUrl ? ['warn', 'error'] : []
-    });
+    // Only create Prisma Client if we have a valid database URL
+    // Otherwise, create a minimal instance that won't try to connect
+    if (isValidDatabaseUrl) {
+      prismaInstance = new PrismaClient({
+        log: ['warn', 'error']
+      });
+    } else {
+      // Create instance with dummy URL - it won't actually connect
+      prismaInstance = new PrismaClient({
+        datasources: {
+          db: {
+            url: prismaUrl
+          }
+        },
+        log: []
+      });
+    }
     
     // Only store in global if not in production (to avoid memory leaks)
     if (process.env.NODE_ENV !== 'production') {
