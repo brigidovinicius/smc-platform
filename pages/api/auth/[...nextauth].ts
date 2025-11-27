@@ -77,20 +77,6 @@ export const authOptions: NextAuthOptions = {
 
           let user;
           try {
-            // Test connection first with a simple query
-            try {
-              await prisma.$queryRaw`SELECT 1`;
-            } catch (connError: any) {
-              console.error('[AUTH] Database connection test failed:', connError);
-              if (connError.code === 'P1001' || connError.message?.includes('can\'t reach database server')) {
-                throw new Error('Serviço temporariamente indisponível. Por favor, tente novamente em alguns instantes.');
-              }
-              if (connError.code === 'P1000' || connError.message?.includes('authentication')) {
-                throw new Error('Erro de autenticação no banco de dados. Verifique as credenciais no Vercel.');
-              }
-              throw new Error(`Erro de conexão: ${connError.message || 'Verifique a configuração do banco de dados no Vercel.'}`);
-            }
-            
             user = await prisma.user.findUnique({ 
               where: { email: normalizedEmail } 
             });
@@ -99,16 +85,6 @@ export const authOptions: NextAuthOptions = {
             console.error('[AUTH] Error code:', dbError.code);
             console.error('[AUTH] Error message:', dbError.message);
             
-            // Re-throw if it's already a user-friendly error
-            if (dbError.message && (
-              dbError.message.includes('Serviço temporariamente indisponível') ||
-              dbError.message.includes('Erro de autenticação') ||
-              dbError.message.includes('Erro de conexão')
-            )) {
-              throw dbError;
-            }
-            
-            // Check for specific Prisma error codes
             if (dbError.code === 'P1001' || dbError.message?.includes('can\'t reach database server')) {
               throw new Error('Serviço temporariamente indisponível. Por favor, tente novamente em alguns instantes.');
             }
@@ -119,7 +95,6 @@ export const authOptions: NextAuthOptions = {
               throw new Error('Conexão com o banco de dados foi fechada. Tente novamente.');
             }
             
-            // More detailed error message
             const errorMsg = dbError.message || 'Erro desconhecido';
             throw new Error(`Erro ao acessar o banco de dados: ${errorMsg}. Verifique a configuração do servidor.`);
           }
