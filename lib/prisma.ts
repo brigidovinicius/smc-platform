@@ -94,8 +94,21 @@ if (globalForPrisma.prisma) {
           url: fallbackUrl
         }
       },
-      log: []
+      log: ['error']
     });
+    
+    // Add connection test method
+    prismaInstance.$connect = async () => {
+      if (!isValidDatabaseUrl) {
+        throw new Error('DATABASE_URL não está configurado ou é inválido');
+      }
+      try {
+        await prismaInstance.$queryRaw`SELECT 1`;
+      } catch (err: any) {
+        console.error('[Prisma] Connection test failed:', err);
+        throw err;
+      }
+    };
   }
 }
 
