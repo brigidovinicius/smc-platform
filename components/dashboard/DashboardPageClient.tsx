@@ -101,17 +101,26 @@ export default function DashboardPageClient() {
       setLoading(true);
       setError(null);
 
-      const dashboardResponse = await fetch('/api/dashboard');
+      const dashboardResponse = await fetch('/api/dashboard', {
+        credentials: 'include',
+        cache: 'no-store'
+      });
       if (!dashboardResponse.ok) {
         throw new Error('Error loading dashboard data');
       }
       const dashboardResult = await dashboardResponse.json();
 
-      const badgesResponse = await fetch('/api/dashboard/badges');
+      const badgesResponse = await fetch('/api/dashboard/badges', {
+        credentials: 'include',
+        cache: 'no-store'
+      });
       const badgesResult = badgesResponse.ok ? await badgesResponse.json() : null;
 
       const metricsEndpoint = adminMode ? '/api/admin/metrics' : '/api/me/metrics';
-      const metricsResponse = await fetch(metricsEndpoint);
+      const metricsResponse = await fetch(metricsEndpoint, {
+        credentials: 'include',
+        cache: 'no-store'
+      });
       const metricsResult = metricsResponse.ok ? await metricsResponse.json() : null;
 
       const isAdminMode =

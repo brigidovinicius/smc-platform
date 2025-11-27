@@ -40,7 +40,10 @@ export default function BadgesPage() {
       setLoading(true);
       setError(null);
 
-      const response = await fetch('/api/dashboard/badges');
+      const response = await fetch('/api/dashboard/badges', {
+        credentials: 'include',
+        cache: 'no-store'
+      });
       if (!response.ok) {
         throw new Error('Error loading badges');
       }

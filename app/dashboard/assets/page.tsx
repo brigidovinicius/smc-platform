@@ -63,7 +63,10 @@ export default function AssetsPage() {
       params.append('page', String(page));
       params.append('pageSize', '20');
 
-      const response = await fetch(`/api/me/assets?${params.toString()}`);
+      const response = await fetch(`/api/me/assets?${params.toString()}`, {
+        credentials: 'include',
+        cache: 'no-store'
+      });
       if (!response.ok) {
         throw new Error('Error loading assets');
       }

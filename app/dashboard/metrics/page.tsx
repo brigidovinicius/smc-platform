@@ -49,7 +49,10 @@ export default function MetricsPage() {
       setError(null);
 
       const endpoint = adminMode ? '/api/admin/metrics' : '/api/me/metrics';
-      const response = await fetch(endpoint);
+      const response = await fetch(endpoint, {
+        credentials: 'include',
+        cache: 'no-store'
+      });
       
       if (!response.ok) {
         throw new Error('Error loading metrics');

@@ -39,7 +39,10 @@ export default function OffersPage() {
       setLoading(true);
       setError(null);
 
-      const response = await fetch('/api/dashboard');
+      const response = await fetch('/api/dashboard', {
+        credentials: 'include',
+        cache: 'no-store'
+      });
       if (!response.ok) {
         throw new Error('Error loading offers');
       }

@@ -74,7 +74,10 @@ export default function AdminUsersPage() {
       params.append('page', String(page));
       params.append('pageSize', '20');
 
-      const response = await fetch(`/api/admin/users?${params.toString()}`);
+      const response = await fetch(`/api/admin/users?${params.toString()}`, {
+        credentials: 'include',
+        cache: 'no-store'
+      });
       if (!response.ok) {
         throw new Error('Error loading users');
       }
