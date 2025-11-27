@@ -1,5 +1,9 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
+
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
