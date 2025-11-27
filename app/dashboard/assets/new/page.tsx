@@ -8,6 +8,8 @@ export const metadata: Metadata = {
 
 // Force dynamic rendering for this page
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
 
 export default function NewAssetPage() {
   return (
