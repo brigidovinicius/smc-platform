@@ -10,38 +10,6 @@ const databaseUrl = process.env.POSTGRES_URL_NON_POOLING ||
                     process.env.POSTGRES_URL || 
                     process.env.DATABASE_URL;
 
-// Se POSTGRES_URL_NON_POOLING estiver disponível mas DATABASE_URL não estiver (ou estiver diferente),
-// definir DATABASE_URL no runtime para que o Prisma Client possa usá-la
-if (process.env.POSTGRES_URL_NON_POOLING && process.env.DATABASE_URL !== process.env.POSTGRES_URL_NON_POOLING) {
-  process.env.DATABASE_URL = process.env.POSTGRES_URL_NON_POOLING;
-  console.log('✅ DATABASE_URL definida automaticamente a partir de POSTGRES_URL_NON_POOLING');
-} else if (process.env.POSTGRES_URL && process.env.DATABASE_URL !== process.env.POSTGRES_URL) {
-  process.env.DATABASE_URL = process.env.POSTGRES_URL;
-  console.log('✅ DATABASE_URL definida automaticamente a partir de POSTGRES_URL');
-}
-
-const isValidDatabaseUrl = databaseUrl && 
-  !databaseUrl.includes('dummy') && 
-  !databaseUrl.includes('postgres:5432') &&
-  (databaseUrl.startsWith('postgresql://') || databaseUrl.startsWith('postgres://'));
-
-if (!isValidDatabaseUrl) {
-  console.warn(
-    '⚠️  DATABASE_URL não está configurado ou é inválido!\n' +
-    'A aplicação funcionará em modo limitado (sem persistência de dados).\n' +
-    'Para habilitar o banco de dados, configure uma das seguintes variáveis no Vercel:\n' +
-    '  - POSTGRES_URL_NON_POOLING (RECOMENDADO para Supabase - sem connection pooling)\n' +
-    '  - POSTGRES_URL (com connection pooling)\n' +
-    '  - DATABASE_URL (fallback)\n' +
-    '\n' +
-    'Exemplo para Supabase (recomendado):\n' +
-    'POSTGRES_URL_NON_POOLING="postgresql://user:password@host:5432/database?sslmode=require"\n' +
-    '\n' +
-    'Ou para PostgreSQL local:\n' +
-    'DATABASE_URL="postgresql://user:password@localhost:5432/database"'
-  );
-}
-
 // Adicionar parâmetro para desabilitar prepared statements em serverless
 // Isso resolve problemas de "prepared statement already exists" no Vercel
 const getConnectionUrl = (url: string): string => {
@@ -68,10 +36,57 @@ const getConnectionUrl = (url: string): string => {
   }
 };
 
+// Se POSTGRES_URL_NON_POOLING estiver disponível mas DATABASE_URL não estiver (ou estiver diferente),
+// definir DATABASE_URL no runtime para que o Prisma Client possa usá-la
+// IMPORTANTE: Sempre aplicar prepared_statements=false antes de definir DATABASE_URL
+if (process.env.POSTGRES_URL_NON_POOLING) {
+  const processedUrl = getConnectionUrl(process.env.POSTGRES_URL_NON_POOLING);
+  if (process.env.DATABASE_URL !== processedUrl) {
+    process.env.DATABASE_URL = processedUrl;
+    console.log('✅ DATABASE_URL definida automaticamente a partir de POSTGRES_URL_NON_POOLING com prepared_statements=false');
+  }
+} else if (process.env.POSTGRES_URL) {
+  const processedUrl = getConnectionUrl(process.env.POSTGRES_URL);
+  if (process.env.DATABASE_URL !== processedUrl) {
+    process.env.DATABASE_URL = processedUrl;
+    console.log('✅ DATABASE_URL definida automaticamente a partir de POSTGRES_URL com prepared_statements=false');
+  }
+} else if (process.env.DATABASE_URL && !process.env.DATABASE_URL.includes('prepared_statements')) {
+  // Se DATABASE_URL já existir mas não tiver o parâmetro, adicionar
+  process.env.DATABASE_URL = getConnectionUrl(process.env.DATABASE_URL);
+  console.log('✅ DATABASE_URL atualizada com prepared_statements=false');
+}
+
+// Atualizar databaseUrl para usar a URL processada do DATABASE_URL
+const finalDatabaseUrl = process.env.DATABASE_URL || databaseUrl;
+
+const isValidDatabaseUrl = finalDatabaseUrl && 
+  !finalDatabaseUrl.includes('dummy') && 
+  !finalDatabaseUrl.includes('postgres:5432') &&
+  (finalDatabaseUrl.startsWith('postgresql://') || finalDatabaseUrl.startsWith('postgres://'));
+
+if (!isValidDatabaseUrl) {
+  console.warn(
+    '⚠️  DATABASE_URL não está configurado ou é inválido!\n' +
+    'A aplicação funcionará em modo limitado (sem persistência de dados).\n' +
+    'Para habilitar o banco de dados, configure uma das seguintes variáveis no Vercel:\n' +
+    '  - POSTGRES_URL_NON_POOLING (RECOMENDADO para Supabase - sem connection pooling)\n' +
+    '  - POSTGRES_URL (com connection pooling)\n' +
+    '  - DATABASE_URL (fallback)\n' +
+    '\n' +
+    'Exemplo para Supabase (recomendado):\n' +
+    'POSTGRES_URL_NON_POOLING="postgresql://user:password@host:5432/database?sslmode=require"\n' +
+    '\n' +
+    'Ou para PostgreSQL local:\n' +
+    'DATABASE_URL="postgresql://user:password@localhost:5432/database"'
+  );
+}
+
 // Criar Prisma Client apenas se DATABASE_URL for válido
 // Caso contrário, criar com URL dummy para evitar erros de inicialização
+// Usar process.env.DATABASE_URL que já foi processada acima com prepared_statements=false
 const prismaUrl = isValidDatabaseUrl 
-  ? getConnectionUrl(databaseUrl)
+  ? (process.env.DATABASE_URL || finalDatabaseUrl)
   : 'postgresql://dummy:dummy@localhost:5432/dummy?schema=public';
 
 // Create Prisma Client with proper configuration
@@ -113,7 +128,7 @@ if (globalForPrisma.prisma) {
     console.error('Error initializing Prisma Client:', error);
     // Create a minimal instance that won't crash
     // Tentar usar a URL válida primeiro, depois fallback para dummy
-    const fallbackUrl = isValidDatabaseUrl ? getConnectionUrl(databaseUrl!) : prismaUrl;
+    const fallbackUrl = isValidDatabaseUrl ? (process.env.DATABASE_URL || finalDatabaseUrl) : prismaUrl;
     prismaInstance = new PrismaClient({
       datasources: {
         db: {
