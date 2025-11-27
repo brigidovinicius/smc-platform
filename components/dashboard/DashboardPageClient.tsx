@@ -105,10 +105,20 @@ export default function DashboardPageClient() {
         credentials: 'include',
         cache: 'no-store'
       });
-      if (!dashboardResponse.ok) {
-        throw new Error('Error loading dashboard data');
+      
+      let dashboardResult;
+      try {
+        dashboardResult = await dashboardResponse.json();
+      } catch (parseError) {
+        console.error('Failed to parse dashboard response:', parseError);
+        throw new Error(`Erro ao processar resposta do servidor (${dashboardResponse.status})`);
       }
-      const dashboardResult = await dashboardResponse.json();
+      
+      if (!dashboardResponse.ok || !dashboardResult.success) {
+        const errorMessage = dashboardResult?.error || dashboardResult?.message || `Erro ${dashboardResponse.status}: ${dashboardResponse.statusText}`;
+        const errorDetails = dashboardResult?.details || '';
+        throw new Error(errorDetails ? `${errorMessage}: ${errorDetails}` : errorMessage);
+      }
 
       const badgesResponse = await fetch('/api/dashboard/badges', {
         credentials: 'include',
@@ -179,7 +189,13 @@ export default function DashboardPageClient() {
       });
     } catch (error: any) {
       console.error('Error fetching dashboard data:', error);
-      setError(error.message || 'Erro ao carregar dados');
+      const errorMessage = error?.message || error?.toString() || 'Erro desconhecido ao carregar dados do dashboard';
+      setError(errorMessage);
+      
+      // Log detalhado para debug
+      if (error?.stack) {
+        console.error('Error stack:', error.stack);
+      }
     } finally {
       setLoading(false);
     }
@@ -234,27 +250,33 @@ export default function DashboardPageClient() {
 
   const { assets, offers, stats, badges, metrics } = dashboardData;
 
+  const safeNumber = (value?: number | null) =>
+    typeof value === 'number' && Number.isFinite(value) ? value : 0;
+
+  const safeText = (value?: string | null) =>
+    typeof value === 'string' && value.trim().length > 0 ? value : '-';
+
   const metricsArray = [
     {
       id: 'mrr',
       label: 'Audited MRR',
-      value: metrics.mrr.formatted,
-      sublabel: `${metrics.mrr.growth}% growth in the last 30 days`,
-      trend: metrics.mrr.growthLabel,
+      value: metrics?.mrr?.formatted ?? '-',
+      sublabel: `${safeNumber(metrics?.mrr?.growth)}% growth in the last 30 days`,
+      trend: safeText(metrics?.mrr?.growthLabel),
     },
     {
       id: 'churn',
       label: 'Controlled Churn',
-      value: metrics.churn.formatted,
-      sublabel: `${metrics.churn.benchmark} benchmark`,
-      trend: metrics.churn.status,
+      value: metrics?.churn?.formatted ?? '-',
+      sublabel: `${safeText(metrics?.churn?.benchmark)} benchmark`,
+      trend: safeText(metrics?.churn?.status),
     },
     {
       id: 'cac',
       label: 'CAC payback',
-      value: metrics.cacPayback.formatted,
-      sublabel: `ideal < ${metrics.cacPayback.ideal}`,
-      trend: metrics.cacPayback.target,
+      value: metrics?.cacPayback?.formatted ?? '-',
+      sublabel: `ideal < ${safeText(metrics?.cacPayback?.ideal)}`,
+      trend: safeText(metrics?.cacPayback?.target),
     },
   ];
 
@@ -303,10 +325,10 @@ export default function DashboardPageClient() {
             <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
               <h2 className="text-xl font-semibold mb-4">Global Statistics</h2>
               <AdminStatsSection
-                totalAssets={dashboardData.adminMetrics.totalAssets}
-                totalOffers={dashboardData.adminMetrics.totalOffers}
-                totalUsers={dashboardData.adminMetrics.totalUsers}
-                totalMRR={dashboardData.adminMetrics.formattedTotalMRR}
+                totalAssets={dashboardData.adminMetrics?.totalAssets ?? 0}
+                totalOffers={dashboardData.adminMetrics?.totalOffers ?? 0}
+                totalUsers={dashboardData.adminMetrics?.totalUsers ?? 0}
+                totalMRR={dashboardData.adminMetrics?.formattedTotalMRR ?? '-'}
               />
             </div>
           )}
@@ -357,7 +379,7 @@ export default function DashboardPageClient() {
             <AssetsSection
               assets={assets}
               assetsCount={stats.assetsCount}
-              totalValue={stats.totalValue}
+              totalValue={stats.totalValue ?? '-'}
               isAdmin={adminMode}
               userId={sessionUserId || undefined}
             />

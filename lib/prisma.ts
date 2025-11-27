@@ -42,10 +42,36 @@ if (!isValidDatabaseUrl) {
   );
 }
 
+// Adicionar parâmetro para desabilitar prepared statements em serverless
+// Isso resolve problemas de "prepared statement already exists" no Vercel
+const getConnectionUrl = (url: string): string => {
+  if (!url || url.includes('dummy')) {
+    return url;
+  }
+  
+  // Adicionar ?prepared_statements=false se não existir
+  // Isso resolve problemas com connection pooling em ambientes serverless
+  try {
+    const urlObj = new URL(url);
+    // Não sobrescrever se já existir, mas garantir que está configurado
+    if (!urlObj.searchParams.has('prepared_statements')) {
+      urlObj.searchParams.set('prepared_statements', 'false');
+    }
+    return urlObj.toString();
+  } catch {
+    // Se falhar ao parsear URL, adicionar parâmetro manualmente
+    const separator = url.includes('?') ? '&' : '?';
+    if (!url.includes('prepared_statements')) {
+      return `${url}${separator}prepared_statements=false`;
+    }
+    return url;
+  }
+};
+
 // Criar Prisma Client apenas se DATABASE_URL for válido
 // Caso contrário, criar com URL dummy para evitar erros de inicialização
 const prismaUrl = isValidDatabaseUrl 
-  ? databaseUrl 
+  ? getConnectionUrl(databaseUrl)
   : 'postgresql://dummy:dummy@localhost:5432/dummy?schema=public';
 
 // Create Prisma Client with proper configuration
@@ -62,7 +88,7 @@ if (globalForPrisma.prisma) {
       prismaInstance = new PrismaClient({
         datasources: {
           db: {
-            url: databaseUrl
+            url: prismaUrl
           }
         },
         log: ['warn', 'error']
@@ -87,7 +113,7 @@ if (globalForPrisma.prisma) {
     console.error('Error initializing Prisma Client:', error);
     // Create a minimal instance that won't crash
     // Tentar usar a URL válida primeiro, depois fallback para dummy
-    const fallbackUrl = isValidDatabaseUrl ? databaseUrl : prismaUrl;
+    const fallbackUrl = isValidDatabaseUrl ? getConnectionUrl(databaseUrl!) : prismaUrl;
     prismaInstance = new PrismaClient({
       datasources: {
         db: {
