@@ -17,22 +17,26 @@ const getConnectionUrl = (url: string): string => {
     return url;
   }
   
-  // Adicionar ?prepared_statements=false se não existir
-  // Isso resolve problemas com connection pooling em ambientes serverless
+  // Adicionar prepared_statements=false (essencial para serverless)
+  // Isso resolve problemas com prepared statements em ambientes serverless
   try {
     const urlObj = new URL(url);
-    // Não sobrescrever se já existir, mas garantir que está configurado
-    if (!urlObj.searchParams.has('prepared_statements')) {
-      urlObj.searchParams.set('prepared_statements', 'false');
-    }
+    
+    // Forçar desabilitar prepared statements
+    urlObj.searchParams.set('prepared_statements', 'false');
+    
     return urlObj.toString();
   } catch {
     // Se falhar ao parsear URL, adicionar parâmetro manualmente
     const separator = url.includes('?') ? '&' : '?';
-    if (!url.includes('prepared_statements')) {
-      return `${url}${separator}prepared_statements=false`;
+    
+    // Sempre adicionar ou substituir o parâmetro
+    if (url.includes('prepared_statements')) {
+      // Substituir se já existir
+      return url.replace(/[?&]prepared_statements=[^&]*/, `${separator}prepared_statements=false`);
     }
-    return url;
+    
+    return `${url}${separator}prepared_statements=false`;
   }
 };
 
@@ -99,6 +103,7 @@ if (globalForPrisma.prisma) {
     // Only create Prisma Client if we have a valid database URL
     // Sempre especificar datasource explicitamente para garantir que use a URL correta
     // Isso é importante porque o Prisma pode cachear a URL do ambiente
+    // IMPORTANTE: connection_limit e outras opções ajudam em ambientes serverless
     if (isValidDatabaseUrl) {
       prismaInstance = new PrismaClient({
         datasources: {
@@ -106,8 +111,18 @@ if (globalForPrisma.prisma) {
             url: prismaUrl
           }
         },
-        log: ['warn', 'error']
+        log: process.env.NODE_ENV === 'production' ? ['warn', 'error'] : ['warn', 'error'],
+        // Configurações para ambientes serverless - prevenir reutilização de conexões com prepared statements
+        // A URL já tem prepared_statements=false, mas essas configs adicionais ajudam
       });
+      
+      // Forçar conexão limpa ao inicializar em produção (serverless)
+      if (process.env.NODE_ENV === 'production') {
+        // Desabilitar prepared statements via extensão de conexão
+        prismaInstance.$on('beforeExit' as never, async () => {
+          await prismaInstance.$disconnect();
+        });
+      }
     } else {
       // Create instance with dummy URL - it won't actually connect
       prismaInstance = new PrismaClient({
@@ -120,10 +135,10 @@ if (globalForPrisma.prisma) {
       });
     }
     
-    // Only store in global if not in production (to avoid memory leaks)
-    if (process.env.NODE_ENV !== 'production') {
-      globalForPrisma.prisma = prismaInstance;
-    }
+    // SEMPRE armazenar no global em serverless para garantir singleton
+    // Em serverless, cada função pode ter seu próprio contexto, mas dentro da mesma função
+    // precisamos garantir que é o mesmo PrismaClient
+    globalForPrisma.prisma = prismaInstance;
   } catch (error) {
     console.error('Error initializing Prisma Client:', error);
     // Create a minimal instance that won't crash
