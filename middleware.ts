@@ -1,5 +1,6 @@
-import type { NextFetchEvent, NextResponse } from 'next/server';
+import type { NextFetchEvent } from 'next/server';
 import type { NextRequestWithAuth } from 'next-auth/middleware';
+import { NextResponse } from 'next/server';
 import { withAuth } from 'next-auth/middleware';
 import { captureEdgeTelemetry } from '@/lib/context7';
 import { PREVIEW_MODE_COOKIE, getPreviewModeFromCookie } from '@/lib/preview-mode';
