@@ -154,3 +154,34 @@ export async function sendPasswordResetEmail(email: string, token: string, name?
     return false;
   }
 }
+
+/**
+ * Generic email sending function
+ */
+export async function sendEmail(options: {
+  to: string;
+  subject: string;
+  html: string;
+  text?: string;
+}): Promise<boolean> {
+  try {
+    const transport = getTransporter();
+    if (!transport) {
+      console.warn('[email] SMTP settings missing, cannot send email to:', options.to);
+      return false;
+    }
+
+    await transport.sendMail({
+      from: process.env.EMAIL_FROM || 'CounterX <no-reply@counterx.io>',
+      to: options.to,
+      subject: options.subject,
+      text: options.text || options.html.replace(/<[^>]*>/g, ''),
+      html: options.html,
+    });
+
+    return true;
+  } catch (error) {
+    console.error('[email] Erro ao enviar email:', error);
+    return false;
+  }
+}

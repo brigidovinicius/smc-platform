@@ -49,21 +49,16 @@ export default function AdminAssetsPage() {
       if (filters.type) params.append('type', filters.type);
       if (filters.status) params.append('status', filters.status);
       
-      const response = await fetch(`/api/assets?${params.toString()}`);
+      // Use admin API endpoint for better filtering
+      const response = await fetch(`/api/admin/assets?${params.toString()}`, {
+        credentials: 'include',
+      });
       const result = await response.json();
       
       if (result.success) {
-        let filtered = result.data.assets;
-        
-        if (filters.search) {
-          const searchLower = filters.search.toLowerCase();
-          filtered = filtered.filter((asset: Asset) =>
-            asset.title.toLowerCase().includes(searchLower) ||
-            asset.owner.email?.toLowerCase().includes(searchLower)
-          );
-        }
-        
-        setAssets(filtered);
+        // Admin API already handles search filtering
+        const assets = result.data.items || result.data.assets || [];
+        setAssets(assets);
       }
     } catch (error) {
       console.error('Failed to load assets:', error);

@@ -41,10 +41,17 @@ export default function AdminAssetDetailPage({ params }: { params: { id: string 
   const [updating, setUpdating] = useState(false);
   const [statusComment, setStatusComment] = useState('');
   const [newStatus, setNewStatus] = useState('');
+  const [moderationAction, setModerationAction] = useState<'APPROVE' | 'REJECT' | ''>('');
+  const [moderationComment, setModerationComment] = useState('');
+  const [suggestedPriceMin, setSuggestedPriceMin] = useState('');
+  const [suggestedPriceMax, setSuggestedPriceMax] = useState('');
+  const [moderating, setModerating] = useState(false);
 
   const loadAsset = useCallback(async () => {
     try {
-      const response = await fetch(`/api/assets/${params.id}`);
+      const response = await fetch(`/api/assets/${params.id}`, {
+        credentials: 'include',
+      });
       const result = await response.json();
       if (result.success) {
         setAsset(result.data.asset);
@@ -69,9 +76,9 @@ export default function AdminAssetDetailPage({ params }: { params: { id: string 
       const response = await fetch(`/api/assets/${asset.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({
           status: newStatus,
-          // Add moderation comment if provided
         }),
       });
 
@@ -87,6 +94,42 @@ export default function AdminAssetDetailPage({ params }: { params: { id: string 
       alert('Failed to update status');
     } finally {
       setUpdating(false);
+    }
+  };
+
+  const handleModeration = async () => {
+    if (!asset || !moderationAction) return;
+
+    setModerating(true);
+    try {
+      const response = await fetch(`/api/assets/${asset.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          action: moderationAction,
+          comment: moderationComment || undefined,
+          suggestedPriceMin: suggestedPriceMin ? Number(suggestedPriceMin) : undefined,
+          suggestedPriceMax: suggestedPriceMax ? Number(suggestedPriceMax) : undefined,
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        await loadAsset();
+        alert(`Asset ${moderationAction === 'APPROVE' ? 'approved' : 'rejected'} successfully`);
+        setModerationAction('');
+        setModerationComment('');
+        setSuggestedPriceMin('');
+        setSuggestedPriceMax('');
+      } else {
+        alert(result.error || 'Failed to moderate asset');
+      }
+    } catch (error) {
+      console.error('Failed to moderate asset:', error);
+      alert('Failed to moderate asset');
+    } finally {
+      setModerating(false);
     }
   };
 
@@ -206,12 +249,97 @@ export default function AdminAssetDetailPage({ params }: { params: { id: string 
                 <label className="text-sm font-semibold text-[var(--color-text-secondary)] mb-2 block">Current Status</label>
                 <Badge>{asset.status.replace('_', ' ')}</Badge>
               </div>
-              <div>
-                <label className="text-sm font-semibold text-[var(--color-text-secondary)] mb-2 block">Change Status</label>
+              
+              {/* Quick Moderation Actions */}
+              <div className="border-t border-[var(--color-border)] pt-4">
+                <label className="text-sm font-semibold text-[var(--color-text-secondary)] mb-2 block">Moderation Actions</label>
+                <div className="flex gap-2 mb-3">
+                  <Button
+                    variant={moderationAction === 'APPROVE' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setModerationAction('APPROVE')}
+                    className="flex-1"
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    variant={moderationAction === 'REJECT' ? 'destructive' : 'outline'}
+                    size="sm"
+                    onClick={() => setModerationAction('REJECT')}
+                    className="flex-1"
+                  >
+                    Reject
+                  </Button>
+                </div>
+
+                {moderationAction && (
+                  <div className="space-y-3 p-3 bg-[var(--color-white)]/5 rounded-lg border border-[var(--color-border)]">
+                    <div>
+                      <label className="text-xs text-[var(--color-text-secondary)] mb-1 block">Moderation Comment</label>
+                      <textarea
+                        value={moderationComment}
+                        onChange={(e) => setModerationComment(e.target.value)}
+                        placeholder="Add a comment for the asset owner..."
+                        className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-[var(--color-white)] text-[var(--color-text)] text-sm"
+                        rows={3}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="text-xs text-[var(--color-text-secondary)] mb-1 block">Suggested Min Price</label>
+                        <input
+                          type="number"
+                          value={suggestedPriceMin}
+                          onChange={(e) => setSuggestedPriceMin(e.target.value)}
+                          placeholder="Min"
+                          className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-[var(--color-white)] text-[var(--color-text)] text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-[var(--color-text-secondary)] mb-1 block">Suggested Max Price</label>
+                        <input
+                          type="number"
+                          value={suggestedPriceMax}
+                          onChange={(e) => setSuggestedPriceMax(e.target.value)}
+                          placeholder="Max"
+                          className="w-full px-3 py-2 border border-[var(--color-border)] rounded-lg bg-[var(--color-white)] text-[var(--color-text)] text-sm"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={handleModeration}
+                        disabled={moderating}
+                        variant={moderationAction === 'APPROVE' ? 'default' : 'destructive'}
+                        size="sm"
+                        className="flex-1"
+                      >
+                        {moderating ? 'Processing...' : `${moderationAction === 'APPROVE' ? 'Approve' : 'Reject'} Asset`}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setModerationAction('');
+                          setModerationComment('');
+                          setSuggestedPriceMin('');
+                          setSuggestedPriceMax('');
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Manual Status Update */}
+              <div className="border-t border-[var(--color-border)] pt-4">
+                <label className="text-sm font-semibold text-[var(--color-text-secondary)] mb-2 block">Manual Status Update</label>
                 <select
                   value={newStatus}
                   onChange={(e) => setNewStatus(e.target.value)}
-                  className="w-full px-4 py-2 border border-[var(--color-border)] rounded-lg bg-[var(--color-white)] text-[var(--color-text)]"
+                  className="w-full px-4 py-2 border border-[var(--color-border)] rounded-lg bg-[var(--color-white)] text-[var(--color-text)] mb-2"
                 >
                   <option value="DRAFT">Draft</option>
                   <option value="SUBMITTED">Submitted</option>
@@ -220,14 +348,16 @@ export default function AdminAssetDetailPage({ params }: { params: { id: string 
                   <option value="REJECTED">Rejected</option>
                   <option value="PUBLISHED">Published</option>
                 </select>
+                <Button
+                  onClick={handleStatusUpdate}
+                  disabled={updating || newStatus === asset.status}
+                  variant="outline"
+                  className="w-full"
+                  size="sm"
+                >
+                  {updating ? 'Updating...' : 'Update Status'}
+                </Button>
               </div>
-              <Button
-                onClick={handleStatusUpdate}
-                disabled={updating || newStatus === asset.status}
-                className="w-full"
-              >
-                {updating ? 'Updating...' : 'Update Status'}
-              </Button>
             </CardContent>
           </Card>
 

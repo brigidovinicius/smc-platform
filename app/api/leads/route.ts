@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    await handleNewLeadSideEffects(lead);
+    // Side effects are handled by the service layer
 
     return NextResponse.json({ success: true, data: { lead } }, { status: 201 });
   } catch (error) {

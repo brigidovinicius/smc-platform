@@ -73,6 +73,9 @@ model Profile {
   updatedAt DateTime @updatedAt
 }
 
+// DEPRECATED: This model is no longer used. All new assets should use the Asset model.
+// This table is kept for backward compatibility and data migration purposes.
+// TODO: After confirming no production data exists in this table, it can be safely dropped.
 model SaaSAsset {
   id          String   @id @default(cuid())
   name        String

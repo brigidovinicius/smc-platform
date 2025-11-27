@@ -1,4 +1,12 @@
-// @ts-nocheck
+/**
+ * Legacy asset service - DEPRECATED
+ * 
+ * This file is kept for backward compatibility but should be migrated to use
+ * src/core/assets/asset.service.ts instead.
+ * 
+ * @deprecated Use src/core/assets/asset.service.ts
+ */
+
 import type { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
 
@@ -10,24 +18,32 @@ type ListParams = {
   category?: string;
 };
 
+/**
+ * @deprecated Use src/core/assets/asset.service.ts listAssets
+ */
 export async function listAssets(params: ListParams = {}) {
   const page = Math.max(1, params.page ?? 1);
   const pageSize = Math.min(50, params.pageSize ?? DEFAULT_PAGE_SIZE);
-  const where: Prisma.SaaSAssetWhereInput = {};
+  const where: Prisma.AssetWhereInput = {};
 
   if (params.category) {
-    where.category = params.category;
+    // Map legacy category to type if needed
+    where.type = params.category as any;
   }
 
   const [items, total] = await Promise.all([
-    prisma.saaSAsset.findMany({
+    prisma.asset.findMany({
       where,
-      include: { owner: true, offers: true },
+      include: { 
+        owner: true,
+        // Note: offers relation doesn't exist on Asset, only on SaaSAsset
+        // This is a breaking change that needs to be handled
+      },
       skip: (page - 1) * pageSize,
       take: pageSize,
       orderBy: { createdAt: 'desc' }
     }),
-    prisma.saaSAsset.count({ where })
+    prisma.asset.count({ where })
   ]);
 
   return {
@@ -38,24 +54,42 @@ export async function listAssets(params: ListParams = {}) {
   };
 }
 
-export function getAssetById(id: string) {
-  return prisma.saaSAsset.findUnique({
+/**
+ * @deprecated Use src/core/assets/asset.service.ts getAssetByIdOrSlug
+ */
+export async function getAssetById(id: string) {
+  return prisma.asset.findUnique({
     where: { id },
-    include: { owner: true, offers: true }
+    include: { 
+      owner: true,
+      // Note: offers relation doesn't exist on Asset
+    }
   });
 }
 
-export function getAssetBySlug(slug: string) {
-  return prisma.saaSAsset.findUnique({
+/**
+ * @deprecated Use src/core/assets/asset.service.ts getAssetByIdOrSlug
+ */
+export async function getAssetBySlug(slug: string) {
+  return prisma.asset.findUnique({
     where: { slug },
-    include: { owner: true, offers: true }
+    include: { 
+      owner: true,
+      // Note: offers relation doesn't exist on Asset
+    }
   });
 }
 
-export function createAsset(data: Prisma.SaaSAssetCreateInput) {
-  return prisma.saaSAsset.create({ data });
+/**
+ * @deprecated Use src/core/assets/asset.service.ts createAsset
+ */
+export async function createAsset(data: Prisma.AssetCreateInput) {
+  return prisma.asset.create({ data });
 }
 
-export function updateAsset(id: string, data: Prisma.SaaSAssetUpdateInput) {
-  return prisma.saaSAsset.update({ where: { id }, data });
+/**
+ * @deprecated Use src/core/assets/asset.service.ts updateAsset
+ */
+export async function updateAsset(id: string, data: Prisma.AssetUpdateInput) {
+  return prisma.asset.update({ where: { id }, data });
 }

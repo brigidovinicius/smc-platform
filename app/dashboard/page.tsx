@@ -1,30 +1,19 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import Card from '@/components/ui/CardWrapper';
-import { Badge } from '@/components/ui/badge';
-import StatBlock from '@/components/ui/StatBlock';
-import ProgressList from '@/components/ui/ProgressList';
-import OfferCard from '@/components/OfferCard';
-import AssetCard from '@/components/AssetCard';
-import MarketGrid from '@/components/MarketGrid';
-import EmptyState from '@/components/EmptyState';
+import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
+import ProfileCard from '@/components/dashboard/ProfileCard';
+import ReadinessCard from '@/components/dashboard/ReadinessCard';
+import ValuationCard from '@/components/dashboard/ValuationCard';
+import AssetsSection from '@/components/dashboard/AssetsSection';
+import OffersSection from '@/components/dashboard/OffersSection';
+import BadgesSection from '@/components/dashboard/BadgesSection';
+import MetricsSection from '@/components/dashboard/MetricsSection';
+import AdminStatsSection from '@/components/dashboard/AdminStatsSection';
+import { isAdmin, getUserRole } from '@/lib/api/permissions';
 import { useContext7 } from '@/components/providers/Context7Provider';
-
-const readinessTasks = [
-  { id: 'task-1', title: 'Atualizar MRR dos últimos 6 meses', description: 'Suba os indicadores na aba Métricas', status: 'inProgress', statusLabel: 'Em andamento' },
-  { id: 'task-2', title: 'Adicionar benchmark de churn', description: 'Compare com o setor B2B SaaS', status: 'pending', statusLabel: 'Pendente' },
-  { id: 'task-3', title: 'Compartilhar checklists jurídicos', description: 'Envie o checklist padrão para o advisor', status: 'done', statusLabel: 'Concluído' }
-];
-
-type BadgeVariant = 'default' | 'secondary' | 'outline' | 'destructive';
-
-const badges: Array<{ label: string; variant: BadgeVariant }> = [
-  { label: 'Founder PRO', variant: 'default' },
-  { label: 'Pipeline consistente', variant: 'secondary' },
-  { label: 'Dados auditados', variant: 'outline' }
-];
 
 type DashboardSessionUser = {
   id?: string | null;
@@ -33,44 +22,145 @@ type DashboardSessionUser = {
   name?: string | null;
 };
 
+interface DashboardData {
+  assets: any[];
+  offers: any[];
+  stats: {
+    readinessScore: number;
+    valuation: string;
+    assetsCount: number;
+    totalValue?: string;
+    totalAssets?: number;
+    totalOffers?: number;
+    totalUsers?: number;
+    totalMRR?: string;
+  };
+  badges: {
+    badges: Array<{
+      id: string;
+      label: string;
+      variant: 'default' | 'secondary' | 'outline';
+      status?: 'inProgress' | 'pending' | 'done';
+    }>;
+    tasks: Array<{
+      id: string;
+      title: string;
+      description: string;
+      status: 'inProgress' | 'pending' | 'done';
+      statusLabel: string;
+    }>;
+  };
+  metrics: {
+    mrr: {
+      value: number;
+      formatted: string;
+      growth: number;
+      growthLabel: string;
+    };
+    churn: {
+      value: number;
+      formatted: string;
+      benchmark: string;
+      status: string;
+    };
+    cacPayback: {
+      value: number;
+      formatted: string;
+      ideal: string;
+      target: string;
+    };
+  };
+  adminMetrics?: {
+    totalAssets: number;
+    totalOffers: number;
+    totalUsers: number;
+    totalMRR: number;
+    formattedTotalMRR: string;
+  } | null;
+}
+
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const sessionUser = session?.user as DashboardSessionUser | undefined;
   const sessionUserId = sessionUser?.id ?? null;
-  const { trackEvent, getFeatureFlag } = useContext7();
-  const telemetrySent = useRef(false);
-  const [assets, setAssets] = useState<any[]>([]);
-  const [offers, setOffers] = useState<any[]>([]);
-  const [stats, setStats] = useState({
-    readinessScore: 82,
-    valuation: 'R$ 950k',
-    assetsCount: 0
-  });
+  const { trackEvent } = useContext7();
+  
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const userRole = getUserRole(session);
+  const adminMode = isAdmin(session);
+  const userName = sessionUser?.name || 'User';
 
   const fetchDashboardData = useCallback(async () => {
+    if (!sessionUserId) return;
+
     try {
       setLoading(true);
-      const response = await fetch('/api/dashboard');
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success && result.data) {
-          setAssets(result.data.assets || []);
-          setOffers(result.data.offers || []);
-          setStats((prev) => result.data.stats || prev);
-          trackEvent('dashboard_data_loaded', {
-            assets: result.data.assets?.length ?? 0,
-            offers: result.data.offers?.length ?? 0,
-            readinessScore: result.data.stats?.readinessScore
-          });
-        }
+      setError(null);
+
+      // Buscar dados do dashboard (assets, offers, stats)
+      const dashboardResponse = await fetch('/api/dashboard');
+      if (!dashboardResponse.ok) {
+        throw new Error('Error loading dashboard data');
       }
-    } catch (error) {
+      const dashboardResult = await dashboardResponse.json();
+
+      // Buscar badges e tarefas
+      const badgesResponse = await fetch('/api/dashboard/badges');
+      const badgesResult = badgesResponse.ok ? await badgesResponse.json() : null;
+
+      // Buscar métricas (diferente para admin vs user)
+      const metricsEndpoint = adminMode ? '/api/admin/metrics' : '/api/me/metrics';
+      const metricsResponse = await fetch(metricsEndpoint);
+      const metricsResult = metricsResponse.ok ? await metricsResponse.json() : null;
+
+      const isAdminMode = dashboardResult.success && dashboardResult.data.isAdmin;
+
+      const data: DashboardData = {
+        assets: dashboardResult.success ? dashboardResult.data.assets || [] : [],
+        offers: dashboardResult.success ? dashboardResult.data.offers || [] : [],
+        stats: dashboardResult.success ? dashboardResult.data.stats || {
+          readinessScore: 0,
+          valuation: '$0',
+          assetsCount: 0
+        } : {
+          readinessScore: 0,
+          valuation: '$0',
+          assetsCount: 0
+        },
+        badges: isAdminMode ? {
+          badges: [],
+          tasks: []
+        } : (badgesResult?.success ? badgesResult.data : {
+          badges: [],
+          tasks: []
+        }),
+        metrics: metricsResult?.success ? (metricsResult.data.metrics || metricsResult.data) : {
+          mrr: { value: 0, formatted: '$0', growth: 0, growthLabel: '' },
+          churn: { value: 0, formatted: '0%', benchmark: '', status: '' },
+          cacPayback: { value: 0, formatted: '0 meses', ideal: '', target: '' }
+        },
+        adminMetrics: isAdminMode && dashboardResult.success ? dashboardResult.data.adminMetrics : null
+      };
+
+      setDashboardData(data);
+
+      trackEvent('dashboard_data_loaded', {
+        assets: data.assets.length,
+        offers: data.offers.length,
+        readinessScore: data.stats.readinessScore,
+        adminMode
+      });
+    } catch (error: any) {
       console.error('Error fetching dashboard data:', error);
+      setError(error.message || 'Erro ao carregar dados');
     } finally {
       setLoading(false);
     }
-  }, [trackEvent]);
+  }, [sessionUserId, adminMode, trackEvent]);
 
   useEffect(() => {
     if (status === 'authenticated' && sessionUserId) {
@@ -78,113 +168,217 @@ export default function DashboardPage() {
     }
   }, [status, sessionUserId, fetchDashboardData]);
 
-  useEffect(() => {
-    if (status !== 'authenticated' || telemetrySent.current) return;
-    telemetrySent.current = true;
-    trackEvent('dashboard_session_started', {
-      readinessScore: stats.readinessScore,
-      assets: assets.length,
-      offers: offers.length,
-      betaGamification: getFeatureFlag('enableLeadScoring')
-    });
-  }, [status, stats.readinessScore, assets.length, offers.length, trackEvent, getFeatureFlag]);
-
   if (status === 'loading' || loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
+      <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-[#0044CC] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-400">Carregando dashboard...</p>
+          <p className="text-slate-400">Loading dashboard...</p>
         </div>
       </div>
     );
   }
 
+  if (!session || !sessionUser) {
   return (
-    <div className="stack-lg">
-      <Card
-        className="w-full"
-        title="Dashboard de ativos digitais"
-        description="Acompanhe métricas, readiness score e prepare-se para negociações com investidores qualificados."
-        actions={
-          session && (
-            <Badge variant="default">
-              {sessionUser?.name?.split(' ')[0] ?? 'Usuário'} · Nível Founder
-            </Badge>
-          )
-        }
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <StatBlock label="Readiness score" value={`${stats.readinessScore}%`} sublabel="Pronto para due diligence" trend="+6% este mês" />
-          <StatBlock label="Valuation sugerido" value={stats.valuation} sublabel="Com base em MRR e churn" trend="Atualizado diariamente" />
-          <StatBlock label="Ativos listados" value={stats.assetsCount} sublabel="Total em carteira" trend="--" />
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p className="text-slate-400">Not authenticated. Redirecting...</p>
         </div>
-      </Card>
+      </div>
+    );
+  }
 
-      <Card className="w-full" title="Meus ativos" description="Selecione um ativo para ajustar métricas, readiness e badges." actions={null}>
-        {assets.length ? (
-          <MarketGrid
-            items={assets}
-            renderItem={(asset: any) => (
-              <div key={asset.id} className="space-y-2">
-                <AssetCard
-                  asset={{
-                    name: asset.name,
-                    category: asset.category,
-                    description: asset.description,
-                    mrr: asset.mrr ? `R$ ${Number(asset.mrr).toLocaleString('pt-BR')}` : 'N/A',
-                    churn: asset.churnRate ? `${asset.churnRate}%` : 'N/A'
-                  }}
-                />
-                <div className="flex gap-4 text-sm text-muted-foreground">
-                  <Badge variant="default">Saudável</Badge>
-                </div>
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p className="text-red-400 mb-4">Error: {error}</p>
+          <button
+            onClick={fetchDashboardData}
+            className="px-4 py-2 bg-primary text-primary-foreground rounded"
+          >
+            Try again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!dashboardData) {
+    return null;
+  }
+
+  const { assets, offers, stats, badges, metrics } = dashboardData;
+
+  // Preparar métricas para o componente
+  const metricsArray = [
+    {
+      id: 'mrr',
+      label: 'Audited MRR',
+      value: metrics.mrr.formatted,
+      sublabel: `${metrics.mrr.growth}% growth in the last 30 days`,
+      trend: metrics.mrr.growthLabel
+    },
+    {
+      id: 'churn',
+      label: 'Controlled Churn',
+      value: metrics.churn.formatted,
+      sublabel: `${metrics.churn.benchmark} benchmark`,
+      trend: metrics.churn.status
+    },
+    {
+      id: 'cac',
+      label: 'CAC payback',
+      value: metrics.cacPayback.formatted,
+      sublabel: `ideal < ${metrics.cacPayback.ideal}`,
+      trend: metrics.cacPayback.target
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-background">
+      <DashboardHeader 
+        onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
+        isSidebarOpen={sidebarOpen}
+      />
+      <DashboardSidebar 
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+      
+      <main className={`transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : ''}`}>
+        <div className="container mx-auto px-4 py-8 space-y-6">
+          {/* Header Section */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold text-foreground">
+                  {adminMode ? 'Administrative Dashboard' : 'Digital Assets Dashboard'}
+                </h1>
+                <p className="text-muted-foreground">
+                  {adminMode 
+                    ? 'Platform overview and management of all resources'
+                    : 'Track metrics, readiness score and prepare for negotiations with qualified investors.'}
+                </p>
               </div>
-            )}
-          />
-        ) : (
-          <EmptyState title="Nenhum ativo" description="Cadastre seu primeiro ativo para começar." />
-        )}
-      </Card>
+              {adminMode && (
+                <div className="px-4 py-2 rounded-lg bg-primary/10 border border-primary/20">
+                  <span className="text-sm font-medium text-primary">🔒 Admin Mode</span>
+                </div>
+              )}
+            </div>
+          </div>
 
-      <Card className="w-full" title="Ofertas ativas" description="Resumo das propostas em negociação." actions={null}>
-        {offers.length ? (
-          <MarketGrid
-            items={offers}
-            renderItem={(offer: any) => <OfferCard key={offer.id} offer={{
-              ...offer,
-              title: offer.asset?.name ?? 'Oferta',
-              summary: offer.asset?.description ?? '',
-              classification: offer.asset?.category ?? 'SaaS',
-              revenueRange: offer.asset?.mrr ? `MRR R$ ${Number(offer.asset.mrr).toLocaleString('pt-BR')}` : 'Sob consulta',
-              investmentRange: { min: Number(offer.price), max: Number(offer.price) },
-              valuationMultiple: 'N/A'
-            }} />}
-          />
-        ) : (
-          <EmptyState title="Sem ofertas" description="Publique seu ativo para receber propostas." />
-        )}
-      </Card>
+          {/* Admin Stats Section */}
+          {adminMode && dashboardData.adminMetrics && (
+            <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+              <h2 className="text-xl font-semibold mb-4">Global Statistics</h2>
+              <AdminStatsSection
+                totalAssets={dashboardData.adminMetrics.totalAssets}
+                totalOffers={dashboardData.adminMetrics.totalOffers}
+                totalUsers={dashboardData.adminMetrics.totalUsers}
+                totalMRR={dashboardData.adminMetrics.formattedTotalMRR}
+              />
+            </div>
+          )}
 
-      <Card className="w-full" title="Gamificação & badges" description="Conquiste badges ao completar tarefas críticas." actions={null}>
-        <div className="flex flex-wrap gap-3 mb-6">
-          {badges.map((badge) => (
-            <Badge key={badge.label} variant={badge.variant}>
-              {badge.label}
-            </Badge>
-          ))}
+          {/* Profile Section - User Mode: Informações do usuário */}
+          {!adminMode && (
+            <section className="space-y-4">
+              <ProfileCard 
+                userName={userName}
+                userLevel="Founder"
+              />
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <ReadinessCard
+                  score={stats.readinessScore}
+                  status="Ready for due diligence"
+                  trend="+6% this month"
+                  editable={false}
+                />
+                <ValuationCard
+                  value={stats.valuation}
+                  description="Based on MRR and churn"
+                  updated="Updated daily"
+                  editable={false}
+                />
+              </div>
+            </section>
+          )}
+
+          {/* Assets Section - User Mode: Meus ativos pessoais */}
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+            <div className="mb-4">
+              <h2 className="text-xl font-semibold">
+                {adminMode ? 'Latest Platform Assets' : 'My Assets'}
+              </h2>
+              {adminMode && (
+                <p className="text-sm text-muted-foreground mt-1">
+                  Showing last 10 assets. See all in <a href="/dashboard/admin/assets" className="text-primary hover:underline">Manage Assets</a>
+                </p>
+              )}
+              {!adminMode && (
+                <p className="text-sm text-muted-foreground mt-1">
+                  Manage your digital assets and track important metrics
+                </p>
+              )}
+            </div>
+            <AssetsSection
+              assets={assets}
+              assetsCount={stats.assetsCount}
+              totalValue={stats.totalValue}
+              isAdmin={false}
+              userId={sessionUserId || undefined}
+            />
+          </div>
+
+          {/* Offers Section - User Mode: Minhas ofertas pessoais */}
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+            <div className="mb-4">
+              <h2 className="text-xl font-semibold">
+                {adminMode ? 'Latest Platform Offers' : 'Active Offers'}
+              </h2>
+              {adminMode && (
+                <p className="text-sm text-muted-foreground mt-1">
+                  Showing last 10 offers. See all in <a href="/dashboard/offers" className="text-primary hover:underline">Manage Offers</a>
+                </p>
+              )}
+              {!adminMode && (
+                <p className="text-sm text-muted-foreground mt-1">
+                  Track your offers in negotiation and receive proposals from buyers
+                </p>
+              )}
+            </div>
+            <OffersSection
+              offers={offers}
+              isAdmin={false}
+            />
+          </div>
+
+          {/* Badges Section - User Mode: Gamificação pessoal */}
+          {!adminMode && (
+            <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+              <BadgesSection
+                badges={badges.badges}
+                tasks={badges.tasks}
+                editable={false}
+                isAdmin={false}
+              />
+            </div>
+          )}
+
+          {/* Metrics Section - User Mode: Minhas métricas pessoais */}
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+            <MetricsSection
+              metrics={metricsArray}
+              editable={false}
+              isAdmin={false}
+            />
         </div>
-        <ProgressList items={readinessTasks} />
-      </Card>
-
-      <Card className="w-full" title="Valuations e métricas" description="Resumo das análises automáticas feitas com base em MRR, churn e CAC." actions={null}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <StatBlock label="MRR auditado" value="R$ 28.400" sublabel="crescimento 9% nos últimos 30 dias" trend="+9% vs último mês" />
-          <StatBlock label="Churn controlado" value="1.9%" sublabel="benchmark SaaS B2B" trend="Em linha com o setor" />
-          <StatBlock label="CAC payback" value="5.2 meses" sublabel="ideal < 7 meses" trend="Meta < 6 meses" />
         </div>
-      </Card>
+      </main>
     </div>
   );
 }
-
