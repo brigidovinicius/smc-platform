@@ -10,11 +10,15 @@ interface Offer {
   status: string;
   asset?: {
     id: string;
-    name: string;
-    description: string;
-    category: string;
+    name?: string;
+    title?: string;
+    description?: string;
+    shortDescription?: string;
+    fullDescription?: string;
+    category?: string;
+    type?: string;
     mrr?: number | null;
-  };
+  } | null;
   sellerId?: string;
 }
 
@@ -43,9 +47,9 @@ export default function OffersSection({ offers, isAdmin = false }: OffersSection
               key={offer.id}
               offer={{
                 ...offer,
-                title: offer.asset?.name ?? 'Oferta',
-                summary: offer.asset?.description ?? '',
-                classification: offer.asset?.category ?? 'SaaS',
+                title: offer.asset?.title || offer.asset?.name || 'Oferta',
+                summary: offer.asset?.shortDescription || offer.asset?.fullDescription || offer.asset?.description || '',
+                classification: offer.asset?.type || offer.asset?.category || 'SaaS',
                 revenueRange: offer.asset?.mrr 
                   ? `MRR $${Number(offer.asset.mrr).toLocaleString('en-US')}` 
                   : 'Upon request',

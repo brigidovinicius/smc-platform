@@ -7,14 +7,28 @@ import EmptyState from '@/components/EmptyState';
 import MarketGrid from '@/components/MarketGrid';
 import AssetCard from '@/components/AssetCard';
 import { Badge } from '@/components/ui/badge';
+import { ASSET_TYPE_LABELS } from '@/lib/assetTypes';
 
 interface Asset {
   id: string;
-  name: string;
-  category: string;
-  description: string;
+  title?: string;
+  name?: string; // Legacy support
+  type?: string;
+  category?: string; // Legacy support
+  shortDescription?: string;
+  fullDescription?: string;
+  description?: string; // Legacy support
   mrr?: number | null;
+  arr?: number | null;
   churnRate?: number | null;
+  status?: string;
+  askingPrice?: number;
+  currency?: string;
+  owner?: {
+    id: string;
+    name: string | null;
+    email: string | null;
+  };
 }
 
 interface AssetsSectionProps {
@@ -57,22 +71,32 @@ export default function AssetsSection({
       {displayAssets.length > 0 ? (
         <MarketGrid
           items={displayAssets}
-          renderItem={(asset: Asset) => (
-            <div key={asset.id} className="space-y-2">
-              <AssetCard
-                asset={{
-                  name: asset.name,
-                  category: asset.category,
-                  description: asset.description,
-                  mrr: asset.mrr ? `$${Number(asset.mrr).toLocaleString('en-US')}` : 'N/A',
-                  churn: asset.churnRate ? `${asset.churnRate}%` : 'N/A'
-                }}
-              />
-              <div className="flex gap-2 text-sm">
-                <Badge variant="default">Healthy</Badge>
+          renderItem={(asset: Asset) => {
+            // Map Asset model fields to AssetCard expected format
+            const assetName = asset.title || asset.name || 'Untitled Asset';
+            const assetType = asset.type || asset.category || 'OTHER';
+            const assetCategory = ASSET_TYPE_LABELS[assetType] || assetType;
+            const assetDescription = asset.shortDescription || asset.fullDescription || asset.description || 'No description';
+            
+            return (
+              <div key={asset.id} className="space-y-2">
+                <AssetCard
+                  asset={{
+                    name: assetName,
+                    category: assetCategory,
+                    description: assetDescription,
+                    mrr: asset.mrr ? `$${Number(asset.mrr).toLocaleString('en-US')}` : 'N/A',
+                    churn: asset.churnRate ? `${asset.churnRate}%` : 'N/A'
+                  }}
+                />
+                <div className="flex gap-2 text-sm">
+                  {asset.status && (
+                    <Badge variant="default">{asset.status}</Badge>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            );
+          }}
         />
       ) : (
         <EmptyState 

@@ -8,9 +8,13 @@ export async function getUserAssets(userId: string) {
 }
 
 export async function getUserOffers(userId: string) {
+    // Note: Offer.asset still points to SaaSAsset (legacy relation)
+    // For now, we'll return offers without asset relation to avoid errors
+    // TODO: Migrate Offer model to use Asset instead of SaaSAsset
     return prisma.offer.findMany({
         where: { sellerId: userId },
-        include: { asset: true },
+        // Temporarily exclude asset to avoid relation errors
+        // include: { asset: true },
         orderBy: { createdAt: 'desc' }
     });
 }
