@@ -245,23 +245,19 @@ async function buildUserPayload(userId: string, traceId: string): Promise<Dashbo
 function respondUnauthorized(res: NextApiResponse<ApiResponse>, traceId: string, reason: string) {
   return res.status(401).json({
     success: false,
-    error: true,
-    message: 'Unauthorized',
-    details: reason,
-    code: 'UNAUTHORIZED',
-    traceId
-  } as ApiResponse);
+    error: `Unauthorized: ${reason}`,
+    code: 'UNAUTHORIZED'
+  });
 }
 
 function respondWithDashboardError(res: NextApiResponse<ApiResponse>, traceId: string, error: unknown) {
+  const errorMessage = sanitizeError(error);
+  log(traceId, 'Dashboard route failed', { error: errorMessage });
   return res.status(500).json({
     success: false,
-    error: true,
-    message: 'Dashboard route failed',
-    details: sanitizeError(error),
-    code: 'DASHBOARD_ROUTE_FAILED',
-    traceId
-  } as ApiResponse);
+    error: `Dashboard route failed: ${errorMessage}`,
+    code: 'DASHBOARD_ROUTE_FAILED'
+  });
 }
 
 function serializePrismaData<T>(payload: T): T {
