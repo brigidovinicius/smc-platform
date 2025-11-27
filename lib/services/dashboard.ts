@@ -31,18 +31,20 @@ export async function getUserOffers(userId: string) {
 
 export async function getDashboardStats(userId: string) {
     try {
-        // Buscar contagens
-        const [assetsCount, offersCount, assets] = await Promise.all([
-            prisma.asset.count({ where: { ownerId: userId } }),
-            prisma.offer.count({ where: { sellerId: userId } }),
-            prisma.asset.findMany({
-                where: { ownerId: userId },
-                select: {
-                    mrr: true,
-                    arr: true
-                }
-            })
-        ]);
+        // Em serverless, executar queries sequencialmente pode evitar conflitos
+        // de prepared statements quando há connection pooling
+        // Executar em paralelo pode causar "prepared statement already exists"
+        
+        // Executar queries sequencialmente para evitar conflitos
+        const assetsCount = await prisma.asset.count({ where: { ownerId: userId } });
+        const offersCount = await prisma.offer.count({ where: { sellerId: userId } });
+        const assets = await prisma.asset.findMany({
+            where: { ownerId: userId },
+            select: {
+                mrr: true,
+                arr: true
+            }
+        });
 
         // Helper para converter valores numéricos de forma segura
         const safeNumber = (value: number | null | undefined): number => {

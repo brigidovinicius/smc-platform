@@ -10,14 +10,14 @@ const databaseUrl = process.env.POSTGRES_URL_NON_POOLING ||
                     process.env.POSTGRES_URL || 
                     process.env.DATABASE_URL;
 
-// Adicionar parâmetro para desabilitar prepared statements em serverless
+// Adicionar parâmetros para desabilitar prepared statements em serverless
 // Isso resolve problemas de "prepared statement already exists" no Vercel
 const getConnectionUrl = (url: string): string => {
   if (!url || url.includes('dummy')) {
     return url;
   }
   
-  // Adicionar prepared_statements=false (essencial para serverless)
+  // Adicionar parâmetros essenciais para serverless
   // Isso resolve problemas com prepared statements em ambientes serverless
   try {
     const urlObj = new URL(url);
@@ -25,18 +25,37 @@ const getConnectionUrl = (url: string): string => {
     // Forçar desabilitar prepared statements
     urlObj.searchParams.set('prepared_statements', 'false');
     
-    return urlObj.toString();
-  } catch {
-    // Se falhar ao parsear URL, adicionar parâmetro manualmente
-    const separator = url.includes('?') ? '&' : '?';
-    
-    // Sempre adicionar ou substituir o parâmetro
-    if (url.includes('prepared_statements')) {
-      // Substituir se já existir
-      return url.replace(/[?&]prepared_statements=[^&]*/, `${separator}prepared_statements=false`);
+    // Limitar conexões simultâneas para evitar conflitos em serverless
+    // Isso ajuda a prevenir problemas com prepared statements compartilhados
+    if (!urlObj.searchParams.has('connection_limit')) {
+      urlObj.searchParams.set('connection_limit', '1');
     }
     
-    return `${url}${separator}prepared_statements=false`;
+    // Timeout de pool menor para serverless (evita manter conexões abertas)
+    if (!urlObj.searchParams.has('pool_timeout')) {
+      urlObj.searchParams.set('pool_timeout', '10');
+    }
+    
+    return urlObj.toString();
+  } catch {
+    // Se falhar ao parsear URL, adicionar parâmetros manualmente
+    let modifiedUrl = url;
+    const separator = modifiedUrl.includes('?') ? '&' : '?';
+    
+    // Sempre adicionar ou substituir os parâmetros
+    if (modifiedUrl.includes('prepared_statements')) {
+      modifiedUrl = modifiedUrl.replace(/[?&]prepared_statements=[^&]*/, '');
+    }
+    modifiedUrl = `${modifiedUrl}${separator}prepared_statements=false`;
+    
+    if (!modifiedUrl.includes('connection_limit')) {
+      modifiedUrl = `${modifiedUrl}&connection_limit=1`;
+    }
+    if (!modifiedUrl.includes('pool_timeout')) {
+      modifiedUrl = `${modifiedUrl}&pool_timeout=10`;
+    }
+    
+    return modifiedUrl;
   }
 };
 
