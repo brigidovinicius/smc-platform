@@ -8,6 +8,8 @@ import type { Session } from 'next-auth';
 import Script from 'next/script';
 import { SessionProvider } from '@/components/providers/SessionProvider';
 import { Context7Provider } from '@/components/providers/Context7Provider';
+import { PreviewModeProvider } from '@/components/providers/PreviewModeProvider';
+import { PreviewModeBadge } from '@/components/preview/PreviewModeBadge';
 import { CookieSetter } from '@/components/SEO/CookieSetter';
 import {
   CONTEXT7_SESSION_COOKIE,
@@ -17,6 +19,7 @@ import {
   parseSourceFromUrl
 } from '@/lib/context7';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { PREVIEW_MODE_COOKIE, getPreviewModeFromCookie } from '@/lib/preview-mode';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -85,6 +88,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     referrer
   });
 
+  // Get preview mode from cookie
+  const previewModeCookie = cookieStore.get(PREVIEW_MODE_COOKIE)?.value;
+  const initialPreviewMode = getPreviewModeFromCookie(previewModeCookie);
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -99,7 +106,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         ) : null}
         <SessionProvider>
           <Context7Provider bootstrap={context7Bootstrap}>
-            {children}
+            <PreviewModeProvider initialMode={initialPreviewMode}>
+              <PreviewModeBadge />
+              {children}
+            </PreviewModeProvider>
           </Context7Provider>
         </SessionProvider>
       </body>

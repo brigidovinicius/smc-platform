@@ -14,10 +14,12 @@ import {
   LogOut,
   Shield,
   Menu,
-  X
+  X,
+  Eye
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { signOut } from 'next-auth/react';
+import { usePreviewMode } from '@/components/providers/PreviewModeProvider';
 
 const adminNavItems = [
   { href: '/admin/assets', label: 'Assets', icon: Package },
@@ -29,6 +31,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { previewMode, setPreviewMode, isUserMode } = usePreviewMode();
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -38,9 +41,15 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
       const userRole = user?.role ? String(user.role).toLowerCase() : '';
       if (userRole !== 'admin') {
         router.push('/dashboard');
+        return;
+      }
+      // If in user preview mode, redirect to homepage (but allow toggle button to work)
+      // Only redirect if we're actually on an admin route
+      if (isUserMode && pathname?.startsWith('/admin')) {
+        router.push('/');
       }
     }
-  }, [status, session, router, pathname]);
+  }, [status, session, router, pathname, isUserMode]);
 
   if (status === 'loading') {
     return (
@@ -57,6 +66,30 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const userRole = user?.role ? String(user.role).toLowerCase() : '';
   if (!session || userRole !== 'admin') {
     return null;
+  }
+
+  // If in user preview mode, show a minimal layout with just the toggle button
+  // This allows the admin to switch back to admin mode
+  if (isUserMode) {
+    return (
+      <>
+        <NoIndexMeta />
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <p className="text-muted-foreground">Você está visualizando como usuário</p>
+            <Button
+              variant="default"
+              size="lg"
+              onClick={() => setPreviewMode('admin')}
+              className="bg-yellow-500 hover:bg-yellow-600"
+            >
+              <Eye className="h-4 w-4 mr-2" />
+              Retornar ao modo Admin
+            </Button>
+          </div>
+        </div>
+      </>
+    );
   }
 
   return (
@@ -84,6 +117,15 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
             </div>
 
             <div className="flex items-center gap-4">
+              <Button
+                variant={isUserMode ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setPreviewMode(isUserMode ? 'admin' : 'user')}
+                className={isUserMode ? 'bg-yellow-500 hover:bg-yellow-600' : ''}
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                {isUserMode ? 'Voltando ao modo Admin' : 'Visualizar como Usuário'}
+              </Button>
               <Link href="/dashboard">
                 <Button variant="ghost" size="sm">
                   <LayoutDashboard className="h-4 w-4 mr-2" />
