@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import { countAssetsSafe, countOffersSafe, countUsersSafe, aggregateMRRSafe } from '@/lib/prisma-helpers';
 
 /**
  * Calcula métricas agregadas dos ativos do usuário
@@ -52,30 +53,22 @@ export async function getUserMetrics(userId: string) {
 
 /**
  * Calcula métricas globais (admin)
+ * Usa helpers seguros para evitar problemas com prepared statements
  */
 export async function getAdminMetrics() {
-  const [
-    totalAssets,
-    totalOffers,
-    totalUsers,
-    totalMRR
-  ] = await Promise.all([
-    prisma.asset.count(),
-    prisma.offer.count(),
-    prisma.user.count(),
-    prisma.asset.aggregate({
-      _sum: {
-        mrr: true
-      }
-    })
-  ]);
+  // Executar queries sequencialmente para evitar conflitos de prepared statements
+  // Em serverless, queries paralelas podem causar problemas
+  const totalAssets = await countAssetsSafe();
+  const totalOffers = await countOffersSafe();
+  const totalUsers = await countUsersSafe();
+  const totalMRR = await aggregateMRRSafe();
 
   return {
     totalAssets,
     totalOffers,
     totalUsers,
-    totalMRR: Number(totalMRR._sum.mrr) || 0,
-    formattedTotalMRR: `$${(Number(totalMRR._sum.mrr) || 0).toLocaleString('en-US')}`
+    totalMRR,
+    formattedTotalMRR: `$${totalMRR.toLocaleString('en-US')}`
   };
 }
 

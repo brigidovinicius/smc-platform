@@ -15,15 +15,25 @@ import {
   Shield,
   Menu,
   X,
-  Eye
+  Eye,
+  DollarSign,
+  Award,
+  BarChart3,
+  Plus
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { signOut } from 'next-auth/react';
 import { usePreviewMode } from '@/components/providers/PreviewModeProvider';
 
 const adminNavItems = [
+  { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/assets', label: 'Assets', icon: Package },
-  { href: '/admin/leads', label: 'Leads', icon: Users },
+  { href: '/admin/assets/new', label: 'Criar Asset', icon: Plus },
+  { href: '/admin/offers', label: 'Ofertas', icon: DollarSign },
+  { href: '/admin/badges', label: 'Badges', icon: Award },
+  { href: '/admin/metrics', label: 'Métricas', icon: BarChart3 },
+  { href: '/admin/users', label: 'Usuários', icon: Users },
+  { href: '/admin/settings', label: 'Configurações', icon: Settings },
 ];
 
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
@@ -110,7 +120,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                 {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </Button>
               
-              <Link href="/admin/assets" className="flex items-center gap-2">
+              <Link href="/admin" className="flex items-center gap-2">
                 <Shield className="h-6 w-6 text-primary" />
                 <span className="font-bold text-lg">Admin Panel</span>
               </Link>
@@ -145,26 +155,53 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           </div>
         </header>
 
-        <div className="flex">
+        <div className="flex relative">
+          {/* Overlay para mobile */}
+          {sidebarOpen && (
+            <div
+              className="fixed inset-0 bg-black/50 z-20 lg:hidden"
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
+
           {/* Sidebar */}
           <aside
             className={`
-              fixed lg:sticky top-16 left-0 z-30 h-[calc(100vh-4rem)] w-64 border-r bg-background
+              fixed lg:sticky top-16 left-0 z-30 h-[calc(100vh-4rem)] w-64 border-r bg-background overflow-y-auto
               transform transition-transform duration-200 ease-in-out
               ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
             `}
           >
-            <nav className="p-4 space-y-2">
+            <div className="p-4 border-b">
+              <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+                Menu
+              </h2>
+            </div>
+            <nav className="p-4 space-y-1">
               {adminNavItems.map((item) => {
                 const Icon = item.icon;
-                const isActive = pathname ? (pathname === item.href || pathname.startsWith(item.href + '/')) : false;
+                // Melhorar detecção de rota ativa
+                let isActive = false;
+                if (pathname) {
+                  if (item.href === '/admin') {
+                    // Para a rota raiz, só ativa se for exatamente /admin
+                    isActive = pathname === '/admin';
+                  } else {
+                    // Para outras rotas, verifica se começa com o href
+                    isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+                  }
+                }
                 
                 return (
-                  <Link key={item.href} href={item.href}>
+                  <Link 
+                    key={item.href} 
+                    href={item.href} 
+                    className="block"
+                    onClick={() => setSidebarOpen(false)}
+                  >
                     <Button
                       variant={isActive ? 'default' : 'ghost'}
                       className="w-full justify-start"
-                      onClick={() => setSidebarOpen(false)}
                     >
                       <Icon className="h-4 w-4 mr-2" />
                       {item.label}
@@ -174,14 +211,6 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
               })}
             </nav>
           </aside>
-
-          {/* Overlay para mobile */}
-          {sidebarOpen && (
-            <div
-              className="fixed inset-0 bg-black/50 z-20 lg:hidden"
-              onClick={() => setSidebarOpen(false)}
-            />
-          )}
 
           {/* Main content */}
           <main className="flex-1 min-h-[calc(100vh-4rem)] p-4 sm:p-6 lg:p-8">

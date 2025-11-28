@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import { countAssetsSafe, countOffersSafe } from '@/lib/prisma-helpers';
 
 export async function getUserAssets(userId: string) {
     try {
@@ -36,8 +37,9 @@ export async function getDashboardStats(userId: string) {
         // Executar em paralelo pode causar "prepared statement already exists"
         
         // Executar queries sequencialmente para evitar conflitos
-        const assetsCount = await prisma.asset.count({ where: { ownerId: userId } });
-        const offersCount = await prisma.offer.count({ where: { sellerId: userId } });
+        // Usar helpers seguros que evitam problemas com prepared statements
+        const assetsCount = await countAssetsSafe({ ownerId: userId });
+        const offersCount = await countOffersSafe({ sellerId: userId });
         const assets = await prisma.asset.findMany({
             where: { ownerId: userId },
             select: {

@@ -22,19 +22,32 @@ const getConnectionUrl = (url: string): string => {
   try {
     const urlObj = new URL(url);
     
-    // Forçar desabilitar prepared statements
+    // FORÇAR desabilitar prepared statements - CRÍTICO para serverless
+    // Remover qualquer parâmetro existente primeiro
+    urlObj.searchParams.delete('prepared_statements');
     urlObj.searchParams.set('prepared_statements', 'false');
+    
+    // Adicionar sslmode se não existir (necessário para Supabase)
+    if (!urlObj.searchParams.has('sslmode')) {
+      urlObj.searchParams.set('sslmode', 'require');
+    }
+    
+    // Se estiver usando pgbouncer, adicionar parâmetro
+    if (url.includes('pooler') || url.includes('pgbouncer')) {
+      urlObj.searchParams.set('pgbouncer', 'true');
+    }
     
     // Limitar conexões simultâneas para evitar conflitos em serverless
     // Isso ajuda a prevenir problemas com prepared statements compartilhados
-    if (!urlObj.searchParams.has('connection_limit')) {
-      urlObj.searchParams.set('connection_limit', '1');
-    }
+    urlObj.searchParams.delete('connection_limit');
+    urlObj.searchParams.set('connection_limit', '1');
     
     // Timeout de pool menor para serverless (evita manter conexões abertas)
-    if (!urlObj.searchParams.has('pool_timeout')) {
-      urlObj.searchParams.set('pool_timeout', '10');
-    }
+    urlObj.searchParams.delete('pool_timeout');
+    urlObj.searchParams.set('pool_timeout', '10');
+    
+    // Forçar close de conexões após uso
+    urlObj.searchParams.set('connect_timeout', '10');
     
     return urlObj.toString();
   } catch {
@@ -42,18 +55,31 @@ const getConnectionUrl = (url: string): string => {
     let modifiedUrl = url;
     const separator = modifiedUrl.includes('?') ? '&' : '?';
     
-    // Sempre adicionar ou substituir os parâmetros
-    if (modifiedUrl.includes('prepared_statements')) {
-      modifiedUrl = modifiedUrl.replace(/[?&]prepared_statements=[^&]*/, '');
-    }
-    modifiedUrl = `${modifiedUrl}${separator}prepared_statements=false`;
+    // Remover parâmetros existentes primeiro
+    modifiedUrl = modifiedUrl.replace(/[?&]prepared_statements=[^&]*/g, '');
+    modifiedUrl = modifiedUrl.replace(/[?&]connection_limit=[^&]*/g, '');
+    modifiedUrl = modifiedUrl.replace(/[?&]pool_timeout=[^&]*/g, '');
+    modifiedUrl = modifiedUrl.replace(/[?&]connect_timeout=[^&]*/g, '');
     
-    if (!modifiedUrl.includes('connection_limit')) {
-      modifiedUrl = `${modifiedUrl}&connection_limit=1`;
+    // Adicionar parâmetros necessários
+    const params = [
+      'prepared_statements=false',
+      'connection_limit=1',
+      'pool_timeout=10',
+      'connect_timeout=10'
+    ];
+    
+    // Adicionar sslmode se não existir
+    if (!modifiedUrl.includes('sslmode=')) {
+      params.push('sslmode=require');
     }
-    if (!modifiedUrl.includes('pool_timeout')) {
-      modifiedUrl = `${modifiedUrl}&pool_timeout=10`;
+    
+    // Adicionar pgbouncer se necessário
+    if (url.includes('pooler') || url.includes('pgbouncer')) {
+      params.push('pgbouncer=true');
     }
+    
+    modifiedUrl = `${modifiedUrl}${separator}${params.join('&')}`;
     
     return modifiedUrl;
   }
@@ -108,9 +134,17 @@ if (!isValidDatabaseUrl) {
 // Criar Prisma Client apenas se DATABASE_URL for válido
 // Caso contrário, criar com URL dummy para evitar erros de inicialização
 // Usar process.env.DATABASE_URL que já foi processada acima com prepared_statements=false
-const prismaUrl = isValidDatabaseUrl 
+// IMPORTANTE: Garantir que prepared_statements=false está presente
+let prismaUrl = isValidDatabaseUrl 
   ? (process.env.DATABASE_URL || finalDatabaseUrl)
   : 'postgresql://dummy:dummy@localhost:5432/dummy?schema=public';
+
+// FORÇAR prepared_statements=false se não estiver presente
+if (isValidDatabaseUrl && prismaUrl && !prismaUrl.includes('prepared_statements=false')) {
+  prismaUrl = getConnectionUrl(prismaUrl);
+  // Atualizar DATABASE_URL também
+  process.env.DATABASE_URL = prismaUrl;
+}
 
 // Create Prisma Client with proper configuration
 let prismaInstance: PrismaClient;
@@ -124,10 +158,28 @@ if (globalForPrisma.prisma) {
     // Isso é importante porque o Prisma pode cachear a URL do ambiente
     // IMPORTANTE: connection_limit e outras opções ajudam em ambientes serverless
     if (isValidDatabaseUrl) {
+      // Garantir que a URL tenha prepared_statements=false
+      // A URL já foi processada acima, mas vamos garantir novamente
+      let finalUrl = prismaUrl;
+      if (!finalUrl.includes('prepared_statements=false')) {
+        finalUrl = getConnectionUrl(finalUrl);
+        // Atualizar também no ambiente
+        process.env.DATABASE_URL = finalUrl;
+      }
+      
+      console.log('[Prisma] Initializing with URL (prepared_statements=false enforced)');
+      
+      // Verificar novamente se a URL tem prepared_statements=false
+      if (!finalUrl.includes('prepared_statements=false')) {
+        console.error('[Prisma] ERRO CRÍTICO: URL não tem prepared_statements=false!');
+        console.error('[Prisma] URL:', finalUrl.replace(/:[^:@]+@/, ':****@'));
+        throw new Error('DATABASE_URL deve ter prepared_statements=false para funcionar com connection pooling');
+      }
+      
       prismaInstance = new PrismaClient({
         datasources: {
           db: {
-            url: prismaUrl
+            url: finalUrl
           }
         },
         log: process.env.NODE_ENV === 'production' ? ['warn', 'error'] : ['warn', 'error'],
@@ -135,9 +187,8 @@ if (globalForPrisma.prisma) {
         // A URL já tem prepared_statements=false, mas essas configs adicionais ajudam
       });
       
-      // Forçar conexão limpa ao inicializar em produção (serverless)
+      // Forçar desconexão limpa ao sair (importante para serverless)
       if (process.env.NODE_ENV === 'production') {
-        // Desabilitar prepared statements via extensão de conexão
         prismaInstance.$on('beforeExit' as never, async () => {
           await prismaInstance.$disconnect();
         });
@@ -191,6 +242,17 @@ export const prisma = prismaInstance;
 
 if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = prisma;
+}
+
+// Log da URL final usada (sem senha)
+if (isValidDatabaseUrl && process.env.DATABASE_URL) {
+  try {
+    const urlObj = new URL(process.env.DATABASE_URL);
+    const safeUrl = `${urlObj.protocol}//${urlObj.host}${urlObj.pathname}?${urlObj.searchParams.toString()}`;
+    console.log('[Prisma] Using database URL:', safeUrl.replace(/password=[^&]*/gi, 'password=***'));
+  } catch {
+    // Ignore URL parsing errors
+  }
 }
 
 export default prisma;

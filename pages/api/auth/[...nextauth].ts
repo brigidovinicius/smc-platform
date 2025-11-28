@@ -4,13 +4,17 @@ import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import bcrypt from 'bcryptjs';
+// Importar prisma DEPOIS que a URL foi processada
+// Isso garante que prepared_statements=false está aplicado
 import prisma from '@/lib/prisma';
+import { findUserByEmailSafe, findProfileByUserIdSafe } from '@/lib/prisma-helpers';
 
 // Only use PrismaAdapter if DATABASE_URL is configured
 // Prioridade: POSTGRES_URL_NON_POOLING (recomendado para Supabase) > POSTGRES_URL > DATABASE_URL
-const databaseUrl = process.env.POSTGRES_URL_NON_POOLING || 
-                    process.env.POSTGRES_URL || 
-                    process.env.DATABASE_URL;
+// IMPORTANTE: Usar process.env.DATABASE_URL que já foi processada em lib/prisma.ts
+const databaseUrl = process.env.DATABASE_URL || 
+                    process.env.POSTGRES_URL_NON_POOLING || 
+                    process.env.POSTGRES_URL;
 const hasDatabase = Boolean(
   databaseUrl && 
   !databaseUrl.includes('dummy') &&
@@ -18,15 +22,35 @@ const hasDatabase = Boolean(
   (databaseUrl.startsWith('postgresql://') || databaseUrl.startsWith('postgres://'))
 );
 
-// Only create adapter if database is available
+// IMPORTANTE: Desabilitar PrismaAdapter em produção/serverless quando usando connection pooling
+// O PrismaAdapter cria prepared statements que causam conflitos com pgBouncer
+// Usar apenas JWT strategy que não depende do adapter
+const useAdapter = hasDatabase && 
+                   databaseUrl && 
+                   databaseUrl.includes('prepared_statements=false') &&
+                   !databaseUrl.includes('pooler') &&
+                   !databaseUrl.includes('pgbouncer') &&
+                   process.env.NODE_ENV !== 'production';
+
+// Only create adapter if database is available and safe to use
+// IMPORTANTE: Criar adapter DEPOIS que prisma foi inicializado com URL correta
 let adapter = undefined;
-if (hasDatabase) {
+if (useAdapter && databaseUrl) {
   try {
-    adapter = PrismaAdapter(prisma);
+    // Verificar se a URL tem prepared_statements=false
+    const finalUrl = process.env.DATABASE_URL || databaseUrl;
+    if (finalUrl && !finalUrl.includes('prepared_statements=false')) {
+      console.warn('[NextAuth] DATABASE_URL não tem prepared_statements=false. Desabilitando adapter.');
+    } else {
+      adapter = PrismaAdapter(prisma);
+      console.log('[NextAuth] PrismaAdapter habilitado');
+    }
   } catch (error) {
     console.error('Error creating PrismaAdapter:', error);
     adapter = undefined;
   }
+} else if (hasDatabase) {
+  console.log('[NextAuth] PrismaAdapter desabilitado (usando connection pooling ou produção)');
 }
 
 export const authOptions: NextAuthOptions = {
@@ -76,10 +100,24 @@ export const authOptions: NextAuthOptions = {
           }
 
           let user;
+          let role = 'user';
+          
           try {
-            user = await prisma.user.findUnique({ 
-              where: { email: normalizedEmail } 
-            });
+            // Usar helper seguro que evita prepared statements
+            user = await findUserByEmailSafe(normalizedEmail);
+            
+            // Extrair role do profile
+            if (user?.profile) {
+              role = user.profile.role?.toLowerCase() ?? 'user';
+            } else if (user && hasDatabase) {
+              // Se não encontrou profile no include, buscar separadamente
+              try {
+                const profile = await findProfileByUserIdSafe(user.id);
+                role = profile?.role?.toLowerCase() ?? 'user';
+              } catch (profileError) {
+                console.error('Error fetching profile in authorize:', profileError);
+              }
+            }
           } catch (dbError: any) {
             console.error('[AUTH] Database error:', dbError);
             console.error('[AUTH] Error code:', dbError.code);
@@ -87,16 +125,14 @@ export const authOptions: NextAuthOptions = {
             
             if (dbError.code === 'P1001' || dbError.message?.includes('can\'t reach database server')) {
               throw new Error('Serviço temporariamente indisponível. Por favor, tente novamente em alguns instantes.');
-            }
-            if (dbError.code === 'P1000' || dbError.message?.includes('authentication')) {
+            } else if (dbError.code === 'P1000' || dbError.message?.includes('authentication')) {
               throw new Error('Erro de autenticação no banco de dados. Verifique as credenciais no Vercel.');
-            }
-            if (dbError.code === 'P1017' || dbError.message?.includes('connection closed')) {
+            } else if (dbError.code === 'P1017' || dbError.message?.includes('connection closed')) {
               throw new Error('Conexão com o banco de dados foi fechada. Tente novamente.');
+            } else {
+              const errorMsg = dbError.message || 'Erro desconhecido';
+              throw new Error(`Erro ao acessar o banco de dados: ${errorMsg}. Verifique a configuração do servidor.`);
             }
-            
-            const errorMsg = dbError.message || 'Erro desconhecido';
-            throw new Error(`Erro ao acessar o banco de dados: ${errorMsg}. Verifique a configuração do servidor.`);
           }
 
           if (!user) {
@@ -129,21 +165,7 @@ export const authOptions: NextAuthOptions = {
           }
 
           console.log(`[AUTH] ✅ Login bem-sucedido: ${normalizedEmail}`);
-
-          // Buscar o role do Profile
-          let role = 'user';
-          if (hasDatabase) {
-            try {
-              const profile = await prisma.profile.findUnique({
-                where: { userId: user.id },
-                select: { role: true },
-              });
-              role = profile?.role?.toLowerCase() ?? 'user';
-              console.log(`[AUTH] Role do usuário: ${role}`);
-            } catch (error) {
-              console.error('Error fetching profile in authorize:', error);
-            }
-          }
+          console.log(`[AUTH] Role do usuário: ${role}`);
 
           // Retornar objeto compatível com NextAuth
           return {
@@ -169,7 +191,7 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session: sessionData }) {
       if (user) {
         token.sub = user.id;
         // Tentar usar o role do objeto user (credentials provider)
@@ -177,13 +199,11 @@ export const authOptions: NextAuthOptions = {
         
         if (userRole) {
           token.role = userRole;
-        } else if (hasDatabase) {
+        } else if (hasDatabase && user.id) {
           // Se não houver role no user (ex: Google OAuth), buscar do Profile
+          // Usar helper seguro que evita prepared statements
           try {
-            const profile = await prisma.profile.findUnique({
-              where: { userId: user.id },
-              select: { role: true },
-            });
+            const profile = await findProfileByUserIdSafe(user.id);
             token.role = profile?.role?.toLowerCase() ?? 'user';
           } catch (error) {
             console.error('Error fetching profile role in JWT callback:', error);
@@ -192,19 +212,54 @@ export const authOptions: NextAuthOptions = {
         } else {
           token.role = 'user';
         }
+        
+        // Armazenar o ID do admin original para impersonation (só se for admin)
+        if (token.role?.toLowerCase() === 'admin') {
+          (token as any).originalAdminId = user.id;
+        }
       } else if (token.sub && hasDatabase) {
         // Atualizar role do token se já existir (para refresh de sessão)
         // Isso garante que o role está sempre atualizado mesmo após refresh
+        // Usar helper seguro que evita prepared statements
         try {
-          const profile = await prisma.profile.findUnique({
-            where: { userId: token.sub },
-            select: { role: true },
-          });
-          if (profile?.role) {
-            token.role = profile.role.toLowerCase();
+          if (token.sub) {
+            const profile = await findProfileByUserIdSafe(token.sub);
+            if (profile?.role) {
+              token.role = profile.role.toLowerCase();
+            }
           }
         } catch (error) {
           console.error('Error refreshing profile role in JWT callback:', error);
+        }
+      }
+      
+      // Suporte para impersonation via session update
+      if (trigger === 'update' && sessionData?.impersonateUserId) {
+        const impersonateUserId = sessionData.impersonateUserId as string;
+        const currentRole = (token as { role?: string }).role?.toLowerCase();
+        
+        // Só permitir impersonation se for admin
+        if (currentRole === 'admin') {
+          // Se já estava impersonando, restaurar o admin original
+          if (impersonateUserId === 'stop') {
+            const originalAdminId = (token as any).originalAdminId;
+            if (originalAdminId) {
+              token.sub = originalAdminId;
+              token.role = 'admin';
+              delete (token as any).impersonateUserId;
+            }
+          } else {
+            // Impersonar novo usuário
+            // Manter o admin original antes de mudar
+            if (!(token as any).originalAdminId && token.sub) {
+              (token as any).originalAdminId = token.sub;
+            }
+            
+            const impersonatedProfile = await findProfileByUserIdSafe(impersonateUserId);
+            token.sub = impersonateUserId;
+            token.role = impersonatedProfile?.role?.toLowerCase() ?? 'user';
+            (token as any).impersonateUserId = impersonateUserId;
+          }
         }
       }
       
@@ -214,6 +269,13 @@ export const authOptions: NextAuthOptions = {
       if (session.user && token?.sub) {
         (session.user as { id?: string }).id = token.sub;
         (session.user as { role?: string }).role = (token as { role?: string }).role ?? 'user';
+        
+        // Adicionar informação de impersonation
+        const impersonateUserId = (token as { impersonateUserId?: string }).impersonateUserId;
+        if (impersonateUserId) {
+          (session.user as { impersonating?: boolean; impersonateUserId?: string }).impersonating = true;
+          (session.user as { impersonating?: boolean; impersonateUserId?: string }).impersonateUserId = impersonateUserId;
+        }
       }
       return session;
     },

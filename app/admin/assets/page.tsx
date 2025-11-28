@@ -59,6 +59,8 @@ export default function AdminAssetsPage() {
         // Admin API already handles search filtering
         const assets = result.data.items || result.data.assets || [];
         setAssets(assets);
+      } else {
+        console.error('Error loading assets:', result.error);
       }
     } catch (error) {
       console.error('Failed to load assets:', error);

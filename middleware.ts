@@ -7,7 +7,15 @@ import { PREVIEW_MODE_COOKIE, getPreviewModeFromCookie } from '@/lib/preview-mod
 
 const authMiddleware = withAuth({
   callbacks: {
-    authorized: ({ token }) => !!token
+    authorized: ({ token, req }) => {
+      // For admin routes, check if user is authenticated AND has ADMIN role
+      if (req.nextUrl.pathname.startsWith('/admin')) {
+        const role = (token?.role as string)?.toLowerCase();
+        return !!token && role === 'admin';
+      }
+      // For other protected routes, just check if authenticated
+      return !!token;
+    }
   },
   pages: {
     signIn: '/auth/login'
@@ -32,7 +40,16 @@ export default async function middleware(req: NextRequestWithAuth, event: NextFe
     }
   }
   
-  return authMiddleware(req, event);
+  const response = await authMiddleware(req, event);
+  
+  // If admin route and not authorized, redirect to not-authorized or home
+  if (req.nextUrl.pathname.startsWith('/admin') && response?.status === 401) {
+    const url = req.nextUrl.clone();
+    url.pathname = '/not-authorized';
+    return NextResponse.redirect(url);
+  }
+  
+  return response;
 }
 
 export const config = {

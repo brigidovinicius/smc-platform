@@ -95,27 +95,33 @@ export default function MetricsPage() {
     return null;
   }
 
+  const safeNumber = (value?: number | null) =>
+    typeof value === 'number' && Number.isFinite(value) ? value : 0;
+
+  const safeText = (value?: string | null) =>
+    typeof value === 'string' && value.trim().length > 0 ? value : '-';
+
   const metricsArray = [
     {
       id: 'mrr',
       label: 'Audited MRR',
-      value: metrics.mrr.formatted,
-      sublabel: `${metrics.mrr.growth}% growth in the last 30 days`,
-      trend: metrics.mrr.growthLabel
+      value: metrics?.mrr?.formatted ?? '-',
+      sublabel: `${safeNumber(metrics?.mrr?.growth)}% growth in the last 30 days`,
+      trend: safeText(metrics?.mrr?.growthLabel)
     },
     {
       id: 'churn',
       label: 'Controlled Churn',
-      value: metrics.churn.formatted,
-      sublabel: `${metrics.churn.benchmark} benchmark`,
-      trend: metrics.churn.status
+      value: metrics?.churn?.formatted ?? '-',
+      sublabel: `${safeText(metrics?.churn?.benchmark)} benchmark`,
+      trend: safeText(metrics?.churn?.status)
     },
     {
       id: 'cac',
       label: 'CAC payback',
-      value: metrics.cacPayback.formatted,
-      sublabel: `ideal < ${metrics.cacPayback.ideal}`,
-      trend: metrics.cacPayback.target
+      value: metrics?.cacPayback?.formatted ?? '-',
+      sublabel: `ideal < ${safeText(metrics?.cacPayback?.ideal)}`,
+      trend: safeText(metrics?.cacPayback?.target)
     }
   ];
 

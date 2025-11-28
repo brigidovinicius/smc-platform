@@ -25,6 +25,7 @@ model User {
   transactionsSold   Transaction[] @relation("TransactionSeller")
   transactionsBought Transaction[] @relation("TransactionBuyer")
   favorites          Favorite[]    @relation("UserFavorites")
+  userBadges         UserBadge[]   @relation("UserBadges")
 }
 
 model Account {
@@ -233,6 +234,7 @@ model Asset {
   moderation   AssetModeration?
   media        AssetMedia[]
   leads        Lead[]
+  badges       AssetBadge[] @relation("AssetBadges")
 
   @@index([ownerId])
   @@index([type])
@@ -323,4 +325,91 @@ model Lead {
   @@index([assetId])
   @@index([status])
   @@index([createdAt])
+}
+
+// Admin System Models
+
+model BadgeDefinition {
+  id          String      @id @default(cuid())
+  name        String
+  slug        String      @unique
+  description String?
+  type        BadgeType   @default(USER_BADGE)
+  automatic   Boolean     @default(false)
+  criteria    String?     // JSON string with criteria rules
+  icon        String?     // Icon name or URL
+  color       String?     // Hex color
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  userBadges UserBadge[]
+  assetBadges AssetBadge[]
+
+  @@index([type])
+  @@index([slug])
+}
+
+enum BadgeType {
+  USER_BADGE
+  ASSET_BADGE
+}
+
+model UserBadge {
+  id                String          @id @default(cuid())
+  userId            String
+  user              User            @relation("UserBadges", fields: [userId], references: [id], onDelete: Cascade)
+  badgeDefinitionId String
+  badgeDefinition   BadgeDefinition @relation(fields: [badgeDefinitionId], references: [id], onDelete: Cascade)
+  assignedBy        String?         // Admin user ID who assigned this
+  assignedAt        DateTime        @default(now())
+  notes             String?
+
+  @@unique([userId, badgeDefinitionId])
+  @@index([userId])
+  @@index([badgeDefinitionId])
+}
+
+model AssetBadge {
+  id                String          @id @default(cuid())
+  assetId           String
+  asset             Asset           @relation("AssetBadges", fields: [assetId], references: [id], onDelete: Cascade)
+  badgeDefinitionId String
+  badgeDefinition   BadgeDefinition @relation(fields: [badgeDefinitionId], references: [id], onDelete: Cascade)
+  assignedBy        String?         // Admin user ID who assigned this
+  assignedAt        DateTime        @default(now())
+  notes             String?
+
+  @@unique([assetId, badgeDefinitionId])
+  @@index([assetId])
+  @@index([badgeDefinitionId])
+}
+
+model AdminActionLog {
+  id          String   @id @default(cuid())
+  adminId     String   // User ID of the admin
+  action      String   // e.g., "USER_ROLE_CHANGED", "ASSET_APPROVED", "BADGE_ASSIGNED"
+  targetType  String?  // "USER", "ASSET", "OFFER", "BADGE", etc.
+  targetId    String?  // ID of the target entity
+  details     String?  // JSON string with action details
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  @@index([adminId])
+  @@index([action])
+  @@index([targetType, targetId])
+  @@index([createdAt])
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  valueJson String   // JSON string value
+  category  String?  // e.g., "platform", "pricing", "seo", "features"
+  updatedBy String?  // Admin user ID
+  updatedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  @@index([key])
+  @@index([category])
 }
