@@ -147,7 +147,7 @@ export default function AdminUsersPage() {
         onClose={() => setSidebarOpen(false)}
       />
 
-      <main className={`transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : ''}`}>
+      <main className={`transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : ''} lg:ml-64`}>
         <div className="container mx-auto px-4 py-8 space-y-6">
           <div>
             <h1 className="text-3xl font-bold text-foreground">Manage Users</h1>

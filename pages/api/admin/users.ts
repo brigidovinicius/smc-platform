@@ -26,12 +26,12 @@ export default apiHandler(async (req, res) => {
       ];
     }
 
-    // Ordenação
+    // Ordenação - User não tem createdAt, usar emailVerified ou name
     const { orderBy } = parseSortParams(
       sortBy as string,
       sortOrder as string,
-      'createdAt',
-      ['createdAt', 'name', 'email']
+      'name', // Campo padrão que existe no User
+      ['name', 'email', 'emailVerified'] // Campos disponíveis no User
     );
 
     // Buscar dados paginados

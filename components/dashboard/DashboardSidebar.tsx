@@ -1,8 +1,9 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Package, FileText, Trophy, BarChart3, Settings, Users } from 'lucide-react';
+import { LayoutDashboard, Package, FileText, Trophy, BarChart3, Settings, Users, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils/utils';
 import { isAdmin } from '@/lib/api/permissions';
 import { useSession } from 'next-auth/react';
@@ -33,6 +34,23 @@ export default function DashboardSidebar({ isOpen, onClose }: DashboardSidebarPr
   const pathname = usePathname();
   const { data: session } = useSession();
   const admin = isAdmin(session);
+  
+  // Estado de collapsed com persistência no localStorage
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  useEffect(() => {
+    // Carregar estado do localStorage
+    const saved = localStorage.getItem('sidebar-collapsed');
+    if (saved !== null) {
+      setIsCollapsed(saved === 'true');
+    }
+  }, []);
+
+  const toggleCollapse = () => {
+    const newState = !isCollapsed;
+    setIsCollapsed(newState);
+    localStorage.setItem('sidebar-collapsed', String(newState));
+  };
 
   const visibleItems = navItems.filter(item => !item.adminOnly || admin);
 
@@ -50,11 +68,25 @@ export default function DashboardSidebar({ isOpen, onClose }: DashboardSidebarPr
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed top-16 left-0 z-40 h-[calc(100vh-4rem)] w-64 border-r border-border bg-background transition-transform duration-300 ease-in-out lg:translate-x-0',
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+          'fixed top-16 left-0 z-40 h-[calc(100vh-4rem)] border-r border-border bg-background transition-all duration-300 ease-in-out lg:translate-x-0',
+          isOpen ? 'translate-x-0' : '-translate-x-full',
+          isCollapsed ? 'w-16' : 'w-64'
         )}
       >
         <nav className="flex flex-col gap-1 p-4">
+          {/* Botão de toggle collapse - apenas em desktop */}
+          <button
+            onClick={toggleCollapse}
+            className="hidden lg:flex mb-2 p-2 rounded-lg hover:bg-accent text-muted-foreground hover:text-foreground transition-colors self-end"
+            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {isCollapsed ? (
+              <ChevronRight className="h-5 w-5" />
+            ) : (
+              <ChevronLeft className="h-5 w-5" />
+            )}
+          </button>
+          
           {visibleItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
@@ -68,11 +100,13 @@ export default function DashboardSidebar({ isOpen, onClose }: DashboardSidebarPr
                   'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
                   isActive
                     ? 'bg-primary/10 text-primary'
-                    : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                    : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
+                  isCollapsed && 'justify-center'
                 )}
+                title={isCollapsed ? item.label : undefined}
               >
-                <Icon className="h-5 w-5" />
-                {item.label}
+                <Icon className="h-5 w-5 flex-shrink-0" />
+                {!isCollapsed && <span className="truncate">{item.label}</span>}
               </Link>
             );
           })}
