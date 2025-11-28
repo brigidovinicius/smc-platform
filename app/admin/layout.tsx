@@ -85,17 +85,36 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
       <>
         <NoIndexMeta />
         <div className="min-h-screen bg-background flex items-center justify-center">
-          <div className="text-center space-y-4">
-            <p className="text-muted-foreground">Você está visualizando como usuário</p>
-            <Button
-              variant="default"
-              size="lg"
-              onClick={() => setPreviewMode('admin')}
-              className="bg-yellow-500 hover:bg-yellow-600"
-            >
-              <Eye className="h-4 w-4 mr-2" />
-              Retornar ao modo Admin
-            </Button>
+          <div className="text-center space-y-4 max-w-md mx-auto p-8">
+            <div className="mb-6">
+              <Eye className="h-12 w-12 mx-auto mb-4 text-yellow-500" />
+              <h2 className="text-2xl font-bold text-foreground mb-2">Modo Usuário Ativo</h2>
+              <p className="text-muted-foreground">
+                Você está visualizando a plataforma como um usuário comum. 
+                Navegue pelo site normalmente para ver como os usuários veem o sistema.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <Button
+                variant="default"
+                size="lg"
+                onClick={async () => {
+                  try {
+                    await setPreviewMode('admin');
+                  } catch (error) {
+                    console.error('Erro ao voltar ao modo admin:', error);
+                    alert('Erro ao voltar ao modo admin. Tente novamente.');
+                  }
+                }}
+                className="bg-yellow-500 hover:bg-yellow-600 text-white w-full"
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                Retornar ao Modo Admin
+              </Button>
+              <p className="text-xs text-muted-foreground">
+                Você pode navegar pelo site normalmente. O badge amarelo no topo indica que está em modo usuário.
+              </p>
+            </div>
           </div>
         </div>
       </>
@@ -130,11 +149,18 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
               <Button
                 variant={isUserMode ? 'default' : 'outline'}
                 size="sm"
-                onClick={() => setPreviewMode(isUserMode ? 'admin' : 'user')}
-                className={isUserMode ? 'bg-yellow-500 hover:bg-yellow-600' : ''}
+                onClick={async () => {
+                  try {
+                    await setPreviewMode(isUserMode ? 'admin' : 'user');
+                  } catch (error) {
+                    console.error('Erro ao alterar modo:', error);
+                  }
+                }}
+                className={isUserMode ? 'bg-yellow-500 hover:bg-yellow-600 text-white' : 'border-primary text-primary hover:bg-primary/10'}
+                title={isUserMode ? 'Clique para voltar ao modo Admin' : 'Clique para visualizar como usuário comum'}
               >
                 <Eye className="h-4 w-4 mr-2" />
-                {isUserMode ? 'Voltando ao modo Admin' : 'Visualizar como Usuário'}
+                {isUserMode ? 'Voltar ao Admin' : 'Modo Usuário'}
               </Button>
               <Link href="/dashboard">
                 <Button variant="ghost" size="sm">
