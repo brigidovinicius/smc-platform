@@ -8,11 +8,26 @@ import { PREVIEW_MODE_COOKIE, getPreviewModeFromCookie } from '@/lib/preview-mod
 const authMiddleware = withAuth({
   callbacks: {
     authorized: ({ token, req }) => {
-      // For admin routes, check if user is authenticated AND has ADMIN role
-      if (req.nextUrl.pathname.startsWith('/admin')) {
+      const pathname = req.nextUrl.pathname;
+      
+      // For /dashboard/admin/* routes, check if user is authenticated AND has ADMIN role
+      if (pathname.startsWith('/dashboard/admin')) {
         const role = (token?.role as string)?.toLowerCase();
         return !!token && role === 'admin';
       }
+      
+      // For /admin/* routes (legacy), check if user is authenticated AND has ADMIN role
+      if (pathname.startsWith('/admin')) {
+        const role = (token?.role as string)?.toLowerCase();
+        return !!token && role === 'admin';
+      }
+      
+      // For /dashboard routes (User Mode), just check if authenticated
+      // Admin can access /dashboard too (to view as user)
+      if (pathname.startsWith('/dashboard')) {
+        return !!token;
+      }
+      
       // For other protected routes, just check if authenticated
       return !!token;
     }
@@ -41,9 +56,10 @@ export default async function middleware(req: NextRequestWithAuth, event: NextFe
   }
   
   const response = await authMiddleware(req, event);
+  const pathname = req.nextUrl.pathname;
   
-  // If admin route and not authorized, redirect to not-authorized or home
-  if (req.nextUrl.pathname.startsWith('/admin') && response?.status === 401) {
+  // If admin route and not authorized (401), redirect to not-authorized
+  if ((pathname.startsWith('/dashboard/admin') || pathname.startsWith('/admin')) && response?.status === 401) {
     const url = req.nextUrl.clone();
     url.pathname = '/not-authorized';
     return NextResponse.redirect(url);

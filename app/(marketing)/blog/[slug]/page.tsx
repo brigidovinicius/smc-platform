@@ -96,7 +96,7 @@ export default function BlogPostPage({ params }: Params) {
       name: SITE_CONFIG.name,
       logo: {
         '@type': 'ImageObject',
-        url: `${SITE_CONFIG.url}/logo.svg`,
+        url: `${SITE_CONFIG.url}/counterx-primary.svg`,
       },
     },
     mainEntityOfPage: {

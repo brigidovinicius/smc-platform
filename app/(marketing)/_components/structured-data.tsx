@@ -8,7 +8,7 @@ export function StructuredData({ faq }: { faq?: Array<{ question: string; answer
         name: SITE_CONFIG.name,
         alternateName: SITE_CONFIG.shortName,
         url: SITE_CONFIG.url,
-        logo: `${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`,
+        logo: `${SITE_CONFIG.url}/counterx-primary.svg`,
         description: SITE_CONFIG.description,
         sameAs: [
             SITE_CONFIG.twitter.baseUrl,

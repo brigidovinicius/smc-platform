@@ -41,10 +41,18 @@ Allow: /suporte
 Allow: /support
 Allow: /legal
 Allow: /vender-ativo
+Allow: /assets
+Allow: /buy-saas-business
+Allow: /sell-saas
+Allow: /buy-website
+Allow: /sell-website
+Allow: /valuation-saas
+Allow: /valuation-marketplace
+Allow: /digital-asset-valuation
+Allow: /mrr-multiple-calculator
 
 # Crawl-delay for polite crawlers
 Crawl-delay: 1
 
 # Sitemap locations
-Sitemap: https://counterx.io/sitemap.xml
-Sitemap: https://counterx.io/sitemap-blog.xml
+Sitemap: https://www.counterx.io/sitemap.xml

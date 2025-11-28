@@ -20,6 +20,7 @@ import {
 } from '@/lib/context7';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { PREVIEW_MODE_COOKIE, getPreviewModeFromCookie } from '@/lib/preview-mode';
+import { SITE_CONFIG } from '@/lib/site-config';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -92,12 +93,38 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const previewModeCookie = cookieStore.get(PREVIEW_MODE_COOKIE)?.value;
   const initialPreviewMode = getPreviewModeFromCookie(previewModeCookie);
 
+  // Organization schema for all pages
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: SITE_CONFIG.name,
+    alternateName: SITE_CONFIG.shortName,
+    url: SITE_CONFIG.url,
+    logo: `${SITE_CONFIG.url}/counterx-primary.svg`,
+    description: SITE_CONFIG.description,
+    sameAs: [
+      SITE_CONFIG.twitter.baseUrl,
+      'https://linkedin.com/company/counterx'
+    ],
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'Customer Service',
+      availableLanguage: ['English']
+    }
+  };
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${inter.className} ${spaceGrotesk.variable} bg-background text-foreground antialiased`}
         suppressHydrationWarning
       >
+        <Script
+          id="organization-schema-global"
+          type="application/ld+json"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
         <CookieSetter sessionId={sessionId} visitorId={visitorId} />
         {context7Bootstrap.snippet ? (
           <Script id="context7-bootstrap" strategy="afterInteractive">

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { usePathname } from 'next/navigation';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import ProfileCard from '@/components/dashboard/ProfileCard';
@@ -81,6 +82,7 @@ interface DashboardData {
 
 export default function DashboardPageClient() {
   const { data: session, status } = useSession();
+  const pathname = usePathname();
   const sessionUser = session?.user as DashboardSessionUser | undefined;
   const sessionUserId = sessionUser?.id ?? null;
   const { trackEvent } = useContext7();
@@ -89,9 +91,12 @@ export default function DashboardPageClient() {
   const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isAdminMode, setIsAdminMode] = useState(false);
 
   const userRole = getUserRole(session);
-  const adminMode = isAdmin(session);
+  const isUserInAdminArea = pathname?.startsWith('/dashboard/admin');
+  // Se estiver em /dashboard (não admin), forçar User Mode mesmo se for admin
+  // adminMode será determinado pelo resultado da API e pela rota atual
   const userName = sessionUser?.name || 'User';
 
   const fetchDashboardData = useCallback(async () => {
@@ -101,7 +106,15 @@ export default function DashboardPageClient() {
       setLoading(true);
       setError(null);
 
-      const dashboardResponse = await fetch('/api/dashboard', {
+      // Determinar se estamos em admin mode baseado na rota atual
+      const currentPathIsAdmin = pathname?.startsWith('/dashboard/admin');
+      
+      // Se não estiver em área admin, forçar modo usuário na API
+      const apiUrl = currentPathIsAdmin 
+        ? '/api/dashboard' 
+        : '/api/dashboard?forceUserMode=true';
+
+      const dashboardResponse = await fetch(apiUrl, {
         credentials: 'include',
         cache: 'no-store'
       });
@@ -126,15 +139,20 @@ export default function DashboardPageClient() {
       });
       const badgesResult = badgesResponse.ok ? await badgesResponse.json() : null;
 
-      const metricsEndpoint = adminMode ? '/api/admin/metrics' : '/api/me/metrics';
+      // Determinar se estamos em admin mode baseado na rota atual
+      // Se estiver em /dashboard (não admin), SEMPRE forçar User Mode, mesmo se for admin
+      const calculatedAdminMode = currentPathIsAdmin && 
+        dashboardResult.success && 
+        dashboardResult.data.isAdmin;
+      
+      setIsAdminMode(calculatedAdminMode);
+
+      const metricsEndpoint = calculatedAdminMode ? '/api/admin/metrics' : '/api/me/metrics';
       const metricsResponse = await fetch(metricsEndpoint, {
         credentials: 'include',
         cache: 'no-store'
       });
       const metricsResult = metricsResponse.ok ? await metricsResponse.json() : null;
-
-      const isAdminMode =
-        dashboardResult.success && dashboardResult.data.isAdmin;
 
       const data: DashboardData = {
         assets: dashboardResult.success ? dashboardResult.data.assets || [] : [],
@@ -150,7 +168,7 @@ export default function DashboardPageClient() {
               valuation: '$0',
               assetsCount: 0,
             },
-        badges: isAdminMode
+        badges: calculatedAdminMode
           ? {
               badges: [],
               tasks: [],
@@ -174,7 +192,7 @@ export default function DashboardPageClient() {
               },
             },
         adminMetrics:
-          isAdminMode && dashboardResult.success
+          calculatedAdminMode && dashboardResult.success
             ? dashboardResult.data.adminMetrics
             : null,
       };
@@ -185,7 +203,8 @@ export default function DashboardPageClient() {
         assets: data.assets.length,
         offers: data.offers.length,
         readinessScore: data.stats.readinessScore,
-        adminMode,
+        adminMode: calculatedAdminMode,
+        pathname: pathname || '',
       });
     } catch (error: any) {
       console.error('Error fetching dashboard data:', error);
@@ -199,7 +218,7 @@ export default function DashboardPageClient() {
     } finally {
       setLoading(false);
     }
-  }, [sessionUserId, adminMode, trackEvent]);
+  }, [sessionUserId, pathname, trackEvent]);
 
   useEffect(() => {
     if (status === 'authenticated' && sessionUserId) {
@@ -301,17 +320,17 @@ export default function DashboardPageClient() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-foreground">
-                  {adminMode
+                  {isAdminMode
                     ? 'Administrative Dashboard'
-                    : 'Digital Assets Dashboard'}
+                    : 'User Dashboard'}
                 </h1>
                 <p className="text-muted-foreground">
-                  {adminMode
+                  {isAdminMode
                     ? 'Platform overview and management of all resources'
                     : 'Track metrics, readiness score and prepare for negotiations with qualified investors.'}
                 </p>
               </div>
-              {adminMode && (
+              {isAdminMode && (
                 <div className="px-4 py-2 rounded-lg bg-primary/10 border border-primary/20">
                   <span className="text-sm font-medium text-primary">
                     🔒 Admin Mode
@@ -321,7 +340,7 @@ export default function DashboardPageClient() {
             </div>
           </div>
 
-          {adminMode && dashboardData.adminMetrics && (
+          {isAdminMode && dashboardData.adminMetrics && (
             <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
               <h2 className="text-xl font-semibold mb-4">Global Statistics</h2>
               <AdminStatsSection
@@ -333,7 +352,7 @@ export default function DashboardPageClient() {
             </div>
           )}
 
-          {!adminMode && (
+          {!isAdminMode && (
             <section className="space-y-4">
               <ProfileCard userName={userName} userLevel="Founder" />
 
@@ -357,9 +376,9 @@ export default function DashboardPageClient() {
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
             <div className="mb-4">
               <h2 className="text-xl font-semibold">
-                {adminMode ? 'Latest Platform Assets' : 'My Assets'}
+                {isAdminMode ? 'Latest Platform Assets' : 'My Assets'}
               </h2>
-              {adminMode && (
+              {isAdminMode && (
                 <p className="text-sm text-muted-foreground mt-1">
                   Showing last 10 assets. See all in{' '}
                   <a
@@ -370,7 +389,7 @@ export default function DashboardPageClient() {
                   </a>
                 </p>
               )}
-              {!adminMode && (
+              {!isAdminMode && (
                 <p className="text-sm text-muted-foreground mt-1">
                   Manage your digital assets and track important metrics
                 </p>
@@ -380,7 +399,7 @@ export default function DashboardPageClient() {
               assets={assets}
               assetsCount={stats.assetsCount}
               totalValue={stats.totalValue ?? '-'}
-              isAdmin={adminMode}
+              isAdmin={isAdminMode}
               userId={sessionUserId || undefined}
             />
           </div>
@@ -388,9 +407,9 @@ export default function DashboardPageClient() {
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
             <div className="mb-4">
               <h2 className="text-xl font-semibold">
-                {adminMode ? 'Latest Platform Offers' : 'Active Offers'}
+                {isAdminMode ? 'Latest Platform Offers' : 'Active Offers'}
               </h2>
-              {adminMode && (
+              {isAdminMode && (
                 <p className="text-sm text-muted-foreground mt-1">
                   Showing last 10 offers. See all in{' '}
                   <a
@@ -401,17 +420,17 @@ export default function DashboardPageClient() {
                   </a>
                 </p>
               )}
-              {!adminMode && (
+              {!isAdminMode && (
                 <p className="text-sm text-muted-foreground mt-1">
                   Track your offers in negotiation and receive proposals from
                   buyers
                 </p>
               )}
             </div>
-            <OffersSection offers={offers} isAdmin={adminMode} />
+            <OffersSection offers={offers} isAdmin={isAdminMode} />
           </div>
 
-          {!adminMode && (
+          {!isAdminMode && (
             <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
               <BadgesSection
                 badges={badges.badges}
@@ -426,7 +445,7 @@ export default function DashboardPageClient() {
             <MetricsSection
               metrics={metricsArray}
               editable={false}
-              isAdmin={adminMode}
+              isAdmin={isAdminMode}
             />
           </div>
         </div>

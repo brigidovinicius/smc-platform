@@ -1,38 +1,13 @@
 import type { Metadata } from 'next';
+import { buildMetadata } from '@/lib/seo';
 import { SITE_CONFIG } from '@/lib/site-config';
 
-export const metadata: Metadata = {
-  title: 'Marketplace | CounterX',
-  description: 'Browse digital assets available for purchase. Filter by business type, price range, and metrics.',
-  metadataBase: new URL(SITE_CONFIG.url),
-  alternates: {
-    canonical: `${SITE_CONFIG.url}/marketplace`,
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  openGraph: {
-    title: 'Marketplace | CounterX',
-    description: 'Browse digital assets available for purchase on CounterX marketplace.',
-    type: 'website',
-    url: `${SITE_CONFIG.url}/marketplace`,
-    siteName: SITE_CONFIG.name,
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Marketplace | CounterX',
-    description: 'Browse digital assets for purchase.',
-    creator: SITE_CONFIG.twitter.handle,
-  },
-};
+export const metadata: Metadata = buildMetadata({
+  title: 'Digital Assets Marketplace | CounterX',
+  description: 'Browse verified SaaS businesses, websites, and digital assets for sale. Complete financial data, automated valuation, and secure transactions.',
+  url: `${SITE_CONFIG.url}/marketplace`,
+  keywords: ['digital assets marketplace', 'buy SaaS', 'buy website', 'SaaS for sale', 'digital assets for sale', 'marketplace'],
+});
 
 export default function MarketplaceLayout({
   children,
@@ -41,4 +16,3 @@ export default function MarketplaceLayout({
 }) {
   return children;
 }
-

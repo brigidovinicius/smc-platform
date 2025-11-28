@@ -10,7 +10,6 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { isAdmin } from '@/lib/api/permissions';
-import { useSidebar } from '@/contexts/SidebarContext';
 
 interface User {
   id: string;
@@ -50,7 +49,6 @@ export default function AdminUsersPage() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
-  const { isCollapsed } = useSidebar();
 
   const adminMode = isAdmin(session);
 
@@ -151,9 +149,6 @@ export default function AdminUsersPage() {
 
       <main 
         className={`transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : ''}`}
-        style={{ 
-          marginLeft: sidebarOpen ? (isCollapsed ? '4rem' : '16rem') : '0'
-        }}
       >
         <div className="container mx-auto px-4 py-8 space-y-6">
           <div>

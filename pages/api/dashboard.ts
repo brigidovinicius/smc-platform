@@ -63,10 +63,14 @@ export default apiHandler(async (req, res) => {
     return respondUnauthorized(res, traceId, 'User not authorized');
   }
 
-  const adminMode = isAdmin(session);
+  // Verificar se há parâmetro para forçar modo usuário (útil quando admin quer ver como usuário)
+  const forceUserMode = req.query.forceUserMode === 'true' || req.query.mode === 'user';
+  
+  const adminMode = isAdmin(session) && !forceUserMode;
   log(traceId, 'Session resolved', {
     userId,
     adminMode,
+    forceUserMode,
     email: sessionUser?.email ?? null
   });
 
@@ -213,29 +217,54 @@ async function buildAdminPayload(traceId: string): Promise<DashboardResponsePayl
 async function buildUserPayload(userId: string, traceId: string): Promise<DashboardResponsePayload> {
   log(traceId, 'Fetching user dashboard data', { userId });
 
-  const [assets, offers, stats] = await Promise.all([
-    getUserAssets(userId),
-    getUserOffers(userId),
-    getDashboardStats(userId)
-  ]);
+  // Garantir valores default mesmo em caso de erro
+  let assets: unknown[] = [];
+  let offers: unknown[] = [];
+  let stats: Awaited<ReturnType<typeof getDashboardStats>>;
+
+  try {
+    [assets, offers, stats] = await Promise.all([
+      getUserAssets(userId).catch(() => []),
+      getUserOffers(userId).catch(() => []),
+      getDashboardStats(userId).catch(() => ({
+        readinessScore: 0,
+        valuation: '$0',
+        assetsCount: 0,
+        offersCount: 0,
+        totalValue: '$0'
+      }))
+    ]);
+  } catch (error) {
+    log(traceId, 'Error fetching user data, using defaults', { error: sanitizeError(error) });
+    assets = [];
+    offers = [];
+    stats = {
+      readinessScore: 0,
+      valuation: '$0',
+      assetsCount: 0,
+      offersCount: 0,
+      totalValue: '$0'
+    };
+  }
 
   log(traceId, 'User data fetched', {
     assets: assets.length,
     offers: offers.length
   });
 
+  // Garantir que todos os valores sejam definidos (nunca undefined)
   const normalizedStats: DashboardStatsPayload = {
-    readinessScore: stats.readinessScore ?? 0,
-    valuation: stats.valuation ?? '$0',
-    assetsCount: stats.assetsCount ?? assets.length,
-    offersCount: stats.offersCount ?? offers.length,
-    totalValue: stats.totalValue ?? '$0'
+    readinessScore: typeof stats?.readinessScore === 'number' ? stats.readinessScore : 0,
+    valuation: typeof stats?.valuation === 'string' && stats.valuation.length > 0 ? stats.valuation : '$0',
+    assetsCount: typeof stats?.assetsCount === 'number' ? stats.assetsCount : (Array.isArray(assets) ? assets.length : 0),
+    offersCount: typeof stats?.offersCount === 'number' ? stats.offersCount : (Array.isArray(offers) ? offers.length : 0),
+    totalValue: typeof stats?.totalValue === 'string' && stats.totalValue.length > 0 ? stats.totalValue : '$0'
   };
 
   return {
     isAdmin: false,
-    assets: serializePrismaData(assets),
-    offers: serializePrismaData(offers),
+    assets: Array.isArray(assets) ? serializePrismaData(assets) : [],
+    offers: Array.isArray(offers) ? serializePrismaData(offers) : [],
     stats: normalizedStats,
     adminMetrics: null
   };

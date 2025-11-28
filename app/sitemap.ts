@@ -1,8 +1,9 @@
 import { MetadataRoute } from 'next';
 import { getAllPosts, getAllCategories, getAllAuthors } from '@/lib/blog';
 import { SITE_URL } from '@/lib/site-config';
+import prisma from '@/lib/prisma';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = SITE_URL;
     const currentDate = new Date();
 
@@ -160,7 +161,59 @@ export default function sitemap(): MetadataRoute.Sitemap {
         }
     ];
 
-    const staticPages = [...mainPages, ...legalPages, ...authPages, ...publicPages];
+    // SEO Landing Pages (high-intent pages)
+    const seoLandingPages: MetadataRoute.Sitemap = [
+        {
+            url: `${baseUrl}/buy-saas-business`,
+            lastModified: currentDate,
+            changeFrequency: 'weekly',
+            priority: 0.8
+        },
+        {
+            url: `${baseUrl}/sell-saas`,
+            lastModified: currentDate,
+            changeFrequency: 'weekly',
+            priority: 0.8
+        },
+        {
+            url: `${baseUrl}/buy-website`,
+            lastModified: currentDate,
+            changeFrequency: 'weekly',
+            priority: 0.8
+        },
+        {
+            url: `${baseUrl}/sell-website`,
+            lastModified: currentDate,
+            changeFrequency: 'weekly',
+            priority: 0.8
+        },
+        {
+            url: `${baseUrl}/valuation-saas`,
+            lastModified: currentDate,
+            changeFrequency: 'monthly',
+            priority: 0.7
+        },
+        {
+            url: `${baseUrl}/valuation-marketplace`,
+            lastModified: currentDate,
+            changeFrequency: 'monthly',
+            priority: 0.7
+        },
+        {
+            url: `${baseUrl}/digital-asset-valuation`,
+            lastModified: currentDate,
+            changeFrequency: 'monthly',
+            priority: 0.7
+        },
+        {
+            url: `${baseUrl}/mrr-multiple-calculator`,
+            lastModified: currentDate,
+            changeFrequency: 'monthly',
+            priority: 0.7
+        }
+    ];
+
+    const staticPages = [...mainPages, ...legalPages, ...authPages, ...publicPages, ...seoLandingPages];
 
     // Blog posts
     const posts = getAllPosts();
@@ -189,5 +242,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.5
     }));
 
-    return [...staticPages, ...blogPosts, ...categoryPages, ...authorPages];
+    // Published assets from database
+    let assetPages: MetadataRoute.Sitemap = [];
+    try {
+        const publishedAssets = await prisma.asset.findMany({
+            where: {
+                status: 'PUBLISHED'
+            },
+            select: {
+                slug: true,
+                updatedAt: true
+            }
+        });
+
+        assetPages = publishedAssets.map((asset) => ({
+            url: `${baseUrl}/assets/${asset.slug}`,
+            lastModified: asset.updatedAt || currentDate,
+            changeFrequency: 'weekly' as const,
+            priority: 0.8
+        }));
+    } catch (error) {
+        // If database is unavailable during build, continue without asset pages
+        console.warn('Could not fetch assets for sitemap:', error);
+    }
+
+    return [...staticPages, ...blogPosts, ...categoryPages, ...authorPages, ...assetPages];
 }

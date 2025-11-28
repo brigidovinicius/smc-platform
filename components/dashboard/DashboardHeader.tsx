@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
+import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, User, Shield } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/button';
 import { isAdmin } from '@/lib/api/permissions';
@@ -16,11 +17,26 @@ interface DashboardHeaderProps {
 
 export default function DashboardHeader({ onMenuToggle, isSidebarOpen }: DashboardHeaderProps) {
   const { data: session } = useSession();
+  const router = useRouter();
+  const pathname = usePathname();
   const user = session?.user;
   const admin = isAdmin(session);
 
+  // Check if we're in admin area
+  const isInAdminArea = pathname?.startsWith('/dashboard/admin');
+  // Check if we're in user dashboard (not admin area)
+  const isInUserDashboard = pathname?.startsWith('/dashboard') && !isInAdminArea;
+
   const handleSignOut = () => {
     signOut({ callbackUrl: '/' });
+  };
+
+  const handleViewAsUser = () => {
+    router.push('/dashboard');
+  };
+
+  const handleReturnToAdmin = () => {
+    router.push('/dashboard/admin/users');
   };
 
   return (
@@ -43,7 +59,31 @@ export default function DashboardHeader({ onMenuToggle, isSidebarOpen }: Dashboa
         </div>
 
         <div className="flex items-center gap-4">
-          {admin && (
+          {admin && isInAdminArea && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleViewAsUser}
+              className="text-sm"
+            >
+              <User className="h-4 w-4 mr-2" />
+              View as User
+            </Button>
+          )}
+          
+          {admin && isInUserDashboard && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleReturnToAdmin}
+              className="text-sm"
+            >
+              <Shield className="h-4 w-4 mr-2" />
+              Return to Admin Mode
+            </Button>
+          )}
+          
+          {admin && isInAdminArea && (
             <span className="text-xs px-2 py-1 rounded bg-primary/10 text-primary border border-primary/20">
               Admin Mode
             </span>
