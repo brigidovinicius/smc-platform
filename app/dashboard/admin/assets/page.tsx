@@ -170,15 +170,15 @@ export default function AdminAssetsPage() {
               </Button>
             </form>
             
-            <Select value={category} onValueChange={(value) => {
-              setCategory(value);
+            <Select value={category || "all"} onValueChange={(value) => {
+              setCategory(value === "all" ? "" : value);
               setPage(1);
             }}>
               <SelectTrigger className="w-full sm:w-[200px]">
                 <SelectValue placeholder="All categories" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All categories</SelectItem>
+                <SelectItem value="all">All categories</SelectItem>
                 <SelectItem value="SAAS">SaaS</SelectItem>
                 <SelectItem value="ECOMMERCE">E-commerce</SelectItem>
                 <SelectItem value="SOFTWARE">Software</SelectItem>
