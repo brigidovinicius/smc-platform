@@ -19,9 +19,20 @@ export const metadata: Metadata = {
     url: `${SITE_CONFIG.url}/feed`,
     type: 'website',
     siteName: SITE_CONFIG.name,
+    images: [
+      {
+        url: `${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`,
+        width: 1200,
+        height: 630,
+        alt: 'CounterX Opportunities Feed',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
+    title: 'Opportunities Feed – CounterX',
+    description: 'Public preview with the best digital assets opportunities from CounterX.',
+    images: [`${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`],
     creator: SITE_CONFIG.twitter.handle,
   }
 };

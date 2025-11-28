@@ -1,5 +1,18 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Footer } from '@/app/(marketing)/_components/footer';
+import { buildMetadata } from '@/lib/seo';
+import { SITE_CONFIG } from '@/lib/site-config';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return buildMetadata({
+    title: 'Legal Center | CounterX',
+    description: 'Review CounterX policies governing marketplace use, data handling, privacy, terms of use, and cookies. Contact legal@counterx.io for specific cases.',
+    url: `${SITE_CONFIG.url}/legal`,
+    keywords: ['legal', 'terms', 'privacy policy', 'cookies policy', 'legal documents', 'terms of use'],
+    noIndex: false,
+  });
+}
 
 const docs = [
     {

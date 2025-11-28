@@ -57,11 +57,20 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       authors: post.author ? [post.author] : undefined,
       tags: post.tags,
       siteName: SITE_CONFIG.name,
+      images: [
+        {
+          url: (post as any).image ? `${SITE_CONFIG.url}${(post as any).image}` : `${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
       description: post.excerpt,
+      images: (post as any).image ? [`${SITE_CONFIG.url}${(post as any).image}`] : [`${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`],
       creator: SITE_CONFIG.twitter.handle,
     },
   };
@@ -77,6 +86,7 @@ export default function BlogPostPage({ params }: Params) {
 
   const relatedPosts = getRelatedPosts(post.slug, post.category, 3);
   const postUrl = `${SITE_CONFIG.url}/blog/${params.slug}`;
+  const postImage = (post as any).image ? `${SITE_CONFIG.url}${(post as any).image}` : `${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`;
 
   // Structured data for blog post
   const blogPostSchema = {
@@ -84,7 +94,7 @@ export default function BlogPostPage({ params }: Params) {
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.excerpt,
-    image: `${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`,
+    image: postImage,
     datePublished: post.date,
     dateModified: post.date,
     author: {

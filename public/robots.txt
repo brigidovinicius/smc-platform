@@ -55,4 +55,5 @@ Allow: /mrr-multiple-calculator
 Crawl-delay: 1
 
 # Sitemap locations
+Sitemap: https://counterx.io/sitemap.xml
 Sitemap: https://www.counterx.io/sitemap.xml

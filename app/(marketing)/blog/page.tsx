@@ -17,9 +17,20 @@ export const metadata: Metadata = {
     type: 'website',
     url: `${SITE_CONFIG.url}/blog`,
     siteName: SITE_CONFIG.name,
+    images: [
+      {
+        url: `${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`,
+        width: 1200,
+        height: 630,
+        alt: 'CounterX Blog',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
+    title: 'Blog | CounterX',
+    description: 'Insights on valuation and digital assets',
+    images: [`${SITE_CONFIG.url}${SITE_CONFIG.ogImage}`],
     creator: SITE_CONFIG.twitter.handle,
   },
 };
