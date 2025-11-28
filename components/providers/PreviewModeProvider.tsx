@@ -46,10 +46,15 @@ export function PreviewModeProvider({ children, initialMode }: { children: React
   }, [previewMode, pathname, router]);
 
   const setPreviewMode = async (mode: PreviewMode) => {
-    if (isLoading) return; // Prevent multiple simultaneous calls
+    if (isLoading) {
+      console.log('[PreviewModeProvider] Já está carregando, ignorando...');
+      return; // Prevent multiple simultaneous calls
+    }
     
+    console.log('[PreviewModeProvider] setPreviewMode chamado com modo:', mode);
     setIsLoading(true);
     try {
+      console.log('[PreviewModeProvider] Fazendo requisição para /api/preview-mode...');
       const response = await fetch('/api/preview-mode', {
         method: 'POST',
         headers: {
@@ -59,12 +64,16 @@ export function PreviewModeProvider({ children, initialMode }: { children: React
         credentials: 'include', // Important for cookies
       });
 
+      console.log('[PreviewModeProvider] Resposta recebida:', response.status, response.statusText);
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
+        console.error('[PreviewModeProvider] Erro na resposta:', errorData);
         throw new Error(errorData.error || errorData.message || 'Failed to update preview mode');
       }
 
       const data = await response.json();
+      console.log('[PreviewModeProvider] Dados recebidos:', data);
       const newMode = data.data?.mode || mode;
       
       // Update state immediately

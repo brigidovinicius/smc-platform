@@ -41,7 +41,31 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { previewMode, setPreviewMode, isUserMode } = usePreviewMode();
+  
+  // Try to get preview mode, with error handling
+  let previewMode: 'admin' | 'user' = 'admin';
+  let setPreviewMode: ((mode: 'admin' | 'user') => Promise<void>) | null = null;
+  let isUserMode = false;
+  
+  try {
+    const previewModeContext = usePreviewMode();
+    previewMode = previewModeContext.previewMode;
+    setPreviewMode = previewModeContext.setPreviewMode;
+    isUserMode = previewModeContext.isUserMode;
+    console.log('[AdminLayout] PreviewMode context carregado:', { previewMode, isUserMode });
+  } catch (error) {
+    console.error('[AdminLayout] Erro ao carregar PreviewMode context:', error);
+    // Fallback: tentar ler do cookie diretamente
+    if (typeof document !== 'undefined') {
+      const cookieValue = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('preview-mode='))
+        ?.split('=')[1];
+      previewMode = cookieValue === 'user' ? 'user' : 'admin';
+      isUserMode = previewMode === 'user';
+      console.log('[AdminLayout] Modo lido do cookie:', previewMode);
+    }
+  }
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -95,22 +119,37 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
               </p>
             </div>
             <div className="space-y-2">
-              <Button
-                variant="default"
-                size="lg"
-                onClick={async () => {
-                  try {
-                    await setPreviewMode('admin');
-                  } catch (error) {
-                    console.error('Erro ao voltar ao modo admin:', error);
-                    alert('Erro ao voltar ao modo admin. Tente novamente.');
+            <Button
+              variant="default"
+              size="lg"
+              onClick={async () => {
+                console.log('[AdminLayout] Botão "Retornar ao Admin" clicado');
+                if (!setPreviewMode) {
+                  console.error('[AdminLayout] setPreviewMode não está disponível!');
+                  // Fallback: tentar definir cookie diretamente
+                  if (typeof document !== 'undefined') {
+                    document.cookie = 'preview-mode=admin; Path=/; Max-Age=86400; SameSite=Lax';
+                    window.location.href = '/admin';
                   }
-                }}
-                className="bg-yellow-500 hover:bg-yellow-600 text-white w-full"
-              >
-                <Eye className="h-4 w-4 mr-2" />
-                Retornar ao Modo Admin
-              </Button>
+                  return;
+                }
+                try {
+                  await setPreviewMode('admin');
+                  console.log('[AdminLayout] Modo alterado para admin');
+                  // Forçar refresh após mudança
+                  setTimeout(() => {
+                    window.location.href = '/admin';
+                  }, 500);
+                } catch (error) {
+                  console.error('Erro ao voltar ao modo admin:', error);
+                  alert('Erro ao voltar ao modo admin. Tente novamente.');
+                }
+              }}
+              className="bg-yellow-500 hover:bg-yellow-600 text-white w-full"
+            >
+              <Eye className="h-4 w-4 mr-2" />
+              Retornar ao Modo Admin
+            </Button>
               <p className="text-xs text-muted-foreground">
                 Você pode navegar pelo site normalmente. O badge amarelo no topo indica que está em modo usuário.
               </p>
@@ -150,10 +189,49 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                 variant={isUserMode ? 'default' : 'outline'}
                 size="sm"
                 onClick={async () => {
+                  console.log('[AdminLayout] Botão clicado. Modo atual:', previewMode, 'isUserMode:', isUserMode);
+                  const newMode = isUserMode ? 'admin' : 'user';
+                  console.log('[AdminLayout] Tentando alterar para:', newMode);
+                  
+                  if (!setPreviewMode) {
+                    console.error('[AdminLayout] setPreviewMode não está disponível! Usando fallback...');
+                    // Fallback: fazer requisição direta à API
+                    try {
+                      const response = await fetch('/api/preview-mode', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ mode: newMode }),
+                        credentials: 'include',
+                      });
+                      
+                      if (response.ok) {
+                        // Atualizar cookie manualmente
+                        if (typeof document !== 'undefined') {
+                          document.cookie = `preview-mode=${newMode}; Path=/; Max-Age=86400; SameSite=Lax`;
+                        }
+                        // Recarregar página
+                        window.location.href = newMode === 'user' ? '/' : '/admin';
+                      } else {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.error || errorData.message || 'Erro ao alterar modo');
+                      }
+                    } catch (error) {
+                      console.error('[AdminLayout] Erro no fallback:', error);
+                      alert(`Erro ao alterar modo: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
+                    }
+                    return;
+                  }
+                  
                   try {
-                    await setPreviewMode(isUserMode ? 'admin' : 'user');
+                    await setPreviewMode(newMode);
+                    console.log('[AdminLayout] Modo alterado com sucesso para:', newMode);
+                    // Forçar refresh após mudança
+                    setTimeout(() => {
+                      window.location.href = newMode === 'user' ? '/' : '/admin';
+                    }, 500);
                   } catch (error) {
-                    console.error('Erro ao alterar modo:', error);
+                    console.error('[AdminLayout] Erro ao alterar modo:', error);
+                    alert(`Erro ao alterar modo: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
                   }
                 }}
                 className={isUserMode ? 'bg-yellow-500 hover:bg-yellow-600 text-white' : 'border-primary text-primary hover:bg-primary/10'}
