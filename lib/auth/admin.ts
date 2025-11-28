@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import prisma from '@/lib/prisma';
+import { findUserByEmailSafe, findProfileByUserIdSafe } from '@/lib/prisma-helpers';
 
 export async function getAdminSession() {
   const session = await getServerSession(authOptions);
@@ -9,19 +9,16 @@ export async function getAdminSession() {
     return null;
   }
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
+  // Usar helpers seguros que evitam prepared statements
+  const user = await findUserByEmailSafe(session.user.email);
 
   if (!user) {
     return null;
   }
 
-  const profile = await prisma.profile.findUnique({
-    where: { userId: user.id },
-  });
+  const profile = await findProfileByUserIdSafe(user.id);
 
-  if (profile?.role !== 'ADMIN') {
+  if (!profile || profile.role !== 'ADMIN') {
     return null;
   }
 
