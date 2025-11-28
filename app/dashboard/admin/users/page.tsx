@@ -72,15 +72,28 @@ export default function AdminUsersPage() {
 
       const response = await fetch(`/api/admin/users?${params.toString()}`, {
         credentials: 'include',
-        cache: 'no-store'
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+        }
       });
-      if (!response.ok) {
-        throw new Error('Error loading users');
-      }
 
       const result = await response.json();
+
+      if (!response.ok) {
+        // Se for erro 401, redirecionar para login
+        if (response.status === 401) {
+          console.log('[AdminUsersPage] Unauthorized, redirecting to login');
+          router.push('/auth/login?callbackUrl=/dashboard/admin/users');
+          return;
+        }
+        throw new Error(result.error || result.message || 'Error loading users');
+      }
+
       if (result.success) {
         setData(result.data);
+      } else {
+        throw new Error(result.error || 'Error loading users');
       }
     } catch (error: any) {
       console.error('Error fetching users:', error);
@@ -93,8 +106,14 @@ export default function AdminUsersPage() {
   useEffect(() => {
     if (status === 'authenticated' && adminMode) {
       fetchUsers();
+    } else if (status === 'unauthenticated') {
+      console.log('[AdminUsersPage] User not authenticated, redirecting to login');
+      router.push('/auth/login?callbackUrl=/dashboard/admin/users');
+    } else if (status === 'authenticated' && !adminMode) {
+      console.log('[AdminUsersPage] User is not admin, redirecting to dashboard');
+      router.push('/dashboard');
     }
-  }, [status, page, search, adminMode]);
+  }, [status, adminMode, page, search]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
