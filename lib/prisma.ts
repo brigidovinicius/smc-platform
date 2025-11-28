@@ -188,8 +188,9 @@ if (globalForPrisma.prisma) {
       });
       
       // Forçar desconexão limpa ao sair (importante para serverless)
-      if (process.env.NODE_ENV === 'production') {
-        prismaInstance.$on('beforeExit' as never, async () => {
+      // No Prisma 5.0+, usar process.on diretamente em vez de $on
+      if (process.env.NODE_ENV === 'production' && typeof process !== 'undefined') {
+        process.on('beforeExit', async () => {
           await prismaInstance.$disconnect();
         });
       }
