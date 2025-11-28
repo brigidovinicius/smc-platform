@@ -12,10 +12,20 @@ export default apiHandler(async (req, res) => {
   }
 
   const session = await getServerSession(req, res, authOptions);
+  
+  if (!session?.user) {
+    console.log('[API /me/assets] No session found');
+    return errorResponse(res, 'Unauthorized - Please sign in', 401, 'UNAUTHORIZED');
+  }
+
   const userId = getUserId(session);
 
   if (!userId) {
-    return errorResponse(res, 'Unauthorized', 401, 'UNAUTHORIZED');
+    console.log('[API /me/assets] No user ID in session:', { 
+      hasUser: !!session.user, 
+      userId: (session.user as { id?: string })?.id 
+    });
+    return errorResponse(res, 'User ID not found in session', 401, 'UNAUTHORIZED');
   }
 
   try {

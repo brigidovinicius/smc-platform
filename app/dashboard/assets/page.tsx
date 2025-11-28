@@ -51,7 +51,11 @@ export default function AssetsPage() {
   const [page, setPage] = useState(Number(searchParams?.get('page')) || 1);
 
   const fetchAssets = async () => {
-    if (!session) return;
+    if (!session) {
+      console.log('[AssetsPage] No session, redirecting to login');
+      router.push('/auth/login?callbackUrl=/dashboard/assets');
+      return;
+    }
 
     try {
       setLoading(true);
@@ -65,31 +69,47 @@ export default function AssetsPage() {
 
       const response = await fetch(`/api/me/assets?${params.toString()}`, {
         credentials: 'include',
-        cache: 'no-store'
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+        }
       });
-      if (!response.ok) {
-        throw new Error('Error loading assets');
-      }
 
       const result = await response.json();
+
+      if (!response.ok) {
+        // Se for erro 401, redirecionar para login
+        if (response.status === 401) {
+          console.log('[AssetsPage] Unauthorized, redirecting to login');
+          router.push('/auth/login?callbackUrl=/dashboard/assets');
+          return;
+        }
+        throw new Error(result.error || result.message || 'Error loading assets');
+      }
+
       if (result.success) {
         setData(result.data);
         // Atualizar URL sem recarregar
         router.push(`/dashboard/assets?${params.toString()}`, { scroll: false });
+      } else {
+        throw new Error(result.error || 'Error loading assets');
       }
     } catch (error: any) {
-      console.error('Error fetching assets:', error);
-      setError(error.message);
+      console.error('[AssetsPage] Error fetching assets:', error);
+      setError(error.message || 'Failed to load assets. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (status === 'authenticated') {
+    if (status === 'authenticated' && session) {
       fetchAssets();
+    } else if (status === 'unauthenticated') {
+      console.log('[AssetsPage] User not authenticated, redirecting to login');
+      router.push('/auth/login?callbackUrl=/dashboard/assets');
     }
-  }, [status, page, search, category]);
+  }, [status, session, page, search, category]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
