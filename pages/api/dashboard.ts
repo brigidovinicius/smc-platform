@@ -135,10 +135,9 @@ async function resolveUserId(session: Session, sessionUser: SessionUser, traceId
 
   try {
     log(traceId, 'Fallback lookup for user ID via email');
-    const user = await prisma.user.findUnique({
-      where: { email: sessionUser.email },
-      select: { id: true }
-    });
+    // Usar helper seguro que evita prepared statements
+    const { findUserByEmailSafe } = await import('@/lib/prisma-helpers');
+    const user = await findUserByEmailSafe(sessionUser.email);
     return user?.id ?? null;
   } catch (error) {
     log(traceId, 'Failed to resolve user ID from database', { error: sanitizeError(error) });

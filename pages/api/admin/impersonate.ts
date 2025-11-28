@@ -15,10 +15,9 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
       return errorResponse(res, 'userId é obrigatório', 400, 'VALIDATION_ERROR');
     }
 
-    // Verificar se o usuário existe
-    const targetUser = await prisma.user.findUnique({
-      where: { id: userId },
-    });
+    // Verificar se o usuário existe (usar helper seguro)
+    const { findUserByIdSafe } = await import('@/lib/prisma-helpers');
+    const targetUser = await findUserByIdSafe(userId);
 
     if (!targetUser) {
       return errorResponse(res, 'Usuário não encontrado', 404, 'USER_NOT_FOUND');

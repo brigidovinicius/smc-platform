@@ -148,9 +148,9 @@ export async function getUserFromSession(
     errorResponse(res, 'Email não encontrado na sessão', 401, 'NO_EMAIL');
     return null;
   }
-  const user = await prisma.user.findUnique({
-    where: { email: userEmail }
-  });
+  // Usar helper seguro que evita prepared statements
+  const { findUserByEmailSafe } = await import('@/lib/prisma-helpers');
+  const user = await findUserByEmailSafe(userEmail);
 
   if (!user) {
     errorResponse(res, 'Usuário não encontrado', 404, 'USER_NOT_FOUND');

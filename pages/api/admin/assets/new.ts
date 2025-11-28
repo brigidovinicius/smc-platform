@@ -26,10 +26,9 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
       return errorResponse(res, 'Campos obrigatórios faltando', 400, 'VALIDATION_ERROR');
     }
 
-    // Verificar se o owner existe
-    const owner = await prisma.user.findUnique({
-      where: { id: ownerId },
-    });
+    // Verificar se o owner existe (usar helper seguro)
+    const { findUserByIdSafe } = await import('@/lib/prisma-helpers');
+    const owner = await findUserByIdSafe(ownerId);
 
     if (!owner) {
       return errorResponse(res, 'Usuário proprietário não encontrado', 404, 'OWNER_NOT_FOUND');

@@ -16,18 +16,18 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
       return errorResponse(res, 'Role inválido. Use USER ou ADMIN', 400, 'VALIDATION_ERROR');
     }
 
-    // Verificar se o usuário existe
-    const user = await prisma.user.findUnique({
-      where: { id: id as string },
-      include: { profile: true },
-    });
+    // Verificar se o usuário existe (usar helper seguro)
+    const { findUserByIdWithProfileSafe } = await import('@/lib/prisma-helpers');
+    const user = await findUserByIdWithProfileSafe(id as string);
 
     if (!user) {
       return errorResponse(res, 'Usuário não encontrado', 404, 'USER_NOT_FOUND');
     }
 
     // Atualizar ou criar profile
-    if (user.profile) {
+    // O helper retorna profile como { role: string } | null
+    const hasProfile = user.profile && typeof user.profile === 'object' && 'role' in user.profile;
+    if (hasProfile) {
       await prisma.profile.update({
         where: { userId: user.id },
         data: { role },
@@ -51,7 +51,10 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse<ApiRe
             action: 'USER_ROLE_CHANGED',
             targetType: 'USER',
             targetId: user.id,
-            details: JSON.stringify({ oldRole: user.profile?.role, newRole: role }),
+            details: JSON.stringify({ 
+              oldRole: hasProfile ? (user.profile as { role: string }).role : null, 
+              newRole: role 
+            }),
           },
         });
       } catch (error: any) {

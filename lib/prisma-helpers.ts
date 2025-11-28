@@ -309,6 +309,214 @@ export async function findProfileByUserIdSafe(userId: string) {
 }
 
 /**
+ * Busca usuário por ID sem usar prepared statements
+ */
+export async function findUserByIdSafe(userId: string) {
+  const isProduction = process.env.NODE_ENV === 'production';
+  const databaseUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL;
+  const usingPooling = databaseUrl && (databaseUrl.includes('pooler') || databaseUrl.includes('pgbouncer'));
+  const forceRawQueries = process.env.FORCE_RAW_QUERIES === 'true' || isProduction || usingPooling;
+  
+  if (forceRawQueries) {
+    try {
+      const users = await prisma.$queryRaw<Array<{
+        id: string;
+        email: string | null;
+        name: string | null;
+        image: string | null;
+        emailVerified: Date | null;
+      }>>`
+        SELECT 
+          u.id,
+          u.email,
+          u.name,
+          u.image,
+          u."emailVerified"
+        FROM "User" u
+        WHERE u.id = ${userId}
+        LIMIT 1
+      `;
+      
+      if (users.length === 0) {
+        return null;
+      }
+      
+      return users[0];
+    } catch (error: any) {
+      console.error('[Prisma Helper] Error in $queryRaw user lookup by ID:', error);
+      throw error;
+    }
+  }
+  
+  // Em desenvolvimento, tentar query normal primeiro (mas só se não estiver usando pooling)
+  if (!usingPooling) {
+    try {
+      return await prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          image: true,
+          emailVerified: true,
+        }
+      });
+    } catch (error: any) {
+      if (
+        error?.message?.includes('prepared statement') ||
+        error?.code === '42P05' ||
+        error?.code === '26000'
+      ) {
+        console.log('[Prisma Helper] Using $queryRaw fallback for user lookup by ID');
+        
+        const users = await prisma.$queryRaw<Array<{
+          id: string;
+          email: string | null;
+          name: string | null;
+          image: string | null;
+          emailVerified: Date | null;
+        }>>`
+          SELECT 
+            u.id,
+            u.email,
+            u.name,
+            u.image,
+            u."emailVerified"
+          FROM "User" u
+          WHERE u.id = ${userId}
+          LIMIT 1
+        `;
+        
+        if (users.length === 0) {
+          return null;
+        }
+        
+        return users[0];
+      }
+      throw error;
+    }
+  }
+  
+  return null;
+}
+
+/**
+ * Busca usuário por ID com profile sem usar prepared statements
+ */
+export async function findUserByIdWithProfileSafe(userId: string) {
+  const isProduction = process.env.NODE_ENV === 'production';
+  const databaseUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL;
+  const usingPooling = databaseUrl && (databaseUrl.includes('pooler') || databaseUrl.includes('pgbouncer'));
+  const forceRawQueries = process.env.FORCE_RAW_QUERIES === 'true' || isProduction || usingPooling;
+  
+  if (forceRawQueries) {
+    try {
+      const users = await prisma.$queryRaw<Array<{
+        id: string;
+        email: string | null;
+        name: string | null;
+        image: string | null;
+        emailVerified: Date | null;
+        role: string | null;
+      }>>`
+        SELECT 
+          u.id,
+          u.email,
+          u.name,
+          u.image,
+          u."emailVerified",
+          p.role
+        FROM "User" u
+        LEFT JOIN "Profile" p ON p."userId" = u.id
+        WHERE u.id = ${userId}
+        LIMIT 1
+      `;
+      
+      if (users.length === 0) {
+        return null;
+      }
+      
+      const user = users[0];
+      return {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        image: user.image,
+        emailVerified: user.emailVerified,
+        profile: user.role ? {
+          role: user.role
+        } : null
+      };
+    } catch (error: any) {
+      console.error('[Prisma Helper] Error in $queryRaw user lookup by ID with profile:', error);
+      throw error;
+    }
+  }
+  
+  // Em desenvolvimento, tentar query normal primeiro (mas só se não estiver usando pooling)
+  if (!usingPooling) {
+    try {
+      return await prisma.user.findUnique({
+        where: { id: userId },
+        include: {
+          profile: {
+            select: { role: true }
+          }
+        }
+      });
+    } catch (error: any) {
+      if (
+        error?.message?.includes('prepared statement') ||
+        error?.code === '42P05' ||
+        error?.code === '26000'
+      ) {
+        console.log('[Prisma Helper] Using $queryRaw fallback for user lookup by ID with profile');
+        
+        const users = await prisma.$queryRaw<Array<{
+          id: string;
+          email: string | null;
+          name: string | null;
+          image: string | null;
+          emailVerified: Date | null;
+          role: string | null;
+        }>>`
+          SELECT 
+            u.id,
+            u.email,
+            u.name,
+            u.image,
+            u."emailVerified",
+            p.role
+          FROM "User" u
+          LEFT JOIN "Profile" p ON p."userId" = u.id
+          WHERE u.id = ${userId}
+          LIMIT 1
+        `;
+        
+        if (users.length === 0) {
+          return null;
+        }
+        
+        const user = users[0];
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          image: user.image,
+          emailVerified: user.emailVerified,
+          profile: user.role ? {
+            role: user.role
+          } : null
+        };
+      }
+      throw error;
+    }
+  }
+  
+  return null;
+}
+
+/**
  * Count seguro de assets
  */
 export async function countAssetsSafe(where?: { ownerId?: string }): Promise<number> {
