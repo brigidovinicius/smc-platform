@@ -35,7 +35,11 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'CounterX | Digital Asset Marketplace',
+  metadataBase: new URL(SITE_CONFIG.url), // CRÍTICO: Permite URLs absolutas e resolve relativas
+  title: {
+    default: 'CounterX | Digital Asset Marketplace',
+    template: '%s | CounterX', // Permite override nas páginas filhas
+  },
   description: 'Buy and sell digital assets with confidence',
   icons: {
     icon: '/counterx-icon-only.svg',

@@ -11,7 +11,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_CONFIG.url),
+  // metadataBase herdado do root layout
   title: 'CounterX – Evaluate, Buy and Sell Digital Assets with Real Data',
   description:
     'CounterX é a plataforma moderna para compra, venda e valuation de ativos SaaS e digitais.',
@@ -59,9 +59,9 @@ export const metadata: Metadata = {
       'Buy and sell SaaS, newsletters, and apps with verified data. Automated valuation, AI-powered due diligence, and qualified buyers. Over 2,400 active investors.',
     images: [
       {
-        url: '/images/hero-dashboard.webp',
-        width: 1024,
-        height: 1024,
+        url: '/images/hero-dashboard.webp', // URL relativa será resolvida por metadataBase
+        width: 1200,
+        height: 630, // Padrão OG: 1200x630
         alt: 'CounterX dashboard showing valuation metrics and digital assets analysis'
       }
     ]

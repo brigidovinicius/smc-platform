@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     'Explore SaaS, marketplace, and newsletter buying opportunities with MRR, churn, and investment range metrics. Public preview of CounterX.',
   keywords: 'SaaS feed, digital opportunities, digital assets for sale, buy SaaS, invest in SaaS',
-  metadataBase: new URL(SITE_CONFIG.url),
+  // metadataBase herdado do root layout
   alternates: {
     canonical: `${SITE_CONFIG.url}/feed`,
   },

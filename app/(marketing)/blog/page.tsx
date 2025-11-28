@@ -7,7 +7,7 @@ import { SITE_CONFIG } from '@/lib/site-config';
 export const metadata: Metadata = {
   title: 'Blog | CounterX',
   description: 'Insights on valuation, digital assets, guides, and secondary market benchmarks.',
-  metadataBase: new URL(SITE_CONFIG.url),
+  // metadataBase herdado do root layout
   alternates: {
     canonical: `${SITE_CONFIG.url}/blog`,
   },
