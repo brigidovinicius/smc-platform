@@ -43,7 +43,9 @@ export default function AssetsPage() {
   const [error, setError] = useState<string | null>(null);
 
   const [search, setSearch] = useState(searchParams?.get('search') || '');
-  const [category, setCategory] = useState(searchParams?.get('category') || '');
+  // Usar "all" como valor padrão em vez de "" para evitar erro do Select
+  const categoryParam = searchParams?.get('category') || '';
+  const [category, setCategory] = useState(categoryParam || '');
   const [page, setPage] = useState(Number(searchParams?.get('page')) || 1);
 
   const fetchAssets = async () => {
@@ -174,10 +176,13 @@ export default function AssetsPage() {
               </Button>
             </form>
             
-            <Select value={category || "all"} onValueChange={(value) => {
-              setCategory(value === "all" ? "" : value);
-              setPage(1);
-            }}>
+            <Select 
+              value={category === "" ? "all" : category} 
+              onValueChange={(value) => {
+                setCategory(value === "all" ? "" : value);
+                setPage(1);
+              }}
+            >
               <SelectTrigger className="w-full sm:w-[200px]">
                 <SelectValue placeholder="All categories" />
               </SelectTrigger>
