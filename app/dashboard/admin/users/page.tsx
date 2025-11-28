@@ -49,6 +49,7 @@ export default function AdminUsersPage() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
+  const { isCollapsed } = useSidebar();
 
   const adminMode = isAdmin(session);
 
@@ -147,7 +148,12 @@ export default function AdminUsersPage() {
         onClose={() => setSidebarOpen(false)}
       />
 
-      <main className={`transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : ''} lg:ml-64`}>
+      <main 
+        className={`transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : ''}`}
+        style={{ 
+          marginLeft: sidebarOpen ? (isCollapsed ? '4rem' : '16rem') : '0'
+        }}
+      >
         <div className="container mx-auto px-4 py-8 space-y-6">
           <div>
             <h1 className="text-3xl font-bold text-foreground">Manage Users</h1>

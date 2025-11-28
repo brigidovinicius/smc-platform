@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutDashboard, Package, FileText, Trophy, BarChart3, Settings, Users, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils/utils';
 import { isAdmin } from '@/lib/api/permissions';
 import { useSession } from 'next-auth/react';
+import { useSidebar } from '@/contexts/SidebarContext';
 
 interface DashboardSidebarProps {
   isOpen: boolean;
@@ -34,23 +34,7 @@ export default function DashboardSidebar({ isOpen, onClose }: DashboardSidebarPr
   const pathname = usePathname();
   const { data: session } = useSession();
   const admin = isAdmin(session);
-  
-  // Estado de collapsed com persistência no localStorage
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
-  useEffect(() => {
-    // Carregar estado do localStorage
-    const saved = localStorage.getItem('sidebar-collapsed');
-    if (saved !== null) {
-      setIsCollapsed(saved === 'true');
-    }
-  }, []);
-
-  const toggleCollapse = () => {
-    const newState = !isCollapsed;
-    setIsCollapsed(newState);
-    localStorage.setItem('sidebar-collapsed', String(newState));
-  };
+  const { isCollapsed, toggleCollapse } = useSidebar();
 
   const visibleItems = navItems.filter(item => !item.adminOnly || admin);
 
