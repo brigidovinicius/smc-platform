@@ -1,0 +1,65 @@
+[
+  {
+    "route": "/",
+    "status": "PASS",
+    "errors": [],
+    "warnings": [],
+    "found": 13
+  },
+  {
+    "route": "/blog",
+    "status": "PASS",
+    "errors": [],
+    "warnings": [],
+    "found": 13
+  },
+  {
+    "route": "/blog/how-to-prepare-saas-valuation-2024",
+    "status": "PASS",
+    "errors": [],
+    "warnings": [],
+    "found": 13
+  },
+  {
+    "route": "/feed",
+    "status": "PASS",
+    "errors": [],
+    "warnings": [],
+    "found": 13
+  },
+  {
+    "route": "/pricing",
+    "status": "PASS",
+    "errors": [],
+    "warnings": [],
+    "found": 13
+  },
+  {
+    "route": "/calculator",
+    "status": "PASS",
+    "errors": [],
+    "warnings": [],
+    "found": 13
+  },
+  {
+    "route": "/faq",
+    "status": "PASS",
+    "errors": [],
+    "warnings": [],
+    "found": 13
+  },
+  {
+    "route": "/legal",
+    "status": "PASS",
+    "errors": [],
+    "warnings": [],
+    "found": 13
+  },
+  {
+    "route": "/buy-saas-business",
+    "status": "PASS",
+    "errors": [],
+    "warnings": [],
+    "found": 13
+  }
+]
