@@ -31,8 +31,21 @@ export default async function AssetsCatalogPage({
     undefined // No context = public view
   );
 
-  // Sort assets
-  let sortedAssets = [...(result.assets || [])];
+  // Sort assets and map null to undefined for TypeScript compatibility
+  // The AssetCatalog component expects Asset type with optional fields as undefined, not null
+  let sortedAssets = (result.assets || []).map((asset: any) => ({
+    id: asset.id,
+    title: asset.title,
+    slug: asset.slug,
+    type: asset.type,
+    shortDescription: asset.shortDescription ?? undefined,
+    askingPrice: asset.askingPrice,
+    currency: asset.currency,
+    mrr: asset.mrr ?? undefined,
+    churnRate: asset.churnRate ?? undefined,
+    createdAt: asset.createdAt.toISOString(),
+  }));
+  
   if (sortBy === 'price_low') {
     sortedAssets.sort((a, b) => a.askingPrice - b.askingPrice);
   } else if (sortBy === 'price_high') {
