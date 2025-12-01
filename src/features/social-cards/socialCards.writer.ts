@@ -246,10 +246,10 @@ export function buildSocialCardContent(
       return buildDeveloperCardContent(input as DeveloperCardInput, language);
     default:
       return {
-        title: getTranslation(language, 'myBusinessSnapshot'),
-        subtitle: getTranslation(language, 'generatedWithCounterXTools'),
+        title: getTranslation(language, 'developer'),
+        subtitle: getTranslation(language, 'softwareDeveloper'),
         mainMetrics: [],
-        highlight: getTranslation(language, 'digitalBusinessOverview'),
+        highlight: getTranslation(language, 'developerHighlight'),
         footerNote: getFooterText(language),
       };
   }
