@@ -180,7 +180,7 @@ export function buildDeveloperCardContent(input: DeveloperCardInput, language: L
 
   const mainMetrics: { label: string; value: string }[] = [];
   if (input.yearsOfExperience != null) {
-    mainMetrics.push({ label: t('yearsExperience'), value: `${input.yearsOfExperience}+ ${t('years')}` });
+    mainMetrics.push({ label: t('yearsOfExperience'), value: `${input.yearsOfExperience}+ ${t('years')}` });
   }
   if (input.githubStars != null) {
     mainMetrics.push({ label: t('githubStars'), value: input.githubStars.toLocaleString() });
