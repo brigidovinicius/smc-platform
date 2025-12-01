@@ -1,6 +1,7 @@
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { redirect } from 'next/navigation';
+import type { AssetStatus } from '@prisma/client';
 
 /**
  * Verifica se o banco de dados está disponível
@@ -86,7 +87,7 @@ export async function getAdminStats() {
       prisma.asset.findMany({
         where: {
           status: {
-            in: ['PENDING_REVIEW', 'SUBMITTED']
+            in: ['UNDER_REVIEW', 'DRAFT'] as AssetStatus[]
           }
         },
         include: {
