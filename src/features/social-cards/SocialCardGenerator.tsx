@@ -12,7 +12,7 @@ import { SocialCardShare } from './SocialCardShare';
 import { HelpTooltip } from '@/components/ui/HelpTooltip';
 import { LanguageSelector } from './LanguageSelector';
 import { LoginRequiredModal } from './LoginRequiredModal';
-import { Language, getTranslation, translations } from './socialCards.i18n';
+import { Language, getTranslation, translations, TranslationKey } from './socialCards.i18n';
 import {
   SocialCardMode,
   PerformanceCardInput,
@@ -110,7 +110,7 @@ export function SocialCardGenerator({ initialPerformanceData }: SocialCardGenera
     languages: '',
   });
 
-  const t = (key: keyof typeof translations.en) => getTranslation(language, key);
+  const t = (key: TranslationKey) => getTranslation(language, key);
   
   // Helper for nested translation objects
   const getSpecializationLabel = (value: string) => {
