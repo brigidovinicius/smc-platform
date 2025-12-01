@@ -22,10 +22,12 @@ const authMiddleware = withAuth({
         return !!token && role === 'admin';
       }
       
-      // For /dashboard routes (User Mode), just check if authenticated
-      // Admin can access /dashboard too (to view as user)
-      if (pathname.startsWith('/dashboard')) {
-        return !!token;
+      // For /dashboard routes (User Mode), check if authenticated
+      // Block admins from /dashboard (they should use /admin)
+      if (pathname.startsWith('/dashboard') && !pathname.startsWith('/dashboard/admin')) {
+        const role = (token?.role as string)?.toLowerCase();
+        // Only allow non-admin users to access /dashboard
+        return !!token && role !== 'admin';
       }
       
       // For other protected routes, just check if authenticated

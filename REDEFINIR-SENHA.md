@@ -135,3 +135,4 @@ Se nenhuma das opções funcionar:
 3. Verifique se as migrations foram executadas
 4. Tente criar um novo usuário para testar
 
+

@@ -13,6 +13,7 @@ import OffersSection from '@/components/dashboard/OffersSection';
 import BadgesSection from '@/components/dashboard/BadgesSection';
 import MetricsSection from '@/components/dashboard/MetricsSection';
 import AdminStatsSection from '@/components/dashboard/AdminStatsSection';
+import UserDashboardTabs from '@/components/dashboard/UserDashboardTabs';
 import { isAdmin, getUserRole } from '@/lib/api/permissions';
 import { useContext7 } from '@/components/providers/Context7Provider';
 
@@ -352,57 +353,40 @@ export default function DashboardPageClient() {
             </div>
           )}
 
-          {!isAdminMode && (
-            <section className="space-y-4">
-              <ProfileCard userName={userName} userLevel="Founder" />
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <ReadinessCard
-                  score={stats.readinessScore}
-                  status="Ready for due diligence"
-                  trend="+6% this month"
-                  editable={false}
-                />
-                <ValuationCard
-                  value={stats.valuation}
-                  description="Based on MRR and churn"
-                  updated="Updated daily"
-                  editable={false}
+          {!isAdminMode ? (
+            <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+              <UserDashboardTabs
+                assets={assets}
+                assetsCount={stats.assetsCount}
+                totalValue={stats.totalValue ?? '-'}
+                userId={sessionUserId || ''}
+              />
+            </div>
+          ) : (
+            <>
+              <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+                <div className="mb-4">
+                  <h2 className="text-xl font-semibold">Latest Platform Assets</h2>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Showing last 10 assets. See all in{' '}
+                    <a
+                      href="/dashboard/admin/assets"
+                      className="text-primary hover:underline"
+                    >
+                      Manage Assets
+                    </a>
+                  </p>
+                </div>
+                <AssetsSection
+                  assets={assets}
+                  assetsCount={stats.assetsCount}
+                  totalValue={stats.totalValue ?? '-'}
+                  isAdmin={isAdminMode}
+                  userId={sessionUserId || undefined}
                 />
               </div>
-            </section>
+            </>
           )}
-
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-            <div className="mb-4">
-              <h2 className="text-xl font-semibold">
-                {isAdminMode ? 'Latest Platform Assets' : 'My Assets'}
-              </h2>
-              {isAdminMode && (
-                <p className="text-sm text-muted-foreground mt-1">
-                  Showing last 10 assets. See all in{' '}
-                  <a
-                    href="/dashboard/admin/assets"
-                    className="text-primary hover:underline"
-                  >
-                    Manage Assets
-                  </a>
-                </p>
-              )}
-              {!isAdminMode && (
-                <p className="text-sm text-muted-foreground mt-1">
-                  Manage your digital assets and track important metrics
-                </p>
-              )}
-            </div>
-            <AssetsSection
-              assets={assets}
-              assetsCount={stats.assetsCount}
-              totalValue={stats.totalValue ?? '-'}
-              isAdmin={isAdminMode}
-              userId={sessionUserId || undefined}
-            />
-          </div>
 
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
             <div className="mb-4">

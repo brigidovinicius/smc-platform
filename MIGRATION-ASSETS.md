@@ -99,3 +99,4 @@ Após aplicar a migration, teste criando um asset:
 
 
 
+

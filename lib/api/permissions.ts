@@ -44,3 +44,4 @@ export function getUserId(session: Session | null): string | null {
   return (session.user as { id?: string })?.id ?? null;
 }
 
+

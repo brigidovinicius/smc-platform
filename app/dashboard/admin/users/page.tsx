@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { isAdmin } from '@/lib/api/permissions';
+import { useSidebar } from '@/contexts/SidebarContext';
 
 interface User {
   id: string;

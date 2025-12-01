@@ -126,3 +126,4 @@ node scripts/test-database-connection.js
 3. **VERIFIQUE** se a senha está correta antes de configurar
 4. **TESTE** após cada configuração
 
+

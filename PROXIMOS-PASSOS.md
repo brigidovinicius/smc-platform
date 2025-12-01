@@ -86,3 +86,4 @@ Se aparecer isso, a configuração está correta! ✅
 
 Se tudo funcionou, você está com o banco de dados configurado e funcionando! 🚀
 
+

@@ -1,7 +1,37 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
 
 export function Footer() {
+    const [language, setLanguage] = useState<'en' | 'pt'>('en');
+
+    useEffect(() => {
+        // Detect language from localStorage or browser
+        const saved = localStorage.getItem('socialCardGenerator_data');
+        if (saved) {
+            try {
+                const data = JSON.parse(saved);
+                if (data.language) {
+                    setLanguage(data.language);
+                }
+            } catch (e) {
+                // Fallback to browser language
+                const browserLang = navigator.language || navigator.languages?.[0] || 'en';
+                setLanguage(browserLang.startsWith('pt') ? 'pt' : 'en');
+            }
+        } else {
+            // Fallback to browser language
+            const browserLang = navigator.language || navigator.languages?.[0] || 'en';
+            setLanguage(browserLang.startsWith('pt') ? 'pt' : 'en');
+        }
+    }, []);
+
+    const footerMessage = language === 'pt' 
+        ? 'Feito para founders com carinho por CounterX'
+        : 'Made with 💜 for founders by CounterX';
+
     return (
         <footer className="border-t border-[#9EA3B0]/20 bg-white pt-16 pb-8">
             <div className="container">
@@ -36,6 +66,7 @@ export function Footer() {
                             <li><Link href="/recursos" className="hover:text-[var(--color-primary)]">Resources</Link></li>
                             <li><Link href="/blog" className="hover:text-[var(--color-primary)]">Blog</Link></li>
                             <li><Link href="/calculator" className="hover:text-[var(--color-primary)]">Valuation Calculator</Link></li>
+                            <li><Link href="/social-cards" className="hover:text-[var(--color-primary)]">Social Card Generator</Link></li>
                             <li><Link href="/faq" className="hover:text-[var(--color-primary)]">FAQ</Link></li>
                             <li><Link href="/suporte" className="hover:text-[var(--color-primary)]">Support</Link></li>
                         </ul>
@@ -54,7 +85,7 @@ export function Footer() {
 
                 <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-[var(--color-border)] pt-8 text-sm text-[var(--color-text-secondary)] md:flex-row">
                     <p>© {new Date().getFullYear()} CounterX.io. All rights reserved.</p>
-                    <p>Made with 💜 for founders.</p>
+                    <p>{footerMessage}</p>
                 </div>
             </div>
         </footer>

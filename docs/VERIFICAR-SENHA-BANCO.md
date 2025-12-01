@@ -149,3 +149,4 @@ Após corrigir a senha:
 
 **Dica:** Sempre que resetar a senha no Supabase, atualize imediatamente no Vercel para evitar erros!
 
+

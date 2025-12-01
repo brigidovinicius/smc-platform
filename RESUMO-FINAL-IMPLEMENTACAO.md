@@ -182,3 +182,4 @@ Todas as funcionalidades foram implementadas com sucesso! O sistema está pronto
 **Próxima ação:** Criar Pull Request no GitHub para revisão antes do merge e deploy.
 
 
+

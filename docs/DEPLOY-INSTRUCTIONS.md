@@ -104,3 +104,4 @@ Verifique se `NEXTAUTH_SECRET` está configurado e é único.
 3. Verifique os logs do servidor
 
 
+

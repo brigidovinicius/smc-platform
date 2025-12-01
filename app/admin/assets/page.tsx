@@ -26,9 +26,7 @@ interface Asset {
 
 const STATUS_COLORS: Record<string, string> = {
   DRAFT: 'bg-gray-500',
-  SUBMITTED: 'bg-blue-500',
-  PENDING_REVIEW: 'bg-yellow-500',
-  APPROVED: 'bg-green-500',
+  UNDER_REVIEW: 'bg-yellow-500',
   REJECTED: 'bg-red-500',
   PUBLISHED: 'bg-green-600',
 };
@@ -115,9 +113,7 @@ export default function AdminAssetsPage() {
             >
               <option value="">All Statuses</option>
               <option value="DRAFT">Draft</option>
-              <option value="SUBMITTED">Submitted</option>
-              <option value="PENDING_REVIEW">Pending Review</option>
-              <option value="APPROVED">Approved</option>
+              <option value="UNDER_REVIEW">Under Review</option>
               <option value="REJECTED">Rejected</option>
               <option value="PUBLISHED">Published</option>
             </select>

@@ -206,3 +206,4 @@ Recommended folder structure for Cursor:
 
 
 
+

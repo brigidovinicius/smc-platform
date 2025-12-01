@@ -87,8 +87,8 @@ export async function POST(request: NextRequest) {
       isAdmin: context.isAdmin,
     });
 
-    // If status is SUBMITTED or PENDING_REVIEW, notify admin
-    if (asset && (asset.status === 'SUBMITTED' || asset.status === 'PENDING_REVIEW')) {
+    // If status is UNDER_REVIEW, notify admin
+    if (asset && asset.status === 'UNDER_REVIEW') {
       await notifyAdminOfNewAsset({
         assetId: asset.id,
         assetTitle: asset.title,

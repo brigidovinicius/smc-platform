@@ -1,4 +1,3 @@
-import Script from 'next/script';
 import { SITE_CONFIG } from '@/lib/site-config';
 
 export function StructuredData({ faq }: { faq?: Array<{ question: string; answer: string }> }) {
@@ -17,7 +16,7 @@ export function StructuredData({ faq }: { faq?: Array<{ question: string; answer
         contactPoint: {
             '@type': 'ContactPoint',
             contactType: 'Customer Service',
-            availableLanguage: ['English']
+            availableLanguage: ['English', 'Portuguese']
         }
     };
 
@@ -31,6 +30,31 @@ export function StructuredData({ faq }: { faq?: Array<{ question: string; answer
             '@type': 'SearchAction',
             target: `${SITE_CONFIG.url}/feed?q={search_term_string}`,
             'query-input': 'required name=search_term_string'
+        }
+    };
+
+    const marketplaceSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: 'CounterX Digital Assets Marketplace',
+        description: SITE_CONFIG.description,
+        brand: {
+            '@type': 'Brand',
+            name: SITE_CONFIG.name
+        },
+        offers: {
+            '@type': 'AggregateOffer',
+            offerCount: '2400+',
+            lowPrice: '20000',
+            highPrice: '2000000',
+            priceCurrency: 'BRL',
+            availability: 'https://schema.org/InStock'
+        },
+        category: 'Digital Asset Marketplace',
+        aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: '4.8',
+            reviewCount: '326'
         }
     };
 
@@ -97,26 +121,27 @@ export function StructuredData({ faq }: { faq?: Array<{ question: string; answer
         }))
     } : null;
 
+    // Render JSON-LD directly in HTML (Server Component)
     return (
         <>
-            <Script
-                id="organization-schema"
+            <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
             />
-            <Script
-                id="website-schema"
+            <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
             />
-            <Script
-                id="service-schema"
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(marketplaceSchema) }}
+            />
+            <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
             />
             {faqSchema && (
-                <Script
-                    id="faq-schema"
+                <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
                 />

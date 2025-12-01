@@ -60,3 +60,4 @@ WHERE email = 'brigido254@gmail.com';
 
 **💡 Dica:** Depois de executar, teste o login imediatamente para confirmar que funcionou!
 
+

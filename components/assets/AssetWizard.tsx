@@ -191,7 +191,7 @@ export default function AssetWizard({ assetId }: { assetId?: string }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...data,
-          status: 'SUBMITTED',
+          status: 'UNDER_REVIEW',
         }),
       });
 

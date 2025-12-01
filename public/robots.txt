@@ -34,6 +34,7 @@ Allow: /pricing
 Allow: /precos
 Allow: /calculator
 Allow: /calculadora-valuation
+Allow: /social-cards
 Allow: /faq
 Allow: /recursos
 Allow: /resources

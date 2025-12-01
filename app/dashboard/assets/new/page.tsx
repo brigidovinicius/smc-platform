@@ -1,29 +1,42 @@
-import { Metadata } from 'next';
-import AssetWizard from '@/components/assets/AssetWizard';
-
-export const metadata: Metadata = {
-  title: 'Create New Asset | Dashboard | CounterX',
-  description: 'Create a new asset listing',
-};
-
-// Force dynamic rendering for this page
 export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';
 export const revalidate = 0;
 
-export default function NewAssetPage() {
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import AssetWizard from '@/components/assets/AssetWizard';
+
+export default async function NewAssetPage() {
+  const session = await getServerSession(authOptions);
+  
+  if (!session?.user) {
+    redirect('/auth/login');
+  }
+
+  // Get user role from profile
+  const userId = (session.user as { id?: string })?.id;
+  if (userId) {
+    const { default: prisma } = await import('@/lib/prisma');
+    const profile = await prisma.profile.findUnique({
+      where: { userId },
+    });
+    
+    // Redirect admins to /admin
+    if (profile?.role === 'ADMIN') {
+      redirect('/admin');
+    }
+  }
+
   return (
-    <div className="py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-2">Create New Asset Listing</h1>
-        <p className="text-slate-400">
-          Follow the steps below to list your digital asset for sale.
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-foreground">Create New Asset</h1>
+        <p className="text-muted-foreground mt-2">
+          Fill in the details about your digital asset to get started
         </p>
       </div>
-      
       <AssetWizard />
     </div>
   );
 }
-
-

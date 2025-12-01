@@ -12,9 +12,12 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   // metadataBase herdado do root layout
-  title: 'CounterX – Evaluate, Buy and Sell Digital Assets with Real Data',
+  title: {
+    default: 'CounterX – Evaluate, Buy and Sell Digital Assets with Real Data',
+    template: '%s | CounterX'
+  },
   description:
-    'CounterX é a plataforma moderna para compra, venda e valuation de ativos SaaS e digitais.',
+    'CounterX é a plataforma moderna para compra, venda e valuation de ativos SaaS e digitais. Automated valuation, AI-powered due diligence, and verified buyers. Over 2,400 active investors.',
   keywords: [
     'SaaS marketplace',
     'buy SaaS',
@@ -30,20 +33,32 @@ export const metadata: Metadata = {
     'paid newsletters',
     'digital apps',
     'deal room',
-    'verified buyers'
+    'verified buyers',
+    'SaaS valuation',
+    'digital asset marketplace',
+    'M&A platform',
+    'SaaS multiples calculator'
   ],
-  authors: [{ name: 'CounterX' }],
+  authors: [{ name: 'CounterX', url: SITE_CONFIG.url }],
   creator: 'CounterX',
   publisher: 'CounterX',
+  category: 'Digital Asset Marketplace',
+  classification: 'Business',
   alternates: {
-    canonical: SITE_CONFIG.url
+    canonical: SITE_CONFIG.url,
+    languages: {
+      'en-US': SITE_CONFIG.url,
+      'pt-BR': SITE_CONFIG.url
+    }
   },
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1
@@ -52,6 +67,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
+    alternateLocale: ['pt_BR'],
     url: SITE_CONFIG.url,
     siteName: 'CounterX – The Digital Deal Desk',
     title: 'CounterX – Digital Assets Marketplace with Automated Valuation',
@@ -62,22 +78,36 @@ export const metadata: Metadata = {
         url: '/images/hero-dashboard.webp', // URL relativa será resolvida por metadataBase
         width: 1200,
         height: 630, // Padrão OG: 1200x630
-        alt: 'CounterX dashboard showing valuation metrics and digital assets analysis'
+        alt: 'CounterX dashboard showing valuation metrics and digital assets analysis',
+        type: 'image/webp'
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
+    site: SITE_CONFIG.twitter.handle,
+    creator: SITE_CONFIG.twitter.handle,
     title: 'CounterX – Digital Assets Marketplace',
     description:
       'Automated valuation, AI-powered due diligence, and verified buyers to trade SaaS and digital assets.',
-    images: ['/images/hero-dashboard.webp'],
-    creator: SITE_CONFIG.twitter.handle
+    images: [
+      {
+        url: '/images/hero-dashboard.webp',
+        alt: 'CounterX dashboard showing valuation metrics and digital assets analysis'
+      }
+    ]
   },
   verification: {
     // TODO: Add your real Google Search Console code here
     // Get it at: https://search.google.com/search-console
     google: 'ADICIONE_SEU_CODIGO_AQUI'
+  },
+  applicationName: 'CounterX',
+  referrer: 'origin-when-cross-origin',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false
   }
 };
 

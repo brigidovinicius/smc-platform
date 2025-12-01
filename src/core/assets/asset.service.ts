@@ -10,6 +10,7 @@ import prisma from '@/lib/prisma';
 import { slugify } from '@/lib/slugify';
 import { calculateValuation } from '@/lib/valuation';
 import { runVerificationChecks } from '@/lib/verification';
+import { logAssetStatusChange } from '@/lib/admin/action-log';
 
 export interface AssetContext {
   userId: string;
@@ -104,7 +105,7 @@ export async function createAsset(input: CreateAssetInput, context: AssetContext
     data: {
       ownerId: context.userId,
       type: input.type as any,
-      status: (input.status || 'DRAFT') as any,
+      status: (input.status || 'UNDER_REVIEW') as any,
       title: input.title,
       slug,
       shortDescription: input.shortDescription,
@@ -511,12 +512,18 @@ export async function moderateAsset(
   // Determine new status based on action
   let newStatus: string;
   if (input.action === 'APPROVE') {
-    newStatus = 'APPROVED';
+    newStatus = 'PUBLISHED';
   } else if (input.action === 'REJECT') {
     newStatus = 'REJECTED';
+    // Require rejection reason
+    if (!input.comment || input.comment.trim().length < 10) {
+      throw new Error('Rejection reason is required (minimum 10 characters)');
+    }
   } else {
     throw new Error('Invalid moderation action');
   }
+
+  const oldStatus = asset.status;
 
   // Update asset status
   await prisma.asset.update({
@@ -524,6 +531,15 @@ export async function moderateAsset(
     data: {
       status: newStatus as any,
     },
+  });
+
+  // Log the action
+  await logAssetStatusChange({
+    adminId: context.userId,
+    assetId: id,
+    oldStatus,
+    newStatus,
+    reason: input.comment,
   });
 
   // Create or update moderation record

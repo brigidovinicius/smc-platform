@@ -26,6 +26,7 @@ model User {
   transactionsBought Transaction[] @relation("TransactionBuyer")
   favorites          Favorite[]    @relation("UserFavorites")
   userBadges         UserBadge[]   @relation("UserBadges")
+  socialCards        SocialCard[]
 }
 
 model Account {
@@ -145,6 +146,8 @@ model Favorite {
 enum Role {
   USER
   ADMIN
+  FOUNDER
+  INVESTOR
 }
 
 enum OfferStatus {
@@ -169,11 +172,9 @@ enum AssetType {
 
 enum AssetStatus {
   DRAFT
-  SUBMITTED
-  PENDING_REVIEW
-  APPROVED
-  REJECTED
+  UNDER_REVIEW
   PUBLISHED
+  REJECTED
 }
 
 enum LeadStatus {
@@ -412,4 +413,37 @@ model Setting {
 
   @@index([key])
   @@index([category])
+}
+
+model SocialCard {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  mode      String   // 'PERFORMANCE' | 'IDENTITY' | 'JOURNEY' | 'INFLUENCER'
+  
+  // Card data (JSON)
+  cardData  String   // JSON string with all card inputs
+  
+  // Theme and customization
+  themeId   String?  // Theme preset ID
+  useCustomColors Boolean @default(false)
+  customBaseColor String?
+  customComplementaryColor String?
+  customAccentColor String?
+  
+  // Media
+  founderPhotoUrl String?
+  businessLogoUrl String?
+  
+  // Language
+  language String @default("en") // 'en' | 'pt'
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([mode])
+  @@index([createdAt])
 }

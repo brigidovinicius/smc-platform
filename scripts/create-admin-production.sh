@@ -44,3 +44,4 @@ echo ""
 echo "🌐 Teste o login em: https://sua-app.vercel.app/auth/login"
 
 
+

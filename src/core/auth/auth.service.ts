@@ -7,7 +7,7 @@
 import type { Session } from 'next-auth';
 import prisma from '@/lib/prisma';
 
-export type UserRole = 'USER' | 'ADMIN';
+export type UserRole = 'USER' | 'ADMIN' | 'FOUNDER' | 'INVESTOR';
 
 export interface AuthContext {
   userId: string;
@@ -15,6 +15,8 @@ export interface AuthContext {
   name: string | null;
   role: UserRole;
   isAdmin: boolean;
+  isFounder: boolean;
+  isInvestor: boolean;
 }
 
 /**
@@ -38,7 +40,7 @@ export async function getUserRole(session: Session | null): Promise<UserRole> {
     where: { userId },
   });
 
-  return profile?.role === 'ADMIN' ? 'ADMIN' : 'USER';
+  return (profile?.role || 'USER') as UserRole;
 }
 
 /**
@@ -73,7 +75,7 @@ export async function requireUser(session: Session | null): Promise<AuthContext>
     throw new Error('User not found');
   }
 
-  const role = user.profile?.role === 'ADMIN' ? 'ADMIN' : 'USER';
+  const role = (user.profile?.role || 'USER') as UserRole;
 
   return {
     userId: user.id,
@@ -81,6 +83,8 @@ export async function requireUser(session: Session | null): Promise<AuthContext>
     name: user.name,
     role,
     isAdmin: role === 'ADMIN',
+    isFounder: role === 'FOUNDER',
+    isInvestor: role === 'INVESTOR',
   };
 }
 
@@ -115,7 +119,7 @@ export async function getAuthContext(session: Session | null): Promise<AuthConte
 
   if (!user) return null;
 
-  const role = user.profile?.role === 'ADMIN' ? 'ADMIN' : 'USER';
+  const role = (user.profile?.role || 'USER') as UserRole;
 
   return {
     userId: user.id,
@@ -123,6 +127,8 @@ export async function getAuthContext(session: Session | null): Promise<AuthConte
     name: user.name,
     role,
     isAdmin: role === 'ADMIN',
+    isFounder: role === 'FOUNDER',
+    isInvestor: role === 'INVESTOR',
   };
 }
 
